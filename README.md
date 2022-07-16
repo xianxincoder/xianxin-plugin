@@ -1,6 +1,6 @@
 # xianxin-plugin
 
-[xianxin-plugin](https://gitee.com/xianxincoder/xianxin-plugin)是[Yunzai-Bot](https://gitee.com/Le-niao/Yunzai-Bot)的插件，目前正在开发中
+[xianxin-plugin](https://gitee.com/xianxincoder/xianxin-plugin)是[Yunzai-Bot](https://gitee.com/Le-niao/Yunzai-Bot)的插件
 
 ## 依赖
 
