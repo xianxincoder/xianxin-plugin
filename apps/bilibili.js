@@ -43,21 +43,26 @@ export async function bilibiliUpDetail(e) {
 
   const message = [
     segment.image(data.face),
-    `\n昵称：${data.name}\n`,
-    `性别：${data.sex}\n`,
-    `等级：${data.level}\n`,
-    `粉丝人数：${userResJsonData.data.follower}`,
+    `\n昵称：${data.name}`,
+    `\n性别：${data.sex}`,
+    `\n等级：${data.level}`,
+    `\n粉丝人数：${userResJsonData.data.follower}`,
   ];
 
   if (data.live_room) {
     message.push(
-      `\n\n直播信息\n`,
-      `直播标题：${accInfoResJsonData.data.live_room.title}\n`,
-      `直播状态：${
+      `\n\n直播信息`,
+      `\n直播标题：${accInfoResJsonData.data.live_room.title}`,
+      `\n直播状态：${
         accInfoResJsonData.data.live_room.liveStatus ? "直播中" : "未开播"
-      }\n`,
-      `直播链接：${accInfoResJsonData.data.live_room.url}\n`,
-      `直播封面：`,
+      }`,
+      `\n直播链接：${accInfoResJsonData.data.live_room.url}`
+    );
+    if (data.live_room.watched_show) {
+      message.push(`\n观看人数：${data.live_room.watched_show.num}人`);
+    }
+    message.push(
+      "\n直播封面：\n",
       segment.image(accInfoResJsonData.data.live_room.cover)
     );
   }
