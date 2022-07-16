@@ -42,7 +42,7 @@ export async function bilibiliUpDetail(e) {
   }
 
   const message = [
-    segment.image(data.face),
+    segment.image(`${data.face}_60x60.jpg`),
     `\n昵称：${data.name}`,
     `\n性别：${data.sex}`,
     `\n等级：${data.level}`,
