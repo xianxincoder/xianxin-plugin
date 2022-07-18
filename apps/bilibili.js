@@ -1,73 +1,74 @@
-import { segment } from "oicq";
-import lodash from "lodash";
+import plugin from "../../../lib/plugins/plugin.js";
 import fetch from "node-fetch";
+import { segment } from "oicq";
 
-export const rule = {
-  bilibiliUpDetail: {
-    reg: "^#up.*$", //匹配消息正则，命令正则
-    priority: 5000, //优先级，越小优先度越高
-    describe: "【#up+uid】查看up信息", //【命令】功能说明
-  },
-};
-
-export async function bilibiliUpDetail(e) {
-  let uid = e.msg.replace(/#up/g, "");
-
-  if (uid.indexOf("道长") !== -1) {
-    uid = 99744821;
+export class bilibili extends plugin {
+  constructor() {
+    super({
+      name: "b站查询",
+      dsc: "UID查询up信息",
+      event: "message",
+      priority: 500,
+      rule: [
+        {
+          reg: "^#up.*$",
+          fnc: "detail",
+        },
+      ],
+    });
   }
 
-  const userRes = await fetch(
-    `https://api.bilibili.com/x/relation/stat?vmid=${uid}`
-  );
-  const userResJsonData = await userRes.json();
-  console.log(userResJsonData);
+  async detail() {
+    let uid = this.e.msg.replace(/#up/g, "");
 
-  const accInfoRes = await fetch(
-    `https://api.bilibili.com/x/space/acc/info?mid=${uid}&jsonp=jsonp`
-  );
-
-  if (!accInfoRes.ok) {
-    e.reply("诶嘿，出了点网络问题，等会再试试吧~");
-    return true;
-  }
-
-  const accInfoResJsonData = await accInfoRes.json();
-
-  const data = accInfoResJsonData?.data || null;
-
-  if (accInfoResJsonData.code != 0 || !data) {
-    e.reply("UID不对啊老兄，别乱搞哦～");
-    return true;
-  }
-
-  const message = [
-    segment.image(`${data.face}_60x60.jpg`),
-    `\n昵称：${data.name}`,
-    `\n性别：${data.sex}`,
-    `\n等级：${data.level}`,
-    `\n粉丝人数：${userResJsonData.data.follower}`,
-  ];
-
-  if (data.live_room) {
-    message.push(
-      `\n\n直播信息`,
-      `\n直播标题：${accInfoResJsonData.data.live_room.title}`,
-      `\n直播状态：${
-        accInfoResJsonData.data.live_room.liveStatus ? "直播中" : "未开播"
-      }`,
-      `\n直播链接：${accInfoResJsonData.data.live_room.url}`
+    const userRes = await fetch(
+      `https://api.bilibili.com/x/relation/stat?vmid=${uid}`
     );
-    if (data.live_room.watched_show) {
-      message.push(`\n观看人数：${data.live_room.watched_show.num}人`);
+    const userResJsonData = await userRes.json();
+
+    const accInfoRes = await fetch(
+      `https://api.bilibili.com/x/space/acc/info?mid=${uid}&jsonp=jsonp`
+    );
+
+    if (!accInfoRes.ok) {
+      this.reply("诶嘿，出了点网络问题，等会再试试吧~");
+      return true;
     }
-    message.push(
-      "\n直播封面：\n",
-      segment.image(accInfoResJsonData.data.live_room.cover)
-    );
+
+    const accInfoResJsonData = await accInfoRes.json();
+
+    const data = accInfoResJsonData?.data || null;
+
+    if (accInfoResJsonData.code != 0 || !data) {
+      this.reply("UID不对啊老兄，别乱搞哦～");
+      return true;
+    }
+    const message = [
+      segment.image(`${data.face}_60x60.jpg`),
+      `\n昵称：${data.name}`,
+      `\n性别：${data.sex}`,
+      `\n等级：${data.level}`,
+      `\n粉丝人数：${userResJsonData.data.follower}`,
+    ];
+
+    if (data.live_room) {
+      message.push(
+        `\n\n直播信息`,
+        `\n直播标题：${accInfoResJsonData.data.live_room.title}`,
+        `\n直播状态：${
+          accInfoResJsonData.data.live_room.liveStatus ? "直播中" : "未开播"
+        }`,
+        `\n直播链接：${accInfoResJsonData.data.live_room.url}`
+      );
+      if (data.live_room.watched_show) {
+        message.push(`\n观看人数：${data.live_room.watched_show.num}人`);
+      }
+      message.push(
+        "\n直播封面：\n",
+        segment.image(accInfoResJsonData.data.live_room.cover)
+      );
+    }
+
+    this.reply(message);
   }
-
-  e.reply(message);
-
-  return true; //返回true 阻挡消息不再往下
 }
