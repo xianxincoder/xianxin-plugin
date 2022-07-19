@@ -51,7 +51,7 @@ export class admin extends plugin {
           );
           return;
         }
-        that.reply("闲心插件更新成功，正在尝试重新启动Yunzai以应用更新...");
+        that.reply("闲心插件更新成功");
       }
     );
   }
