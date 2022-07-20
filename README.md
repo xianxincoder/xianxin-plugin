@@ -4,7 +4,7 @@
 
 ## 依赖
 
-- [Yunzai-Bot](https://gitee.com/Le-niao/Yunzai-Bot)
+- [Yunzai-Bot V3](https://gitee.com/Le-niao/Yunzai-Bot)
 
 #### 使用说明
 
