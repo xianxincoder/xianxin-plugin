@@ -13,7 +13,7 @@ export class chat extends plugin {
       priority: 999,
       rule: [
         {
-          reg: "^.*$",
+          reg: "^(?!.*#).*$",
           fnc: "repeat",
         },
       ],
