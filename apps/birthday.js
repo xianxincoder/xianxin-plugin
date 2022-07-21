@@ -114,6 +114,6 @@ export class birthday extends plugin {
       this.reply("生日推送已关闭");
     }
 
-    xxCfg.saveRoleSet("role", "set", "defSet", data);
+    xxCfg.saveRoleSet("role", "birthday", "defSet", data);
   }
 }
