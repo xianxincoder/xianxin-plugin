@@ -82,7 +82,7 @@ class XsCfg {
     this.watcher[type][key] = watcher;
   }
 
-  saveBirthday(app, name, type, data) {
+  saveRoleSet(app, name, type, data) {
     let file = this.getFilePath(app, name, type);
     if (lodash.isEmpty(data)) {
       fs.existsSync(file) && fs.unlinkSync(file);

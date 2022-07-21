@@ -3,12 +3,14 @@ import lodash from "lodash";
 import plugin from "../../../lib/plugins/plugin.js";
 import xxCfg from "../model/xxCfg.js";
 import fs from "node:fs";
+import moment from "moment";
+import common from "../../../lib/common/common.js";
 
-let birthdayFile = "./plugins/xianxin-plugin/config/role.birthday.yaml";
-if (!fs.existsSync(birthdayFile)) {
+let birthdaySetFile = "./plugins/xianxin-plugin/config/role.set.yaml";
+if (!fs.existsSync(birthdaySetFile)) {
   fs.copyFileSync(
-    "./plugins/xianxin-plugin/defSet/role/birthday.yaml",
-    birthdayFile
+    "./plugins/xianxin-plugin/defSet/role/set.yaml",
+    birthdaySetFile
   );
 }
 
@@ -30,26 +32,64 @@ export class birthday extends plugin {
       ],
     });
 
-    this.birthdayCfgData = xxCfg.getConfig("role", "birthday");
+    this.birthdaySetData = xxCfg.getConfig("role", "set");
+    this.birthdayCfgData = xxCfg.getdefSet("role", "birthday");
 
     /** 定时任务 */
     this.task = {
-      cron: this.birthdayCfgData.pushTime,
+      cron: this.birthdaySetData.pushTime,
       name: "检测角色生日定时任务",
       fnc: () => this.pushTask(),
     };
   }
 
+  // 群推送失败了，再推一次，再失败就算球了
+  async pushAgain(groupId, msg) {
+    await common.sleep(10000);
+    Bot.pickGroup(groupId)
+      .sendMsg(msg)
+      .catch((err) => {
+        logger.error(`群[${groupId}]推送失败：${err}`);
+      });
+
+    return;
+  }
+
   /** 生日推送任务 */
   async pushTask() {
     const pushList = this.birthdayCfgData.openPushGroups || [];
-    console.log(pushList);
     // 如果没有推送群那么暂停
     if (!pushList.length) {
       return;
     }
 
     // todo: 拿到日期，然后从配置文件中找到角色 然后进行推送
+
+    const currentDate = moment().format("MM-DD");
+
+    const birthdayData = this.birthdayCfgData.birthday;
+
+    const roles = birthdayData[currentDate] || [];
+
+    if (!roles.length) {
+      return;
+    }
+
+    for (let pushItem of pushList) {
+      for (let roleItem of roles) {
+        // todo: 后面可以优化html生成图片
+        const msg = `${roleItem}生日快乐呀～`;
+
+        Bot.pickGroup(pushItem)
+          .sendMsg(msg)
+          .catch((err) => {
+            // 推送失败，重试一次
+            pushAgain(pushItem, msg);
+          });
+
+        await common.sleep(1000);
+      }
+    }
   }
 
   /** 开启 */
@@ -62,18 +102,18 @@ export class birthday extends plugin {
 
     let data = this.birthdayCfgData;
 
-    console.log(data);
-
     if (this.e.msg.includes("开启")) {
       data.openPushGroups = Array.from(
         new Set([...data.openPushGroups, this.e.group_id])
       );
+      this.reply("生日推送已开启");
     } else if (this.e.msg.includes("关闭")) {
       data.openPushGroups = data.openPushGroups.filter(
         (item) => item !== this.e.group_id
       );
+      this.reply("生日推送已关闭");
     }
 
-    xxCfg.saveBirthday("role", "birthday", "defSet", data);
+    xxCfg.saveRoleSet("role", "set", "defSet", data);
   }
 }
