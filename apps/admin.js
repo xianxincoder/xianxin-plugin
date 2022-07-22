@@ -31,7 +31,6 @@ export class admin extends plugin {
     } else {
       this.reply("正在执行更新操作，请稍等");
     }
-    console.log(`${_path}/plugins/xianxin-plugin/`);
     const that = this;
     exec(
       command,

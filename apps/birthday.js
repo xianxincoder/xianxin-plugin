@@ -5,6 +5,8 @@ import xxCfg from "../model/xxCfg.js";
 import fs from "node:fs";
 import moment from "moment";
 import common from "../../../lib/common/common.js";
+import Birthday from "../model/birthday.js";
+import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 
 let birthdaySetFile = "./plugins/xianxin-plugin/config/role.set.yaml";
 if (!fs.existsSync(birthdaySetFile)) {
@@ -63,8 +65,6 @@ export class birthday extends plugin {
       return;
     }
 
-    // todo: 拿到日期，然后从配置文件中找到角色 然后进行推送
-
     const currentDate = moment().format("MM-DD");
 
     const birthdayData = this.birthdayCfgData.birthday;
@@ -77,17 +77,23 @@ export class birthday extends plugin {
 
     for (let pushItem of pushList) {
       for (let roleItem of roles) {
-        // todo: 后面可以优化html生成图片
-        const msg = `${roleItem}生日快乐呀～`;
+        const data = await new Birthday(this.e).getData(
+          pushItem,
+          roleItem.name,
+          roleItem.content
+        );
+        let img = await puppeteer.screenshot("birthday", data);
 
-        Bot.pickGroup(pushItem)
-          .sendMsg(msg)
-          .catch((err) => {
-            // 推送失败，重试一次
-            pushAgain(pushItem, msg);
-          });
+        if (img) {
+          Bot.pickGroup(pushItem)
+            .sendMsg(img)
+            .catch((err) => {
+              // 推送失败，重试一次
+              pushAgain(pushItem, img);
+            });
 
-        await common.sleep(1000);
+          await common.sleep(1000);
+        }
       }
     }
   }
