@@ -4,6 +4,12 @@ import plugin from "../../../lib/plugins/plugin.js";
 // 存放接收到的两条信息
 let tempMsg = {};
 
+/**
+ * 监听所有消息时，如果想不拦截其他插件消息
+ * 不要return空值 改为return false就会继续向下执行
+ * 也可以用accept(接受到消息都会执行一次)处理，具体看代码
+ */
+
 export class chat extends plugin {
   constructor() {
     super({
@@ -11,20 +17,10 @@ export class chat extends plugin {
       dsc: "群里好友发的信息，相关处理",
       event: "message.group",
       priority: 999,
-      rule: [
-        {
-          reg: "^(?!.*#).*$",
-          fnc: "repeat",
-        },
-      ],
     });
   }
 
-  /**
-   * 检测复读功能
-   * 如果不同群友发送信息相同两次 那么小机器人也发送一次相同的信息
-   */
-  async repeat() {
+  async accept() {
     // 如果不是群聊那么直接停止
     if (!this.e.isGroup) return;
 
@@ -75,6 +71,7 @@ export class chat extends plugin {
       tempMsg[info.group_id] = [];
 
       this.reply(info.message);
+      return "return";
     }
   }
 }
