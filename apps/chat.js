@@ -24,6 +24,9 @@ export class chat extends plugin {
     // 如果不是群聊那么直接停止
     if (!this.e.isGroup) return;
 
+    // 如果是命令消息那么不处理
+    if (!/^(?!.*#).*$/.test(this.e.msg)) return;
+
     const info = this.e;
 
     // 如果消息过于复杂那么直接停止
