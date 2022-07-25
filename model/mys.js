@@ -79,4 +79,54 @@ export default class Mys extends base {
     });
     return sortData;
   }
+
+  async getAcgnData() {
+    const cosData = [];
+    const fetchData = await fetch(
+      `https://bbs-api.mihoyo.com/post/wapi/getImagePostList?forum_id=29&gids=2&page_size=20&type=1`
+    );
+    const resJsonData = await fetchData.json();
+
+    if (
+      resJsonData &&
+      resJsonData.retcode === 0 &&
+      resJsonData.data.list &&
+      resJsonData.data.list.length
+    ) {
+      resJsonData.data.list.map((item) => {
+        cosData.push({
+          title: item.post.subject,
+          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
+          cover: item.cover.url,
+        });
+        return item;
+      });
+    }
+    return cosData;
+  }
+
+  async getCosData() {
+    const cosData = [];
+    const fetchData = await fetch(
+      `https://bbs-api.mihoyo.com/post/wapi/getImagePostList?forum_id=49&gids=2&page_size=20&type=1`
+    );
+    const resJsonData = await fetchData.json();
+
+    if (
+      resJsonData &&
+      resJsonData.retcode === 0 &&
+      resJsonData.data.list &&
+      resJsonData.data.list.length
+    ) {
+      resJsonData.data.list.map((item) => {
+        cosData.push({
+          title: item.post.subject,
+          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
+          cover: item.cover.url,
+        });
+        return item;
+      });
+    }
+    return cosData;
+  }
 }
