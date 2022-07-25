@@ -31,6 +31,10 @@ export class birthday extends plugin {
           reg: "^#*(开启|关闭)生日推送$",
           fnc: "switchTask",
         },
+        {
+          reg: "^#.*生日图片$",
+          fnc: "image",
+        },
       ],
     });
 
@@ -121,5 +125,17 @@ export class birthday extends plugin {
     }
 
     xxCfg.saveRoleSet("role", "birthday", "defSet", data);
+  }
+
+  async image() {
+    let role = this.e.msg.replace(/#/g, "").replace(/生日图片/g, "");
+    const imagePath = `./plugins/xianxin-plugin/resources/img/birthday/${role}.jpeg`;
+    try {
+      fs.readFileSync(imagePath);
+      let msg = segment.image(imagePath);
+      this.reply(msg);
+    } catch (error) {
+      this.reply("角色没有找到哦～");
+    }
   }
 }
