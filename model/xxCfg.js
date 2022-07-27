@@ -28,7 +28,7 @@ class XsCfg {
 
   /** 用户配置 */
   getConfig(app, name) {
-    let ignore = ["role.birthday"];
+    let ignore = [];
 
     if (ignore.includes(`${app}.${name}`)) {
       return this.getYaml(app, name, "config");
@@ -82,7 +82,7 @@ class XsCfg {
     this.watcher[type][key] = watcher;
   }
 
-  saveRoleSet(app, name, type, data) {
+  saveSet(app, name, type, data) {
     let file = this.getFilePath(app, name, type);
     if (lodash.isEmpty(data)) {
       fs.existsSync(file) && fs.unlinkSync(file);

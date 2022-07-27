@@ -1,4 +1,6 @@
 import { segment } from "oicq";
+import xxCfg from "../model/xxCfg.js";
+import fs from "node:fs";
 import plugin from "../../../lib/plugins/plugin.js";
 
 // 存放接收到的两条信息
@@ -17,10 +19,21 @@ export class chat extends plugin {
       dsc: "群里好友发的信息，相关处理",
       event: "message.group",
       priority: 999,
+      rule: [
+        {
+          reg: "^#*(开启|关闭)复读$",
+          fnc: "switchRepeat",
+        },
+      ],
     });
+
+    this.chatSetData = xxCfg.getdefSet("chat", "chat");
   }
 
   async accept() {
+    // 如果未开启那么直接终止
+    if (this.chatSetData.closedRepeatGroups.includes(this.e.group_id)) return;
+
     // 如果不是群聊那么直接停止
     if (!this.e.isGroup) return;
 
@@ -76,5 +89,29 @@ export class chat extends plugin {
       this.reply(info.message);
       return "return";
     }
+  }
+
+  async switchRepeat() {
+    if (!this.e.isGroup) return;
+    if (!this.e.isMaster) {
+      e.reply("哒咩，只有主人可以命令我哦～");
+      return;
+    }
+
+    let data = this.chatSetData;
+
+    if (this.e.msg.includes("关闭")) {
+      data.closedRepeatGroups = Array.from(
+        new Set([...data.closedRepeatGroups, this.e.group_id])
+      );
+      this.reply("复读已关闭");
+    } else if (this.e.msg.includes("开启")) {
+      data.closedRepeatGroups = data.closedRepeatGroups.filter(
+        (item) => item !== this.e.group_id
+      );
+      this.reply("复读已开启");
+    }
+
+    xxCfg.saveSet("chat", "chat", "defSet", data);
   }
 }
