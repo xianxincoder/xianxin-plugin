@@ -1,7 +1,7 @@
 import { segment } from "oicq";
 import plugin from "../../../lib/plugins/plugin.js";
 
-export class chat extends plugin {
+export class tools extends plugin {
   constructor() {
     super({
       name: "杂项",
