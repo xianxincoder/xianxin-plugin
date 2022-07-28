@@ -24,6 +24,10 @@ export class chat extends plugin {
           reg: "^#*(开启|关闭)复读$",
           fnc: "switchRepeat",
         },
+        {
+          reg: "^#赞我$",
+          fnc: "thumbsUpMe",
+        },
       ],
     });
 
@@ -113,5 +117,12 @@ export class chat extends plugin {
     }
 
     xxCfg.saveSet("chat", "chat", "defSet", data);
+  }
+
+  async thumbsUpMe() {
+    if (!this.e.isGroup) return;
+
+    Bot.pickFriend(this.e.user_id).thumbUp(10);
+    this.reply("已给你点赞");
   }
 }
