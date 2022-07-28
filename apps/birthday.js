@@ -130,11 +130,11 @@ export class birthday extends plugin {
   async image() {
     let role = this.e.msg.replace(/#/g, "").replace(/生日图片/g, "");
     const imagePath = `./plugins/xianxin-plugin/resources/img/birthday/${role}.jpeg`;
-    try {
-      fs.readFileSync(imagePath);
+
+    if (fs.existsSync(imagePath)) {
       let msg = segment.image(imagePath);
       this.reply(msg);
-    } catch (error) {
+    } else {
       this.reply("角色没有找到哦～");
     }
   }
