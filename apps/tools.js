@@ -4,8 +4,8 @@ import plugin from "../../../lib/plugins/plugin.js";
 export class tools extends plugin {
   constructor() {
     super({
-      name: "杂项",
-      dsc: "处理一些杂项",
+      name: "小工具",
+      dsc: "处理一些杂项小工具",
       event: "message",
       priority: 5000,
       rule: [
