@@ -35,5 +35,5 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 ## 其他
 - 素材来源于网络，仅供交流学习使用
 - 严禁用于任何商业用途和非法行为
-- xianxin-plugin QQ群：426961091 (已开放进入)
+- xianxin-plugin QQ群(已开放)：426961091
 - [爱发电](https://afdian.net/@xianxin)
