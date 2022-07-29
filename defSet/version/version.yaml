@@ -1,0 +1,23 @@
+- {
+    version: 1.0.1,
+    data:
+      [
+        添加<span class="cmd">#闲心插件版本</span>展示版本信息,
+        优化版本信息展示的样式,
+        处理只展示最后三个版本的更新信息,
+      ],
+  }
+- {
+    version: 1.0.0,
+    data:
+      [
+        添加<span class="cmd">#闲心插件更新</span>功能,
+        添加<span class="cmd">#cos</span>、<span class="cmd">#同人</span>、<span class="cmd">#热门话题</span>等米游社相关功能,
+        添加<span class="cmd">#xxx生日图片</span>获取留影续佳期生日图片,
+        添加<span class="cmd">#伪造信息</span>、<span class="strong">群消息复读</span>功能,
+        添加<span class="cmd">#赞我</span>功能，为发送指令的QQ点赞,
+        添加<span class="strong">动态图片</span>功能，例如：举牌大佬牛b，返回带文字的举牌图片,
+        添加<span class="cmd">#up</span>功能，查看B站up的具体信息,
+        添加<span class="strong">原神角色生日推送</span>功能,
+      ],
+  }
