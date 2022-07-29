@@ -16,19 +16,19 @@ export class mys extends plugin {
           fnc: "hotchat",
         },
         {
-          reg: "^#同人[0-9]$",
+          reg: "^#同人[0-9]*$",
           fnc: "acgn",
         },
         {
-          reg: "^#同人[0-9]详情$",
+          reg: "^#同人[0-9]*详情$",
           fnc: "acgnDetail",
         },
         {
-          reg: "^#cos[0-9]$",
+          reg: "^#cos[0-9]*$",
           fnc: "cos",
         },
         {
-          reg: "^#cos[0-9]详情$",
+          reg: "^#cos[0-9]*详情$",
           fnc: "cosDetail",
         },
       ],
