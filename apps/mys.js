@@ -16,12 +16,20 @@ export class mys extends plugin {
           fnc: "hotchat",
         },
         {
-          reg: "^#同人[0-9]*$",
+          reg: "^#同人[0-9]$",
           fnc: "acgn",
         },
         {
-          reg: "^#cos[0-9]*$",
+          reg: "^#同人[0-9]详情$",
+          fnc: "acgnDetail",
+        },
+        {
+          reg: "^#cos[0-9]$",
           fnc: "cos",
+        },
+        {
+          reg: "^#cos[0-9]详情$",
+          fnc: "cosDetail",
         },
       ],
     });
@@ -35,7 +43,7 @@ export class mys extends plugin {
     if (data) {
       this.reply(`热门话题：${data.title}\n话题地址：${data.url}`);
     } else {
-      this.reply("额，不好意思。没有找到合适的话题哦～");
+      this.reply("额，没有找到合适的话题哦～");
     }
   }
 
@@ -44,14 +52,21 @@ export class mys extends plugin {
     const acgnData = await new Mys().getAcgnData();
     const data = acgnData[index];
     if (data) {
-      const message = [
-        segment.image(data.cover),
-        `\n标题：${data.title}`,
-        `\n地址：${data.url}`,
-      ];
+      this.reply(segment.image(data.cover));
+    } else {
+      this.reply("额。没有找到合适的同人信息～");
+    }
+  }
+
+  async acgnDetail() {
+    let index = this.e.msg.replace(/#同人/g, "").replace("详情", "") || 0;
+    const acgnData = await new Mys().getAcgnData();
+    const data = acgnData[index];
+    if (data) {
+      const message = `标题：${data.title}\n地址：${data.url}`;
       this.reply(message);
     } else {
-      this.reply("额，不好意思。没有找到合适的话题哦～");
+      this.reply("额。没有找到合适的同人信息～");
     }
   }
 
@@ -60,14 +75,21 @@ export class mys extends plugin {
     const cosData = await new Mys().getCosData();
     const data = cosData[index];
     if (data) {
-      const message = [
-        segment.image(data.cover),
-        `\n标题：${data.title}`,
-        `\n地址：${data.url}`,
-      ];
+      this.reply(segment.image(data.cover));
+    } else {
+      this.reply("额。没有找到合适的cos信息～");
+    }
+  }
+
+  async cosDetail() {
+    let index = this.e.msg.replace(/#cos/g, "").replace("详情", "") || 0;
+    const cosData = await new Mys().getCosData();
+    const data = cosData[index];
+    if (data) {
+      const message = `标题：${data.title}\n地址：${data.url}`;
       this.reply(message);
     } else {
-      this.reply("额，不好意思。没有找到合适的话题哦～");
+      this.reply("额。没有找到合适的cos信息～");
     }
   }
 }

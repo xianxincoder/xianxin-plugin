@@ -44,7 +44,6 @@ export class bilibili extends plugin {
       return true;
     }
     const message = [
-      segment.image(`${data.face}_60x60.jpg`),
       `\n昵称：${data.name}`,
       `\n性别：${data.sex}`,
       `\n等级：${data.level}`,
@@ -63,10 +62,6 @@ export class bilibili extends plugin {
       if (data.live_room.watched_show) {
         message.push(`\n观看人数：${data.live_room.watched_show.num}人`);
       }
-      message.push(
-        "\n直播封面：\n",
-        segment.image(accInfoResJsonData.data.live_room.cover)
-      );
     }
 
     this.reply(message);
