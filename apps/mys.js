@@ -63,7 +63,7 @@ export class mys extends plugin {
     const acgnData = await new Mys().getAcgnData();
     const data = acgnData[index];
     if (data) {
-      const message = `标题：${data.title}\n地址：${data.url}\n作者：${data.username}\n点赞：${data.like_num}`;
+      const message = `标题：${data.title}\n地址：${data.url}\n作者：${data.nickname}\n点赞：${data.like_num}`;
       this.reply(message);
     } else {
       this.reply("额。没有找到合适的同人信息～");
@@ -86,7 +86,7 @@ export class mys extends plugin {
     const cosData = await new Mys().getCosData();
     const data = cosData[index];
     if (data) {
-      const message = `标题：${data.title}\n地址：${data.url}\n作者：${data.username}\n点赞：${data.like_num}`;
+      const message = `标题：${data.title}\n地址：${data.url}\n作者：${data.nickname}\n点赞：${data.like_num}`;
       this.reply(message);
     } else {
       this.reply("额。没有找到合适的cos信息～");
