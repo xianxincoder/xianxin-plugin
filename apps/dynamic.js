@@ -1,7 +1,7 @@
 import { segment } from "oicq";
 import lodash from "lodash";
 import plugin from "../../../lib/plugins/plugin.js";
-import axios from "axios";
+import fetch from "node-fetch";
 
 export class dynamic extends plugin {
   constructor() {
@@ -22,16 +22,18 @@ export class dynamic extends plugin {
   async raiseCard() {
     let msg = encodeURI(this.e.msg.replace(/举牌/g, ""));
 
-    let response = await axios.get(`https://ovooa.com/API/pai/?msg=${msg}`, {
-      timeout: 20000,
+    let response = await fetch(`https://ovooa.com/API/pai/?msg=${msg}`, {
+      method: "get",
       responseType: "arraybuffer",
     });
+
+    const buffer = await response.arrayBuffer();
 
     this.reply(
       segment.image(
         "base64://" +
           btoa(
-            new Uint8Array(response.data).reduce(
+            new Uint8Array(buffer).reduce(
               (data, byte) => data + String.fromCharCode(byte),
               ""
             )
