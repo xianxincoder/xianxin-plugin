@@ -1,0 +1,40 @@
+- group: 原神查询指令
+  list:
+    - icon: role
+      title: "生日推送 #开启生日推送"
+      desc: 原神角色生日时推送图片
+    - icon: paimon
+      title: "#cos #cos1 #cos详情"
+      desc: 查看米游社中cos榜
+    - icon: abyss
+      title: "#同人 #同人1 #同人详情"
+      desc: 查看米游社中同人榜
+    - icon: weapon
+      title: "#热门话题"
+      desc: 查看米游社中热聊话题
+    - icon: team
+      title: "#七七生日图片"
+      desc: 米游社中留影续佳期的生日图片
+    - icon: 树脂
+      title: "群消息复读 #关闭复读"
+      desc: 如果群内发送相同消息，进行复读
+- group: 其他查询指令
+  list:
+    - icon: 原石
+      title: "#赞我"
+      desc: 为发送指令的QQ点赞
+    - icon: 星辉
+      title: "#伪造信息"
+      desc: 例如：#伪造信息@闲心1@派蒙2|3
+    - icon: 纠缠之缘
+      title: 动态图片
+      desc: 例如：举牌1，返回举牌图片
+    - icon: 攻略
+      title: "#up"
+      desc: 查看B站up的具体信息
+    - icon: 问号
+      title: "#闲心插件版本"
+      desc: 查看，最近维护的版本信息
+    - icon: 史莱姆
+      title: "#闲心插件更新"
+      desc: "进行更新闲心插件"

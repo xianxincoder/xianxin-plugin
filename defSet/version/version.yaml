@@ -2,6 +2,7 @@
     version: 1.0.1,
     data:
       [
+        添加<span class="cmd">#闲心菜单</span>查看功能列表,
         添加<span class="cmd">#闲心插件版本</span>展示版本信息,
         优化版本信息展示的样式,
         处理只展示最后三个版本的更新信息,
