@@ -17,7 +17,7 @@ export class tools extends plugin {
           fnc: "thumbsUpMe",
         },
         {
-          reg: "^#闲心插件版本$",
+          reg: "^#闲心(插件)?版本$",
           fnc: "version",
         },
       ],
