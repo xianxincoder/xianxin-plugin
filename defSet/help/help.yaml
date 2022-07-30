@@ -1,4 +1,4 @@
-- group: 原神查询指令
+- group: 常用指令
   list:
     - icon: role
       title: "生日推送 #开启生日推送"
@@ -18,7 +18,7 @@
     - icon: 树脂
       title: "群消息复读 #关闭复读"
       desc: 如果群内发送相同消息，进行复读
-- group: 其他查询指令
+- group: 其他指令
   list:
     - icon: 原石
       title: "#赞我"
