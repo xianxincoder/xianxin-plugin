@@ -247,10 +247,10 @@ export class game extends plugin {
 
     let addition = 1;
 
-    if (selfExp / enemyExp > 1) {
+    if (selfExp / enemyExp > 2) {
       addition = Math.ceil(selfExp / enemyExp);
       probability = Number(probability / addition).toFixed(2);
-    } else if (enemyExp / selfExp > 1) {
+    } else if (enemyExp / selfExp > 2) {
       addition = Math.ceil(enemyExp / selfExp);
       probability = Number(probability * addition).toFixed(2);
     }
