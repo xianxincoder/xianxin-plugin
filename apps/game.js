@@ -255,9 +255,9 @@ export class game extends plugin {
       probability = Number(probability * addition).toFixed(2);
     }
 
-    if (probability > 0.8 || probability < 0.2) {
-      return { winner: undefined, loser: undefined };
-    }
+    // if (probability > 0.8 || probability < 0.2) {
+    //   return { winner: undefined, loser: undefined };
+    // }
 
     console.log(probability);
 
