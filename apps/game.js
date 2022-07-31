@@ -94,7 +94,7 @@ export class game extends plugin {
       return;
     }
 
-    const enemy = this.getEnemy();
+    const { enemy, enemyNick } = this.getEnemy();
 
     if (!enemy) {
       this.reply("没有对手的战斗，如何战斗。请发送#战@某位群友");
@@ -122,12 +122,22 @@ export class game extends plugin {
     if ((this.e.sender.card || this.e.user_id) === winner.nick) {
       message.push(" 完胜");
       message.push(
-        `\n战胜了对手，并获得战力${winner.tempExp}点，当前战力为${winner.exp}`
+        `\n战胜了对手，并获得战力${winner.tempExp}点，当前战力为${winner.exp}\n`
+      );
+      message.push(segment.at(enemy, enemyNick));
+      message.push(" 惜败");
+      message.push(
+        `\n败给了对手，并损失战力${loser.tempExp}点，当前战力为${loser.exp}`
       );
     } else {
       message.push(" 惜败");
       message.push(
-        `\n惜败，并损失战力${loser.tempExp}点，当前战力为${loser.exp}`
+        `\n败给了对手，并损失战力${loser.tempExp}点，当前战力为${loser.exp}\n`
+      );
+      message.push(segment.at(enemy, enemyNick));
+      message.push(" 完胜");
+      message.push(
+        `\n战胜了对手，并获得战力${winner.tempExp}点，当前战力为${winner.exp}`
       );
     }
 
@@ -296,13 +306,15 @@ export class game extends plugin {
     let message = this.e.message;
 
     let enemy = "";
+    let enemyNick = "";
 
     for (let i in message) {
       if (message[i].type == "at") {
         enemy = message[i].qq;
+        enemyNick = message[i].text.replace("@", "");
       }
     }
-    return enemy;
+    return { enemy, enemyNick };
   }
 
   /** 初始化群战信息 */
