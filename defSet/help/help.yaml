@@ -9,7 +9,7 @@
     - icon: abyss
       title: "#同人 #同人1 #同人详情"
       desc: 查看米游社中同人榜
-    - icon: weapon
+    - icon: wiki
       title: "#热门话题"
       desc: 查看米游社中热聊话题
     - icon: team
@@ -18,6 +18,20 @@
     - icon: 树脂
       title: "群消息复读 #关闭复读"
       desc: 如果群内发送相同消息，进行复读
+- group: 群战指令
+  list:
+    - icon: 养成计算
+      title: "#加入群战 #群战信息"
+      desc: 初始化群战信息
+    - icon: weapon
+      title: "战@群友 #战@群友"
+      desc: "@一名群友进行群战"
+    - icon: 记录
+      title: "#战榜"
+      desc: 查看群战rank榜
+    - icon: moster
+      title: "#战狂"
+      desc: 查看战榜中战斗次数最多的人
 - group: 其他指令
   list:
     - icon: 原石
