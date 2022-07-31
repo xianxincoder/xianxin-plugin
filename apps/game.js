@@ -115,6 +115,11 @@ export class game extends plugin {
 
     const { winner, loser } = retData;
 
+    if (!winner && !loser) {
+      this.reply("对手战力差距过大，触发战力保护机制无法进行挑战");
+      return;
+    }
+
     const message = [
       segment.at(this.e.user_id, this.e.sender.card || this.e.user_id),
     ];
@@ -239,6 +244,22 @@ export class game extends plugin {
 
     let tempSelfExp = selfExp;
     let tempEnemyExp = enemyExp;
+
+    let addition = 1;
+
+    if (selfExp / enemyExp > 1) {
+      addition = Math.ceil(selfExp / enemyExp);
+      probability = Number(probability / addition).toFixed(2);
+    } else if (enemyExp / selfExp > 1) {
+      addition = Math.ceil(enemyExp / selfExp);
+      probability = Number(probability * addition).toFixed(2);
+    }
+
+    if (probability > 0.8 || probability < 0.2) {
+      return { winner: undefined, loser: undefined };
+    }
+
+    console.log(probability);
 
     if (randomNum > probability) {
       // 输了
