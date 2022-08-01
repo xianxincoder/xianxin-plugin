@@ -7,7 +7,7 @@
         <span class="cmd">战@xx</span>@一名群友进行战斗,
         <span class="cmd">#战榜</span>查看群战rank榜,
         <span class="cmd">#战狂</span>查看战榜中战斗次数最多的人,
-        优化战力差距存在倍数时提升动态提升胜负率,
+        <span class="cmd">#逆天改命</span>战力最低的专属技能，每人每天最多用一次,
         战力如果差距特别大，进行战力保护无法进行挑战,
       ],
   }

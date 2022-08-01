@@ -35,6 +35,10 @@ export class game extends plugin {
           reg: "^#战狂$",
           fnc: "time",
         },
+        {
+          reg: "^#逆天改命$",
+          fnc: "chance",
+        },
       ],
     });
 
@@ -175,6 +179,7 @@ export class game extends plugin {
   async time() {
     await this.getGroupId();
     if (!this.group_id) return;
+
     const players = this.getPlayers();
 
     if (!players || !players.length) {
@@ -182,19 +187,81 @@ export class game extends plugin {
       return;
     }
 
-    console.log(players);
-
     const sortTimePlayers = players.sort(function (a, b) {
       return b.time - a.time;
     });
-
-    console.log(sortTimePlayers);
 
     const mostTimePlayer = sortTimePlayers[0];
 
     this.reply(
       `当前战狂：${mostTimePlayer.nick}\n共战斗${mostTimePlayer.time}次，战力为${mostTimePlayer.exp}点`
     );
+  }
+
+  async chance() {
+    await this.getGroupId();
+    if (!this.group_id) return;
+
+    this.initPkArr();
+
+    if (!pkArr[this.group_id]) {
+      this.reply("首次战斗，请先使用#加入群战注册群战信息");
+      return;
+    }
+
+    let selfInfo = pkArr[this.group_id].get(String(this.e.user_id));
+
+    if (!selfInfo) {
+      this.reply("首次战斗，请先使用#加入群战注册群战信息");
+      return;
+    }
+
+    const players = this.getPlayers();
+
+    if (!players || !players.length) {
+      this.reply(`未找到玩家数据`);
+      return;
+    }
+
+    const sortExpPlayers = players.sort(function (a, b) {
+      return b.exp - a.exp;
+    });
+
+    const lowestExpPlayer = sortExpPlayers[players.length - 1];
+
+    if (lowestExpPlayer.exp !== selfInfo.exp) {
+      this.reply("技能为战力最低专属技能，您战力过高还需摆烂～");
+      return;
+    }
+
+    /** cd 单位秒 */
+    let cd = 60 * 60 * 24; // 一天
+    let key = `Yz:gamechance:${this.e.group_id}${this.e.user_id}`;
+    if (await redis.get(key)) {
+      this.reply("今天已经用过这个技能了，一天只能用一次哦");
+      return;
+    }
+    redis.set(key, "1", { EX: cd });
+
+    const mostExpPlayer = sortExpPlayers[0];
+
+    const randomMax = Math.round((mostExpPlayer.exp - lowestExpPlayer.exp) / 2);
+
+    let tempExp = Math.floor(Math.random() * randomMax) + 1;
+
+    pkArr[this.group_id].set(String(this.e.user_id), {
+      ...selfInfo,
+      exp: selfInfo.exp + tempExp,
+    });
+
+    this.saveJson();
+
+    this.reply([
+      segment.at(this.e.user_id, this.e.sender.card || this.e.user_id),
+      ` 逆天改命技能使用成功，获得战力${tempExp}，当前战力为${
+        selfInfo.exp + tempExp
+      }`,
+    ]);
   }
 
   getPlayers() {
@@ -245,19 +312,19 @@ export class game extends plugin {
     let tempSelfExp = selfExp;
     let tempEnemyExp = enemyExp;
 
-    let addition = 1;
+    // let addition = 1;
 
-    if (selfExp / enemyExp > 2) {
-      addition = Math.ceil(selfExp / enemyExp);
-      probability = Number(probability / addition).toFixed(2);
-    } else if (enemyExp / selfExp > 2) {
-      addition = Math.ceil(enemyExp / selfExp);
-      probability = Number(probability * addition).toFixed(2);
-    }
-
-    // if (probability > 0.8 || probability < 0.2) {
-    //   return { winner: undefined, loser: undefined };
+    // if (selfExp / enemyExp > 2) {
+    //   addition = Math.ceil(selfExp / enemyExp);
+    //   probability = Number(probability / addition).toFixed(2);
+    // } else if (enemyExp / selfExp > 2) {
+    //   addition = Math.ceil(enemyExp / selfExp);
+    //   probability = Number(probability * addition).toFixed(2);
     // }
+
+    if (probability > 0.9 || probability < 0.1) {
+      return { winner: undefined, loser: undefined };
+    }
 
     console.log(probability);
 

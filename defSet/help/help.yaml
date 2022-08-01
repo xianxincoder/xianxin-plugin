@@ -32,6 +32,9 @@
     - icon: moster
       title: "#战狂"
       desc: 查看战榜中战斗次数最多的人
+    - icon: sign
+      title: "#逆天改命"
+      desc: 战力最低的专属技能
 - group: 其他指令
   list:
     - icon: 原石
