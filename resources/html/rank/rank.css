@@ -162,6 +162,39 @@ body {
 .list .item:nth-child(3) .title{
   font-size: 16px;
 }
+
+
+.list .item .avatar{
+  width: 36px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.list .item .avatar .icon{
+  width: 20px;
+  height: 20px;
+  border: 1px solid #e6d9be;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  position: relative;
+  flex-shrink: 0;
+}
+.list .item:nth-child(1) .avatar .icon{
+  width: 32px;
+  height: 32px;
+}
+
+.list .item:nth-child(2) .avatar .icon{
+  width: 28px;
+  height: 28px;
+}
+
+.list .item:nth-child(3) .avatar .icon{
+  width: 24px;
+  height: 24px;
+}
+
 .list .item .dec{
   font-size: 12px;
   color: #999;

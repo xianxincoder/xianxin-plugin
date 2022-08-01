@@ -33,6 +33,13 @@
               src="{{pluResPath}}img/rank/top{{idx < 3 ? idx : ''}}.png"
             />
           </div>
+          <div class="avatar">
+            <img
+              class="icon"
+              src="https://q1.qlogo.cn/g?b=qq&s=0&nk={{val.user_id}}"
+              onerror="whenError(this)"
+            />
+          </div>
           <div class="title">{{val.nick}}</div>
 
           <div class="dec">战力<span class="exp">{{val.exp}}</span>点</div>
@@ -42,4 +49,9 @@
       <div class="logo">Created By Yunzai-Bot & Xianxin-Plugin</div>
     </div>
   </body>
+  <script type="text/javascript">
+    function whenError(a) {
+      // a.onerror = null;
+    }
+  </script>
 </html>

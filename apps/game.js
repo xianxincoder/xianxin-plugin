@@ -272,7 +272,7 @@ export class game extends plugin {
     let playerArr = [];
 
     for (let [k, v] of pkArr[this.group_id]) {
-      playerArr.push(v);
+      playerArr.push({ ...v, user_id: k });
     }
     return playerArr;
   }
