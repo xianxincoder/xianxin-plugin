@@ -77,7 +77,24 @@ export class game extends plugin {
       };
     }
 
-    this.reply(`昵称：${pkInfo.nick}\n战力：${pkInfo.exp}`);
+    const data = await new Game(this.e).getMyPkData(pkInfo);
+
+    const { level, info } = this.getLevel(pkInfo.exp);
+
+    let img = await puppeteer.screenshot("mypk", {
+      ...data,
+      level,
+      info,
+      user_id: this.e.user_id,
+      nick: this.e.sender.card || this.e.user_id,
+    });
+    this.e.reply(img);
+
+    // this.reply(
+    //   `昵称：${pkInfo.nick}\n战力：${pkInfo.exp}\n战阶：${this.getLevel(
+    //     pkInfo.exp
+    //   )}`
+    // );
   }
 
   async pk() {
@@ -193,9 +210,17 @@ export class game extends plugin {
 
     const mostTimePlayer = sortTimePlayers[0];
 
-    this.reply(
-      `当前战狂：${mostTimePlayer.nick}\n共战斗${mostTimePlayer.time}次，战力为${mostTimePlayer.exp}点`
-    );
+    const data = await new Game(this.e).getTimeData(mostTimePlayer);
+
+    let img = await puppeteer.screenshot("time", {
+      ...data,
+      level: "战狂",
+    });
+    this.e.reply(img);
+
+    // this.reply(
+    //   `当前战狂：${mostTimePlayer.nick}\n共战斗${mostTimePlayer.time}次，战力为${mostTimePlayer.exp}点`
+    // );
   }
 
   async chance() {
@@ -272,7 +297,8 @@ export class game extends plugin {
     let playerArr = [];
 
     for (let [k, v] of pkArr[this.group_id]) {
-      playerArr.push({ ...v, user_id: k });
+      const { level, info } = this.getLevel(v.exp);
+      playerArr.push({ ...v, user_id: k, level, info });
     }
     return playerArr;
   }
@@ -325,8 +351,6 @@ export class game extends plugin {
     if (probability > 0.9 || probability < 0.1) {
       return { winner: undefined, loser: undefined };
     }
-
-    console.log(probability);
 
     if (randomNum > probability) {
       // 输了
@@ -444,6 +468,34 @@ export class game extends plugin {
     }
 
     return;
+  }
+
+  getLevel(exp) {
+    if (exp === 10) {
+      return { level: "战渣", info: "战至成渣～" };
+    }
+    if (exp < 51) {
+      return { level: "战尘", info: "微尘亦战～" };
+    }
+    if (exp < 151) {
+      return { level: "战士", info: "骁勇善战" };
+    }
+    if (exp < 301) {
+      return { level: "战将", info: "一将功成万骨枯～" };
+    }
+    if (exp < 601) {
+      return { level: "战王", info: "何人敢与我一战！" };
+    }
+
+    if (exp < 1001) {
+      return { level: "战圣", info: "高处不胜寒！" };
+    }
+
+    if (exp > 1000) {
+      return { level: "战圣", info: "无敌无我～" };
+    }
+
+    return { level: "战x", info: "xxxx" };
   }
 
   /** 保存json文件 */

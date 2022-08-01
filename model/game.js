@@ -10,8 +10,26 @@ export default class Game extends base {
     this.model = "rank";
     return {
       ...this.screenData,
-      saveId: "game",
+      saveId: "rank",
       rankData,
+    };
+  }
+
+  async getMyPkData(mypkData) {
+    this.model = "mypk";
+    return {
+      ...this.screenData,
+      saveId: "mypk",
+      ...mypkData,
+    };
+  }
+
+  async getTimeData(timeData) {
+    this.model = "time";
+    return {
+      ...this.screenData,
+      saveId: "time",
+      ...timeData,
     };
   }
 }
