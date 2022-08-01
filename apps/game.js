@@ -87,14 +87,14 @@ export class game extends plugin {
     this.initPkArr();
 
     if (!pkArr[this.group_id]) {
-      this.reply("首次战斗，请先使用#加入群战注册群战信息");
+      this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
       return;
     }
 
     let selfInfo = pkArr[this.group_id].get(String(this.e.user_id));
 
     if (!selfInfo) {
-      this.reply("首次战斗，请先使用#加入群战注册群战信息");
+      this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
       return;
     }
 
@@ -108,7 +108,7 @@ export class game extends plugin {
     let enemyInfo = pkArr[this.group_id].get(String(enemy));
 
     if (!enemyInfo) {
-      this.reply("对手未注册群战信息，请先让对手使用#加入群战注册群战信息");
+      this.reply("对手未注册群战信息，请先让对手使用 #加入群战 注册群战信息");
       return;
     }
 
@@ -205,14 +205,14 @@ export class game extends plugin {
     this.initPkArr();
 
     if (!pkArr[this.group_id]) {
-      this.reply("首次战斗，请先使用#加入群战注册群战信息");
+      this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
       return;
     }
 
     let selfInfo = pkArr[this.group_id].get(String(this.e.user_id));
 
     if (!selfInfo) {
-      this.reply("首次战斗，请先使用#加入群战注册群战信息");
+      this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
       return;
     }
 
