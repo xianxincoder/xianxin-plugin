@@ -7,6 +7,7 @@ export default class Game extends base {
   }
 
   async getRankData(rankData) {
+    this.model = "rank";
     return {
       ...this.screenData,
       saveId: "game",

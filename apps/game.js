@@ -172,7 +172,7 @@ export class game extends plugin {
       sortExpPlayers.slice(0, 20)
     );
 
-    let img = await puppeteer.screenshot("game", data);
+    let img = await puppeteer.screenshot("rank", data);
     this.e.reply(img);
   }
 
