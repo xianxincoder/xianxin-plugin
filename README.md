@@ -36,7 +36,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 ```
 
 
-##请作者喝杯咖啡，全凭自愿哦
+## 请作者喝杯咖啡，全凭自愿哦
 
 - [爱发电](https://afdian.net/@xianxin)
 
