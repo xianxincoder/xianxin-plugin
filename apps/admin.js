@@ -1,8 +1,11 @@
 import plugin from "../../../lib/plugins/plugin.js";
-import { exec } from "child_process";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const { exec } = require("child_process");
 
 const _path = process.cwd();
-
+let timer;
 export class admin extends plugin {
   constructor() {
     super({
@@ -12,11 +15,26 @@ export class admin extends plugin {
       priority: 400,
       rule: [
         {
-          reg: "^#闲心插件(强制)?更新",
+          reg: "^#闲心(插件)?(强制)?更新",
           fnc: "checkout",
         },
       ],
     });
+
+    this.key = "xianxin:restart";
+  }
+
+  async init() {
+    let restart = await redis.get(this.key);
+    if (restart) {
+      restart = JSON.parse(restart);
+      if (restart.isGroup) {
+        Bot.pickGroup(restart.id).sendMsg("重启成功，新版闲心插件已经生效");
+      } else {
+        Bot.pickUser(restart.id).sendMsg("重启成功，新版闲心插件已经生效");
+      }
+      redis.del(this.key);
+    }
   }
 
   async checkout() {
@@ -27,9 +45,9 @@ export class admin extends plugin {
     let command = "git  pull";
     if (isForce) {
       command = "git  checkout . && git  pull";
-      this.reply("正在执行强制更新操作，请稍等");
+      this("正在执行强制更新操作，请稍等");
     } else {
-      this.reply("正在执行更新操作，请稍等");
+      this.e.reply("正在执行更新操作，请稍等");
     }
     const that = this;
     exec(
@@ -37,11 +55,11 @@ export class admin extends plugin {
       { cwd: `${_path}/plugins/xianxin-plugin/` },
       function (error, stdout, stderr) {
         if (/(Already up[ -]to[ -]date|已经是最新的)/.test(stdout)) {
-          that.reply("目前已经是最新版闲心插件了~");
+          that.e.reply("目前已经是最新版闲心插件了~");
           return;
         }
         if (error) {
-          that.reply(
+          that.e.reply(
             "闲心插件更新失败！\nError code: " +
               error.code +
               "\n" +
@@ -50,8 +68,50 @@ export class admin extends plugin {
           );
           return;
         }
-        that.reply("闲心插件更新成功");
+        that.e.reply("闲心插件更新成功，正在尝试重新启动Yunzai以应用更新...");
+        timer && clearTimeout(timer);
+        timer = setTimeout(async () => {
+          try {
+            let data = JSON.stringify({
+              isGroup: !!that.e.isGroup,
+              id: that.e.isGroup ? that.e.group_id : that.e.user_id,
+            });
+
+            await redis.set(that.key, data, { EX: 120 });
+
+            let cm = "npm run start";
+            if (process.argv[1].includes("pm2")) {
+              cm = "npm run restart";
+            } else {
+              await that.e.reply("当前为前台运行，重启将转为后台...");
+            }
+
+            exec(cm, (error, stdout, stderr) => {
+              if (error) {
+                redis.del(that.key);
+                that.e.reply(
+                  "自动重启失败，请手动重启以应用新版闲心插件。\nError code: " +
+                    error.code +
+                    "\n" +
+                    error.stack +
+                    "\n"
+                );
+                logger.error(`重启失败\n${error.stack}`);
+              } else if (stdout) {
+                logger.mark("重启成功，运行已转为后台");
+                logger.mark("查看日志请用命令：npm run log");
+                logger.mark("停止后台运行命令：npm stop");
+                process.exit();
+              }
+            });
+          } catch (error) {
+            redis.del(this.key);
+            let e = error.stack ?? error;
+            that.e.reply(`重启云崽操作失败！\n${e}`);
+          }
+        }, 1000);
       }
     );
+    return true;
   }
 }
