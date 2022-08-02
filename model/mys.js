@@ -98,6 +98,7 @@ export default class Mys extends base {
           title: item.post.subject,
           url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
           cover: item.cover.url,
+          images: item.post.images,
           nickname: item.user.nickname,
           like_num: item.stat.like_num,
         });
@@ -125,6 +126,7 @@ export default class Mys extends base {
           title: item.post.subject,
           url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
           cover: item.cover.url,
+          images: item.post.images,
           nickname: item.user.nickname,
           like_num: item.stat.like_num,
         });

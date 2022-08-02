@@ -2,6 +2,7 @@ import { segment } from "oicq";
 import lodash from "lodash";
 import plugin from "../../../lib/plugins/plugin.js";
 import Mys from "../model/mys.js";
+import common from "../../../lib/common/common.js";
 
 export class mys extends plugin {
   constructor() {
@@ -52,7 +53,10 @@ export class mys extends plugin {
     const acgnData = await new Mys().getAcgnData();
     const data = acgnData[index];
     if (data) {
-      this.reply(segment.image(data.cover));
+      for (let imageItem of data.images) {
+        await this.reply(segment.image(imageItem));
+        await common.sleep(600);
+      }
     } else {
       this.reply("额。没有找到合适的同人信息～");
     }
@@ -75,7 +79,10 @@ export class mys extends plugin {
     const cosData = await new Mys().getCosData();
     const data = cosData[index];
     if (data) {
-      this.reply(segment.image(data.cover));
+      for (let imageItem of data.images) {
+        await this.reply(segment.image(imageItem));
+        await common.sleep(600);
+      }
     } else {
       this.reply("额。没有找到合适的cos信息～");
     }
