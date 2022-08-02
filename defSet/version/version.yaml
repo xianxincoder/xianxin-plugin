@@ -2,9 +2,9 @@
     version: 1.0.3,
     data:
       [
-        <span class="cmd">#闲心插件更新</span>支持<span class="cmd">#闲心更新</span>指令
-        <span class="cmd">#闲心插件更新</span>后自动重启云崽bot以完成插件的生效
-        <span class="cmd">#战狂</span>、<span class="cmd">#群战信息</span>面板样式优化
+        <span class="cmd">#闲心插件更新</span>支持<span class="cmd">#闲心更新</span>指令,
+        <span class="cmd">#闲心插件更新</span>后自动重启云崽bot以完成插件的生效,
+        <span class="cmd">#战狂</span>、<span class="cmd">#群战信息</span>面板样式优化,
       ],
   }
 - {
