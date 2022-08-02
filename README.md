@@ -36,17 +36,18 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 ```
 
 
-## 请作者喝杯咖啡，全凭自愿哦
+## 其他
+- 素材来源于网络，仅供交流学习使用
+- 严禁用于任何商业用途和非法行为
+- xianxin-plugin QQ群：426961091
+
+
+
+## 赞助，全凭自愿哦
 
 - [爱发电](https://afdian.net/@xianxin)
 
 
 | 赞助老哥 | 金额 |
 | --- | --- |
-| Fei.| 33元 |
-
-
-## 其他
-- 素材来源于网络，仅供交流学习使用
-- 严禁用于任何商业用途和非法行为
-- xianxin-plugin QQ群：426961091
+| Fei.| 33 |
