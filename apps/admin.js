@@ -45,7 +45,7 @@ export class admin extends plugin {
     let command = "git  pull";
     if (isForce) {
       command = "git  checkout . && git  pull";
-      this("正在执行强制更新操作，请稍等");
+      this.e.reply("正在执行强制更新操作，请稍等");
     } else {
       this.e.reply("正在执行更新操作，请稍等");
     }
