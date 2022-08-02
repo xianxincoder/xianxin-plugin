@@ -2,9 +2,9 @@
     version: 1.0.3,
     data:
       [
+        <span class="cmd">#战狂</span><span class="cmd">#群战信息</span>面板样式优化,
         <span class="cmd">#闲心插件更新</span>支持<span class="cmd">#闲心更新</span>指令,
         <span class="cmd">#闲心插件更新</span>后自动重启云崽bot以完成插件的生效,
-        <span class="cmd">#战狂</span>、<span class="cmd">#群战信息</span>面板样式优化,
       ],
   }
 - {
@@ -12,7 +12,7 @@
     data:
       [
         添加<span class="strong">群战</span>功能,
-        <span class="cmd">#加入群战</span>、<span class="cmd">#群战信息</span>初始化群战信息，并展示自己的信息,
+        <span class="cmd">#加入群战</span><span class="cmd">#群战信息</span>初始化群战信息，并展示自己的信息,
         <span class="cmd">战@xx</span>@一名群友进行战斗,
         <span class="cmd">#战榜</span>查看群战rank榜,
         <span class="cmd">#战狂</span>查看战榜中战斗次数最多的人,
