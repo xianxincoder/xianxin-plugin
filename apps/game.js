@@ -145,7 +145,7 @@ export class game extends plugin {
       segment.at(this.e.user_id, this.e.sender.card || this.e.user_id),
     ];
 
-    if ((this.e.sender.card || this.e.user_id) === winner.nick) {
+    if (this.e.user_id == winner.user_id) {
       message.push(" 完胜");
       message.push(
         `\n战胜了对手，并获得战力${winner.tempExp}点，当前战力为${winner.exp}\n`
