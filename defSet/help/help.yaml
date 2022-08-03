@@ -15,9 +15,9 @@
     - icon: team
       title: "#七七生日图片"
       desc: 米游社中留影续佳期的生日图片
-    - icon: 树脂
-      title: "群消息复读 #关闭复读"
-      desc: 如果群内发送相同消息，进行复读
+    - icon: 原石
+      title: "#赞我"
+      desc: 为发送指令的QQ点赞
 - group: 群战指令
   list:
     - icon: 养成计算
@@ -37,12 +37,6 @@
       desc: 战力最低的专属技能
 - group: 其他指令
   list:
-    - icon: 原石
-      title: "#赞我"
-      desc: 为发送指令的QQ点赞
-    - icon: 星辉
-      title: "#伪造信息"
-      desc: 例如：#伪造信息@闲心1@派蒙2|3
     - icon: 纠缠之缘
       title: 动态图片
       desc: 例如：举牌1，返回举牌图片
