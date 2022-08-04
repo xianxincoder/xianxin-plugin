@@ -50,4 +50,5 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | --- | --- |
 | Fei.| 33 |
 | 林木森つ| 5 |
+| 星辰之梦| 6.6 |
 
