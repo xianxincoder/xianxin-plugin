@@ -2,7 +2,6 @@ import { segment } from "oicq";
 import lodash from "lodash";
 import plugin from "../../../lib/plugins/plugin.js";
 import Mys from "../model/mys.js";
-import common from "../../../lib/common/common.js";
 
 export class mys extends plugin {
   constructor() {
@@ -53,9 +52,19 @@ export class mys extends plugin {
     const acgnData = await new Mys().getAcgnData();
     const data = acgnData[index];
     if (data) {
+      let msgList = [];
       for (let imageItem of data.images) {
-        await this.reply(segment.image(imageItem));
-        await common.sleep(600);
+        msgList.push({
+          message: segment.image(imageItem),
+          nickname: Bot.nickname,
+          user_id: Bot.uin,
+        });
+      }
+
+      if (msgList.length == 1) {
+        await this.e.reply(msgList[0].message);
+      } else {
+        await this.e.reply(await Bot.makeForwardMsg(msgList));
       }
     } else {
       this.reply("额。没有找到合适的同人信息～");
@@ -79,9 +88,18 @@ export class mys extends plugin {
     const cosData = await new Mys().getCosData();
     const data = cosData[index];
     if (data) {
+      let msgList = [];
       for (let imageItem of data.images) {
-        await this.reply(segment.image(imageItem));
-        await common.sleep(600);
+        msgList.push({
+          message: segment.image(imageItem),
+          nickname: Bot.nickname,
+          user_id: Bot.uin,
+        });
+      }
+      if (msgList.length == 1) {
+        await this.e.reply(msgList[0].message);
+      } else {
+        await this.e.reply(await Bot.makeForwardMsg(msgList));
       }
     } else {
       this.reply("额。没有找到合适的cos信息～");

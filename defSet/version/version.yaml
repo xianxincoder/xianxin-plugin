@@ -5,7 +5,7 @@
         <span class="cmd">#战狂</span><span class="cmd">#群战信息</span>面板样式优化,
         <span class="cmd">#闲心插件更新</span>支持<span class="cmd">#闲心更新</span>指令,
         <span class="cmd">#闲心插件更新</span>后自动重启云崽bot以完成插件的生效,
-        <span class="cmd">#cos</span><span class="cmd">#同人</span>优化为发送一组完整照片,
+        <span class="cmd">#cos</span><span class="cmd">#同人</span>优化为发送一组完整照片，避免刷屏改为转发的形式,
       ],
   }
 - {
