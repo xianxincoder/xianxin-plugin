@@ -2,14 +2,16 @@ import plugin from "../../../lib/plugins/plugin.js";
 import fs from "node:fs";
 import { segment } from "oicq";
 import Game from "../model/game.js";
+import moment from "moment";
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
+import xxCfg from "../model/xxCfg.js";
 
 let pkArr = {};
 
-/**
- * jsonData
- * {1484288448: {exp: 0, nick: '', time: 0}}
- */
+let gameSetFile = "./plugins/xianxin-plugin/config/game.set.yaml";
+if (!fs.existsSync(gameSetFile)) {
+  fs.copyFileSync("./plugins/xianxin-plugin/defSet/game/set.yaml", gameSetFile);
+}
 
 export class game extends plugin {
   constructor(e) {
@@ -43,6 +45,7 @@ export class game extends plugin {
     });
 
     this.path = "./data/pkJson/";
+    this.gameSetData = xxCfg.getConfig("game", "set");
   }
 
   async init() {
@@ -74,6 +77,8 @@ export class game extends plugin {
         nick: this.e.sender.card || this.e.user_id,
         exp: 100,
         time: 0,
+        dayTime: 0,
+        lastpk: moment().format("YYYYMMDD"),
       };
     }
 
@@ -109,6 +114,20 @@ export class game extends plugin {
     }
 
     let selfInfo = pkArr[this.group_id].get(String(this.e.user_id));
+
+    if (moment().format("YYYYMMDD") !== selfInfo.lastpk) {
+      selfInfo.dayTime = 0;
+    }
+
+    if (
+      this.gameSetData.limitTimes !== 0 &&
+      selfInfo.dayTime >= this.gameSetData.limitTimes
+    ) {
+      this.reply(
+        `每日限制挑战次数为${this.gameSetData.limitTimes}次，请明日再战`
+      );
+      return;
+    }
 
     if (!selfInfo) {
       this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
@@ -191,10 +210,13 @@ export class game extends plugin {
     });
 
     const data = await new Game(this.e).getRankData(
-      sortExpPlayers.slice(0, 20)
+      sortExpPlayers.slice(0, this.gameSetData.limitTop || 20)
     );
 
-    let img = await puppeteer.screenshot("rank", data);
+    let img = await puppeteer.screenshot("rank", {
+      ...data,
+      limitTop: this.gameSetData.limitTop || 20,
+    });
     this.e.reply(img);
   }
 
@@ -317,6 +339,8 @@ export class game extends plugin {
       nick: this.e.sender.card || this.e.user_id,
       exp: 100,
       time: 0,
+      dayTime: 0,
+      lastpk: moment().format("YYYYMMDD"),
     });
 
     this.saveJson();
@@ -326,9 +350,13 @@ export class game extends plugin {
   pkHandle(self, enemy) {
     if (!pkArr[this.group_id]) pkArr[this.group_id] = new Map();
 
-    const { exp: selfExp, time: selfTime = 0 } = self;
+    const { exp: selfExp, time: selfTime = 0, dayTime: selfDayTime = 0 } = self;
 
-    const { exp: enemyExp, time: enemyTime = 0 } = enemy;
+    const {
+      exp: enemyExp,
+      time: enemyTime = 0,
+      dayTime: enemyDayTime = 0,
+    } = enemy;
 
     let winner = null;
     let loser = null;
@@ -406,6 +434,8 @@ export class game extends plugin {
       nick: self.nick,
       exp: tempSelfExp,
       time: selfTime + 1,
+      dayTime: selfDayTime + 1,
+      lastpk: moment().format("YYYYMMDD"),
     });
 
     pkArr[this.group_id].set(String(enemy.user_id), {
@@ -413,6 +443,7 @@ export class game extends plugin {
       nick: enemy.nick,
       exp: tempEnemyExp,
       time: enemyTime,
+      dayTime: enemyDayTime,
     });
 
     this.saveJson();
@@ -497,7 +528,7 @@ export class game extends plugin {
     }
 
     if (exp > 1000) {
-      return { level: "战圣", info: "无敌无我～" };
+      return { level: "战神", info: "无敌无我～" };
     }
 
     return { level: "战x", info: "xxxx" };
