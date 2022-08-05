@@ -115,6 +115,11 @@ export class game extends plugin {
 
     let selfInfo = pkArr[this.group_id].get(String(this.e.user_id));
 
+    if (!selfInfo) {
+      this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
+      return;
+    }
+
     if (moment().format("YYYYMMDD") !== selfInfo.lastpk) {
       selfInfo.dayTime = 0;
     }
@@ -126,11 +131,6 @@ export class game extends plugin {
       this.reply(
         `每日限制挑战次数为${this.gameSetData.limitTimes}次，请明日再战`
       );
-      return;
-    }
-
-    if (!selfInfo) {
-      this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
       return;
     }
 
