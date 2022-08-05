@@ -122,6 +122,11 @@ export class game extends plugin {
       return;
     }
 
+    if (enemy === this.e.user_id) {
+      this.reply("不可以和自己战斗哦，请@群中好友战斗");
+      return;
+    }
+
     let enemyInfo = pkArr[this.group_id].get(String(enemy));
 
     if (!enemyInfo) {
