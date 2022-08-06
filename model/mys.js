@@ -135,4 +135,33 @@ export default class Mys extends base {
     }
     return cosData;
   }
+
+  async getCosSearchData(keyword, last_id) {
+    const cosData = [];
+
+    const fetchData = await fetch(
+      `https://bbs-api.mihoyo.com/post/wapi/searchPosts?forum_id=49&gids=2&keyword=${keyword}&last_id=${last_id}&size=20`
+    );
+    const resJsonData = await fetchData.json();
+
+    if (
+      resJsonData &&
+      resJsonData.retcode === 0 &&
+      resJsonData.data.posts &&
+      resJsonData.data.posts.length
+    ) {
+      resJsonData.data.posts.map((item) => {
+        cosData.push({
+          title: item.post.subject,
+          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
+          cover: item.cover && item.cover.url,
+          images: item.post.images,
+          nickname: item.user.nickname,
+          like_num: item.stat.like_num,
+        });
+        return item;
+      });
+    }
+    return cosData;
+  }
 }

@@ -1,0 +1,5 @@
+# #cos 角色 搜索coser命令是否发送一组cos图片 0:发送单张 1:发送一组
+isReplyMulti: 0
+
+# 随机图库大小，设置过大可能会造成搜索精准度下降，也会有概率找不到cos的问题
+cosRandomMax: 100

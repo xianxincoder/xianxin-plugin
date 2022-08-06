@@ -1,4 +1,14 @@
 - {
+    version: 1.0.5,
+    data:
+      [
+        添加<span class="cmd">#cos 角色名</span>例如<span class="cmd">#cos 刻晴</span>获取指定角色的cos图,
+        <span class="cmd">#cos 角色名</span>支持自定义设置发送单张照片还是一组照片,
+        <span class="cmd">#cos 角色名</span>支持自定义设置随机图库数量最大数,
+        cos配置文件为 - xianxin-plugin/config/mys.set.yaml,
+      ],
+  }
+- {
     version: 1.0.4,
     data:
       [

@@ -1,8 +1,8 @@
 - group: 常用指令
   list:
-    - icon: role
-      title: "生日推送 #开启生日推送"
-      desc: 原神角色生日时推送图片
+    - icon: 绑定账号
+      title: "#cos 角色名 #cos 刻晴"
+      desc: 指定角色随机查看cos图片
     - icon: paimon
       title: "#cos #cos1 #cos详情"
       desc: 查看米游社中cos榜
@@ -12,6 +12,9 @@
     - icon: wiki
       title: "#热门话题"
       desc: 查看米游社中热聊话题
+    - icon: role
+      title: "生日推送 #开启生日推送"
+      desc: 原神角色生日时推送图片
     - icon: team
       title: "#七七生日图片"
       desc: 米游社中留影续佳期的生日图片

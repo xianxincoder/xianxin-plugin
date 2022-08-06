@@ -3,7 +3,13 @@ import lodash from "lodash";
 import plugin from "../../../lib/plugins/plugin.js";
 import Mys from "../model/mys.js";
 import common from "../../../lib/common/common.js";
+import xxCfg from "../model/xxCfg.js";
+import fs from "node:fs";
 
+let mysSetFile = "./plugins/xianxin-plugin/config/mys.set.yaml";
+if (!fs.existsSync(mysSetFile)) {
+  fs.copyFileSync("./plugins/xianxin-plugin/defSet/mys/set.yaml", mysSetFile);
+}
 export class mys extends plugin {
   constructor() {
     super({
@@ -32,8 +38,14 @@ export class mys extends plugin {
           reg: "^#cos[0-9]*详情$",
           fnc: "cosDetail",
         },
+        {
+          reg: "^#cos .*[0-9]*$",
+          fnc: "searchCos",
+        },
       ],
     });
+
+    this.mysSetData = xxCfg.getConfig("mys", "set");
   }
 
   async hotchat() {
@@ -98,6 +110,11 @@ export class mys extends plugin {
   async cos() {
     const isPrivate = this.e.isPrivate;
     let index = this.e.msg.replace(/#cos/g, "") || 0;
+
+    if (index === 0) {
+      index = Math.floor(Math.random() * 20);
+    }
+
     const cosData = await new Mys().getCosData();
     const data = cosData[index];
     if (data) {
@@ -135,6 +152,61 @@ export class mys extends plugin {
     if (data) {
       const message = `标题：${data.title}\n地址：${data.url}\n作者：${data.nickname}\n点赞：${data.like_num}`;
       this.reply(message);
+    } else {
+      this.reply("额。没有找到合适的cos信息～");
+    }
+  }
+
+  async searchCos() {
+    const isPrivate = this.e.isPrivate;
+    let role = this.e.msg.replace(/#cos /g, "");
+
+    const randomIndex =
+      Math.floor(Math.random() * (this.mysSetData.cosRandomMax || 100)) + 1;
+
+    const last_id = Math.ceil(randomIndex / 20);
+
+    const keyword = encodeURIComponent(role);
+
+    const index = randomIndex % 20;
+
+    const cosData = await new Mys().getCosSearchData(keyword, last_id);
+
+    const data = cosData[index];
+
+    if (data) {
+      if (!data.images || !data.images.length) {
+        this.searchCos();
+        return;
+      }
+
+      if (!this.mysSetData.isReplyMulti) {
+        const randomImgIdx = Math.floor(Math.random() * data.images.length);
+        data.images = [data.images[randomImgIdx]];
+      }
+
+      let msgList = [];
+      for (let imageItem of data.images) {
+        if (isPrivate) {
+          await this.e.reply(segment.image(imageItem));
+          await common.sleep(600);
+        } else {
+          msgList.push({
+            message: segment.image(imageItem),
+            nickname: Bot.nickname,
+            user_id: Bot.uin,
+          });
+        }
+      }
+
+      if (isPrivate) {
+        return;
+      }
+      if (msgList.length == 1) {
+        await this.e.reply(msgList[0].message);
+      } else {
+        await this.e.reply(await Bot.makeForwardMsg(msgList));
+      }
     } else {
       this.reply("额。没有找到合适的cos信息～");
     }
