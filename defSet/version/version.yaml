@@ -2,6 +2,7 @@
     version: 1.0.4,
     data:
       [
+        <span class="cmd">#cos</span><span class="cmd">#同人</span>修复私聊转发图片破裂问题，私聊改为分开发送,
         <span class="cmd">战</span>支持设置每日每人限制挑战次数,
         <span class="cmd">#战榜</span>支持自定义上榜人数,
         群战小游戏配置文件为 - xianxin-plugin/config/game.set.yaml,

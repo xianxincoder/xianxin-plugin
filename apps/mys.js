@@ -2,6 +2,7 @@ import { segment } from "oicq";
 import lodash from "lodash";
 import plugin from "../../../lib/plugins/plugin.js";
 import Mys from "../model/mys.js";
+import common from "../../../lib/common/common.js";
 
 export class mys extends plugin {
   constructor() {
@@ -48,17 +49,28 @@ export class mys extends plugin {
   }
 
   async acgn() {
+    const isPrivate = this.e.isPrivate;
+
     let index = this.e.msg.replace(/#同人/g, "") || 0;
     const acgnData = await new Mys().getAcgnData();
     const data = acgnData[index];
     if (data) {
       let msgList = [];
       for (let imageItem of data.images) {
-        msgList.push({
-          message: segment.image(imageItem),
-          nickname: Bot.nickname,
-          user_id: Bot.uin,
-        });
+        if (isPrivate) {
+          await this.e.reply(segment.image(imageItem));
+          await common.sleep(600);
+        } else {
+          msgList.push({
+            message: segment.image(imageItem),
+            nickname: Bot.nickname,
+            user_id: Bot.uin,
+          });
+        }
+      }
+
+      if (isPrivate) {
+        return;
       }
 
       if (msgList.length == 1) {
@@ -84,17 +96,27 @@ export class mys extends plugin {
   }
 
   async cos() {
+    const isPrivate = this.e.isPrivate;
     let index = this.e.msg.replace(/#cos/g, "") || 0;
     const cosData = await new Mys().getCosData();
     const data = cosData[index];
     if (data) {
       let msgList = [];
       for (let imageItem of data.images) {
-        msgList.push({
-          message: segment.image(imageItem),
-          nickname: Bot.nickname,
-          user_id: Bot.uin,
-        });
+        if (isPrivate) {
+          await this.e.reply(segment.image(imageItem));
+          await common.sleep(600);
+        } else {
+          msgList.push({
+            message: segment.image(imageItem),
+            nickname: Bot.nickname,
+            user_id: Bot.uin,
+          });
+        }
+      }
+
+      if (isPrivate) {
+        return;
       }
       if (msgList.length == 1) {
         await this.e.reply(msgList[0].message);
