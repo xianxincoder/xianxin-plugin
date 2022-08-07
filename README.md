@@ -57,6 +57,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | Lie| 15 |
 | 妙娃种子不妙了| 5 |
 | 遇到问题摆大烂| 5 |
+| Gimme| 10 |
 
 
 
