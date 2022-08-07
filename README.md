@@ -59,6 +59,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 遇到问题摆大烂| 5 |
 | Gimme| 10 |
 | 吃瓜群众| 20 |
+| 长楠| 10 |
 
 
 
