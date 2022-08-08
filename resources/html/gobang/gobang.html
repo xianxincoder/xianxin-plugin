@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{pluResPath}}html/gobang/gobang.css"
+    />
+    <link rel="preload" href="{{resPath}}font/tttgbnumber.ttf" as="font" />
+    <link rel="preload" href="{{pluResPath}}img/bg.jpeg" as="image" />
+    <link rel="shortcut icon" href="#" />
+  </head>
+
+  <body>
+    <div class="container" id="container">
+      <div class="hindex">
+        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span
+        ><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span
+        ><span>11</span><span>12</span><span>13</span><span>14</span
+        ><span>15</span>
+      </div>
+      <div class="vindex">
+        <p>A</p>
+        <p>B</p>
+        <p>C</p>
+        <p>D</p>
+        <p>E</p>
+        <p>F</p>
+        <p>G</p>
+        <p>H</p>
+        <p>I</p>
+        <p>J</p>
+        <p>K</p>
+        <p>L</p>
+        <p>M</p>
+        <p>N</p>
+        <p>O</p>
+      </div>
+      <canvas id="canvas" width="480" height="480"></canvas>
+    </div>
+  </body>
+  <script type="text/javascript">
+    const data = JSON.parse(`{{@ gobangData}}`);
+    const { state } = data;
+    var p = document.getElementById("order");
+    var canvas = document.querySelector("#canvas");
+    var context = canvas.getContext("2d");
+
+    function init() {
+      //画棋盘
+      context.beginPath();
+      for (var i = 1; i < 16; i++) {
+        context.moveTo(30 * i, 30);
+        context.lineTo(30 * i, 450);
+      }
+      for (var i = 1; i < 16; i++) {
+        context.moveTo(30, 30 * i);
+        context.lineTo(450, 30 * i);
+      }
+      context.stroke();
+      //画棋点
+      draw(240, 240, 3);
+      draw(120, 120, 3);
+      draw(360, 120, 3);
+      draw(120, 360, 3);
+      draw(360, 360, 3);
+
+      // 初始化已落点位置
+      for (var i = 0; i < state.length; i++) {
+        for (var j = 0; j < state[i].length; j++) {
+          if (state[i][j] !== -1) {
+            const w = i * 30;
+            const h = j * 30;
+            drawChess(w, h, state[i][j], 14);
+            draw(w, h, 14);
+          }
+        }
+      }
+    }
+
+    //画空心圆
+    function draw(x, y, r) {
+      context.beginPath();
+      context.arc(x, y, r, 0, Math.PI * 2);
+      context.stroke();
+    }
+
+    function drawChess(x, y, c, r) {
+      if (c == 0) {
+        context.fillStyle = "black";
+      } else {
+        context.fillStyle = "white";
+      }
+      context.fillStyle = c;
+      context.beginPath();
+      context.arc(x, y, r, 0, Math.PI * 2);
+      context.fill();
+    }
+    init();
+  </script>
+</html>

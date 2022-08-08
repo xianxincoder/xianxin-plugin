@@ -32,4 +32,13 @@ export default class Game extends base {
       ...timeData,
     };
   }
+
+  async getGobangData(gobangData) {
+    this.model = "gobang";
+    return {
+      ...this.screenData,
+      saveId: "gobang",
+      ...gobangData,
+    };
+  }
 }

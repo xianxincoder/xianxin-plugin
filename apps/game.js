@@ -6,7 +6,11 @@ import moment from "moment";
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 import xxCfg from "../model/xxCfg.js";
 
+// PK信息存放
 let pkArr = {};
+
+// 五子棋信息存放
+let gobangState = new Array();
 
 let gameSetFile = "./plugins/xianxin-plugin/config/game.set.yaml";
 if (!fs.existsSync(gameSetFile)) {
@@ -40,6 +44,10 @@ export class game extends plugin {
         {
           reg: "^#逆天改命$",
           fnc: "chance",
+        },
+        {
+          reg: "^#五子棋$",
+          fnc: "gobang",
         },
       ],
     });
@@ -314,6 +322,35 @@ export class game extends plugin {
         selfInfo.exp + tempExp
       }`,
     ]);
+  }
+
+  async gobang() {
+    await this.getGroupId();
+    if (!this.group_id) return;
+
+    this.initArray();
+
+    gobangState[1][2] = 1;
+    gobangState[6][2] = 0;
+
+    const data = await new Game(this.e).getGobangData({
+      gobangData: JSON.stringify({ state: gobangState }),
+    });
+
+    let img = await puppeteer.screenshot("gobang", {
+      ...data,
+      user_id: this.e.user_id,
+    });
+    this.e.reply(img);
+  }
+
+  initArray() {
+    for (var i = 0; i < 15; i++) {
+      gobangState[i] = new Array();
+      for (var j = 0; j < 15; j++) {
+        gobangState[i][j] = -1;
+      }
+    }
   }
 
   getPlayers() {
