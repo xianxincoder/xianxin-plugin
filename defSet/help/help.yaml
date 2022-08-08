@@ -38,6 +38,14 @@
     - icon: sign
       title: "#逆天改命"
       desc: 战力最低的专属技能
+- group: 五子棋
+  list:
+    - icon: 打卡
+      title: "#五子棋"
+      desc: 开局进行五子棋小游戏
+    - icon: ledger
+      title: "落子+字母+数字 落子H8"
+      desc: "五子棋落子操作"
 - group: 其他指令
   list:
     - icon: 纠缠之缘

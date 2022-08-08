@@ -1,4 +1,13 @@
 - {
+    version: 1.0.6,
+    data:
+      [
+        添加<span class="cmd">#五子棋</span>进行五子棋小游戏,
+        添加<span class="cmd">落子A1</span>进行五子棋落子,
+        当前五子棋小游戏正在逐步开发完善，如遇bug烦请到QQ群(426961091)中反馈,
+      ],
+  }
+- {
     version: 1.0.5,
     data:
       [

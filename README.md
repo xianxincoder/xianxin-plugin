@@ -60,6 +60,8 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | Gimme| 10 |
 | 吃瓜群众| 20 |
 | 长楠| 10 |
+| Tears| 10 |
+| 时雨星空| 5 |
 
 
 

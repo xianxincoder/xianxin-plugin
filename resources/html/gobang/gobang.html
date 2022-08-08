@@ -70,8 +70,8 @@
       for (var i = 0; i < state.length; i++) {
         for (var j = 0; j < state[i].length; j++) {
           if (state[i][j] !== -1) {
-            const w = i * 30;
-            const h = j * 30;
+            const w = (i + 1) * 30;
+            const h = (j + 1) * 30;
             drawChess(w, h, state[i][j], 14);
             draw(w, h, 14);
           }
