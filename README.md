@@ -62,7 +62,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 吃瓜群众| 20 |
 | 长楠| 10 |
 | Tears| 10 |
-| 时雨星空| 5 |
+| [时雨🌌星空](https://gitee.com/TimeRainStarSky) | 5 |
 
 
 
