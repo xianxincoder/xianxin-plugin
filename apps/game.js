@@ -343,7 +343,9 @@ export class game extends plugin {
     await this.getGroupId();
     if (!this.group_id) return;
 
-    if (gameing && gameing[this.group_id]) {
+    if (!gameing[this.group_id]) gameing[this.group_id] = {};
+
+    if (gameing && gameing[this.group_id] && gameing[this.group_id].self) {
       this.e.reply("五子棋正在游戏中，请对局结束后再开局");
       return;
     }
@@ -488,7 +490,6 @@ export class game extends plugin {
 
   initArray() {
     if (!gobangState[this.group_id]) gobangState[this.group_id] = new Array();
-    if (!gameing[this.group_id]) gameing[this.group_id] = {};
     for (var i = 0; i < 15; i++) {
       gobangState[this.group_id][i] = new Array();
       for (var j = 0; j < 15; j++) {
