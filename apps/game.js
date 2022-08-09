@@ -57,7 +57,7 @@ export class game extends plugin {
           fnc: "startGobang",
         },
         {
-          reg: "^(#)?落子[A-Z]+[0-9]+$",
+          reg: "^(#)?落子[A-Za-z]+[0-9]+$",
           fnc: "drop",
         },
         {
@@ -423,7 +423,7 @@ export class game extends plugin {
 
     const position = this.e.msg.replace("#", "").replace("落子", "").trim();
 
-    let y = position.substr(0, 1);
+    let y = position.substr(0, 1).toUpperCase();
     const x = position.slice(1) - 1;
 
     y = Number(y.charCodeAt(0) - 65);
