@@ -6,6 +6,12 @@
     - icon: paimon
       title: "#cos #cos1 #cos详情"
       desc: 查看米游社中cos榜
+    - icon: 原石
+      title: "#cosdbs 角色名 #cosdbs 刻晴"
+      desc: 指定角色随机查看大别墅cos图片
+    - icon: 纠缠之缘
+      title: "#cosdbs #cosdbs1 #cosdbs详情"
+      desc: 查看米游社中大别墅cos榜
     - icon: abyss
       title: "#同人 #同人1 #同人详情"
       desc: 查看米游社中同人榜
@@ -18,9 +24,6 @@
     - icon: team
       title: "#七七生日图片"
       desc: 米游社中留影续佳期的生日图片
-    - icon: 原石
-      title: "#赞我"
-      desc: 为发送指令的QQ点赞
 - group: 群战指令
   list:
     - icon: 养成计算
@@ -48,12 +51,6 @@
       desc: "五子棋落子操作"
 - group: 其他指令
   list:
-    - icon: 纠缠之缘
-      title: 动态图片
-      desc: 例如：举牌1，返回举牌图片
-    - icon: 攻略
-      title: "#up"
-      desc: 查看B站up的具体信息
     - icon: 问号
       title: "#闲心插件版本"
       desc: 查看，最近维护的版本信息

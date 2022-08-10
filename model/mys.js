@@ -108,11 +108,13 @@ export default class Mys extends base {
     return cosData;
   }
 
-  async getCosData() {
+  async getCosData(key) {
+    const urlMap = {
+      ys: `https://bbs-api.mihoyo.com/post/wapi/getImagePostList?forum_id=49&gids=2&page_size=20&type=1`,
+      dbs: `https://bbs-api.mihoyo.com/post/wapi/getImagePostList?forum_id=47&gids=2&page_size=20&type=1`,
+    };
     const cosData = [];
-    const fetchData = await fetch(
-      `https://bbs-api.mihoyo.com/post/wapi/getImagePostList?forum_id=49&gids=2&page_size=20&type=1`
-    );
+    const fetchData = await fetch(urlMap[key]);
     const resJsonData = await fetchData.json();
 
     if (
@@ -136,12 +138,15 @@ export default class Mys extends base {
     return cosData;
   }
 
-  async getCosSearchData(keyword, last_id) {
+  async getCosSearchData(keyword, last_id, key) {
     const cosData = [];
 
-    const fetchData = await fetch(
-      `https://bbs-api.mihoyo.com/post/wapi/searchPosts?forum_id=49&gids=2&keyword=${keyword}&last_id=${last_id}&size=20`
-    );
+    const urlMap = {
+      ys: `https://bbs-api.mihoyo.com/post/wapi/searchPosts?forum_id=49&gids=2&keyword=${keyword}&last_id=${last_id}&size=20`,
+      dbs: `https://bbs-api.mihoyo.com/post/wapi/searchPosts?forum_id=47&gids=5&keyword=${keyword}&last_id=${last_id}&size=20`,
+    };
+
+    const fetchData = await fetch(urlMap[key]);
     const resJsonData = await fetchData.json();
 
     if (

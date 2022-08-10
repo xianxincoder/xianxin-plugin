@@ -31,15 +31,15 @@ export class mys extends plugin {
           fnc: "acgnDetail",
         },
         {
-          reg: "^#cos[0-9]*$",
+          reg: "^#cos[a-z]*[0-9]*$",
           fnc: "cos",
         },
         {
-          reg: "^#cos[0-9]*详情$",
+          reg: "^#cos[a-z]*[0-9]*详情$",
           fnc: "cosDetail",
         },
         {
-          reg: "^#cos .*[0-9]*$",
+          reg: "^#cos[a-z]* .*[0-9]*$",
           fnc: "searchCos",
         },
       ],
@@ -109,13 +109,18 @@ export class mys extends plugin {
 
   async cos() {
     const isPrivate = this.e.isPrivate;
-    let index = this.e.msg.replace(/#cos/g, "") || 0;
+    let index = this.e.msg.replace(/#cos/g, "").replace(/dbs/g, "") || 0;
 
-    if (index === 0) {
-      index = Math.floor(Math.random() * 20);
+    let key = "ys";
+    if (this.e.msg.indexOf("dbs") !== -1) {
+      key = "dbs";
     }
 
-    const cosData = await new Mys().getCosData();
+    const cosData = await new Mys().getCosData(key);
+
+    if (index === 0) {
+      index = Math.floor(Math.random() * cosData.length);
+    }
     const data = cosData[index];
     if (data) {
       let msgList = [];
@@ -146,8 +151,15 @@ export class mys extends plugin {
   }
 
   async cosDetail() {
-    let index = this.e.msg.replace(/#cos/g, "").replace("详情", "") || 0;
-    const cosData = await new Mys().getCosData();
+    let index =
+      this.e.msg.replace(/#cos/g, "").replace(/dbs/g, "").replace("详情", "") ||
+      0;
+
+    let key = "ys";
+    if (this.e.msg.indexOf("dbs") !== -1) {
+      key = "dbs";
+    }
+    const cosData = await new Mys().getCosData(key);
     const data = cosData[index];
     if (data) {
       const message = `标题：${data.title}\n地址：${data.url}\n作者：${data.nickname}\n点赞：${data.like_num}`;
@@ -159,10 +171,16 @@ export class mys extends plugin {
 
   async searchCos() {
     const isPrivate = this.e.isPrivate;
-    let role = this.e.msg.replace(/#cos /g, "");
+    let role = this.e.msg.replace(/#cos /g, "").replace(/#cosdbs /g, "");
 
-    const randomIndex =
-      Math.floor(Math.random() * (this.mysSetData.cosRandomMax || 100)) + 1;
+    let key = "ys";
+    if (this.e.msg.indexOf("dbs") !== -1) {
+      key = "dbs";
+    }
+
+    const randomMax = this.mysSetData.cosRandomMax || key === "dbs" ? 40 : 100;
+
+    const randomIndex = Math.floor(Math.random() * randomMax) + 1;
 
     const last_id = Math.ceil(randomIndex / 20);
 
@@ -170,7 +188,7 @@ export class mys extends plugin {
 
     const index = randomIndex % 20;
 
-    const cosData = await new Mys().getCosSearchData(keyword, last_id);
+    const cosData = await new Mys().getCosSearchData(keyword, last_id, key);
 
     const data = cosData[index];
 
