@@ -5,6 +5,9 @@ import Game from "../model/game.js";
 import moment from "moment";
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 import xxCfg from "../model/xxCfg.js";
+import common from "../../../lib/common/common.js";
+
+const _path = process.cwd() + "/plugins/xianxin-plugin";
 
 // PK信息存放
 let pkArr = {};
@@ -158,6 +161,12 @@ export class game extends plugin {
       { ...selfInfo, user_id: this.e.user_id },
       { ...enemyInfo, user_id: enemy }
     );
+
+    await this.e.reply(
+      segment.image(`file:///${_path}/resources/img/other/pking.gif`)
+    );
+
+    await common.sleep(600);
 
     const { winner, loser } = retData;
 
