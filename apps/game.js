@@ -5,9 +5,6 @@ import Game from "../model/game.js";
 import moment from "moment";
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 import xxCfg from "../model/xxCfg.js";
-import common from "../../../lib/common/common.js";
-
-const _path = process.cwd() + "/plugins/xianxin-plugin";
 
 // PK信息存放
 let pkArr = {};
@@ -40,6 +37,10 @@ export class game extends plugin {
         {
           reg: "^#战狂$",
           fnc: "time",
+        },
+        {
+          reg: "^#摆烂榜$",
+          fnc: "invertRank",
         },
         {
           reg: "^#逆天改命$",
@@ -162,12 +163,6 @@ export class game extends plugin {
       { ...enemyInfo, user_id: enemy }
     );
 
-    await this.e.reply(
-      segment.image(`file:///${_path}/resources/img/other/pking.gif`)
-    );
-
-    await common.sleep(600);
-
     const { winner, loser } = retData;
 
     if (!winner && !loser) {
@@ -225,6 +220,34 @@ export class game extends plugin {
 
     let img = await puppeteer.screenshot("rank", {
       ...data,
+      isInvert: false,
+      limitTop: this.gameSetData.limitTop || 20,
+    });
+    this.e.reply(img);
+  }
+
+  async invertRank() {
+    await this.getGroupId();
+    if (!this.group_id) return;
+
+    const players = this.getPlayers();
+
+    if (!players || !players.length) {
+      this.reply(`未找到玩家数据`);
+      return;
+    }
+
+    const sortExpPlayers = players.sort(function (a, b) {
+      return a.exp - b.exp;
+    });
+
+    const data = await new Game(this.e).getRankData(
+      sortExpPlayers.slice(0, this.gameSetData.limitTop || 20)
+    );
+
+    let img = await puppeteer.screenshot("rank", {
+      ...data,
+      isInvert: true,
       limitTop: this.gameSetData.limitTop || 20,
     });
     this.e.reply(img);

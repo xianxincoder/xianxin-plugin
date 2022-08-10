@@ -29,6 +29,9 @@
     - icon: 记录
       title: "#战榜"
       desc: 查看群战rank榜
+    - icon: role
+      title: "#摆烂榜"
+      desc: 查看战力倒数排行榜
     - icon: moster
       title: "#战狂"
       desc: 查看战榜中战斗次数最多的人

@@ -13,13 +13,13 @@
 body {
   font-family: sans-serif;
   font-size: 16px;
-  width: 572px;
+  width: 642px;
   color: #1e1f20;
   transform: scale(1.5);
   transform-origin: 0 0;
 }
 .container {
-  width: 572px;
+  width: 642px;
   padding: 20px 15px 10px 15px;
   background-image: url(../../img/bg.jpeg);
   background-size: 100%;
@@ -164,10 +164,32 @@ body {
 }
 
 
+.list .item .level{
+  font-size: 14px;
+  margin-left: 6px;
+  line-height: 20px;
+  width: 42px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+}
+.list .item:nth-child(1) .level{
+  font-size: 20px;
+}
+
+.list .item:nth-child(2) .level{
+  font-size: 18px;
+}
+
+.list .item:nth-child(3) .level{
+  font-size: 16px;
+}
+
+
 .list .item .avatar{
   width: 36px;
   display: flex;
-  justify-content: end;
+  justify-content: center;
   align-items: center;
 }
 .list .item .avatar .icon{
