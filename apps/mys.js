@@ -109,11 +109,11 @@ export class mys extends plugin {
 
   async cos() {
     const isPrivate = this.e.isPrivate;
-    let index = this.e.msg.replace(/#cos/g, "").replace(/dbs/g, "") || 0;
+    let index = this.e.msg.replace(/#cos/g, "").replace(/dby/g, "") || 0;
 
     let key = "ys";
-    if (this.e.msg.indexOf("dbs") !== -1) {
-      key = "dbs";
+    if (this.e.msg.indexOf("dby") !== -1) {
+      key = "dby";
     }
 
     const cosData = await new Mys().getCosData(key);
@@ -152,12 +152,12 @@ export class mys extends plugin {
 
   async cosDetail() {
     let index =
-      this.e.msg.replace(/#cos/g, "").replace(/dbs/g, "").replace("详情", "") ||
+      this.e.msg.replace(/#cos/g, "").replace(/dby/g, "").replace("详情", "") ||
       0;
 
     let key = "ys";
-    if (this.e.msg.indexOf("dbs") !== -1) {
-      key = "dbs";
+    if (this.e.msg.indexOf("dby") !== -1) {
+      key = "dby";
     }
     const cosData = await new Mys().getCosData(key);
     const data = cosData[index];
@@ -171,14 +171,14 @@ export class mys extends plugin {
 
   async searchCos() {
     const isPrivate = this.e.isPrivate;
-    let role = this.e.msg.replace(/#cos /g, "").replace(/#cosdbs /g, "");
+    let role = this.e.msg.replace(/#cos /g, "").replace(/#cosdby /g, "");
 
     let key = "ys";
-    if (this.e.msg.indexOf("dbs") !== -1) {
-      key = "dbs";
+    if (this.e.msg.indexOf("dby") !== -1) {
+      key = "dby";
     }
 
-    const randomMax = this.mysSetData.cosRandomMax || key === "dbs" ? 40 : 100;
+    const randomMax = this.mysSetData.cosRandomMax || key === "dby" ? 40 : 100;
 
     const randomIndex = Math.floor(Math.random() * randomMax) + 1;
 
