@@ -32,7 +32,7 @@ export class gobang extends plugin {
           fnc: "drop",
         },
         {
-          reg: "^#五子棋认输$",
+          reg: "^#弃子$",
           fnc: "defeat",
         },
         {
