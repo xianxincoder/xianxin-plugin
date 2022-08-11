@@ -49,6 +49,11 @@ export class game extends plugin {
           reg: "^#逆天改命$",
           fnc: "chance",
         },
+        {
+          reg: "^#重置群战战力$",
+          permission: "master",
+          fnc: "reset",
+        },
       ],
     });
 
@@ -354,6 +359,16 @@ export class game extends plugin {
     ]);
   }
 
+  async reset() {
+    await this.getGroupId();
+    if (!this.group_id) return;
+
+    this.resetPkArr();
+    this.saveJson();
+
+    this.e.reply("群战信息重置成功");
+  }
+
   getPlayers() {
     this.initPkArr();
 
@@ -518,6 +533,33 @@ export class game extends plugin {
       let pkMapJson = JSON.parse(fs.readFileSync(path, "utf8"));
       for (let key in pkMapJson) {
         pkArr[this.group_id].set(String(key), pkMapJson[key]);
+      }
+    } catch (error) {
+      logger.error(`json格式错误：${path}`);
+      delete pkArr[this.group_id];
+      return;
+    }
+  }
+
+  /** 重置群战信息 */
+  resetPkArr() {
+    pkArr[this.group_id] = new Map();
+
+    let path = `${this.path}${this.group_id}.json`;
+    if (!fs.existsSync(path)) {
+      return;
+    }
+
+    try {
+      let pkMapJson = JSON.parse(fs.readFileSync(path, "utf8"));
+      for (let key in pkMapJson) {
+        pkArr[this.group_id].set(String(key), {
+          ...pkMapJson[key],
+          exp: 100,
+          time: 0,
+          dayTime: 0,
+          lastpk: moment().format("YYYYMMDD"),
+        });
       }
     } catch (error) {
       logger.error(`json格式错误：${path}`);
