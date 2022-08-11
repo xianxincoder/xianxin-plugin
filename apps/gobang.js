@@ -35,10 +35,6 @@ export class gobang extends plugin {
           reg: "^#弃子$",
           fnc: "admitDefeat",
         },
-        {
-          reg: "^#强制退出五子棋$",
-          fnc: "forceGobang",
-        },
       ],
     });
 
@@ -213,6 +209,19 @@ export class gobang extends plugin {
     await this.getGroupId();
     if (!this.group_id) return;
 
+    if (
+      ![
+        gameing[this.group_id].self.user_id,
+        (gameing[this.group_id].enemy &&
+          gameing[this.group_id].enemy.user_id) ||
+          "",
+      ].includes(this.e.sender.user_id)
+    ) {
+      return;
+    }
+
+    gobangTimer[this.group_id] && clearTimeout(gobangTimer[this.group_id]);
+
     gameing[this.group_id] = {};
     count = 0;
     gobangState[this.group_id] = new Array();
@@ -220,19 +229,6 @@ export class gobang extends plugin {
     await this.e.reply(
       `${this.e.sender.card || this.e.user_id} 认输，本轮五子棋结束！`
     );
-  }
-
-  async forceGobang() {
-    await this.getGroupId();
-    if (!this.group_id) return;
-
-    if (!this.e.isMaster) return;
-
-    gameing[this.group_id] = {};
-    count = 0;
-    gobangState[this.group_id] = new Array();
-
-    this.e.reply("已强制退出本轮五子棋");
   }
 
   initArray() {
