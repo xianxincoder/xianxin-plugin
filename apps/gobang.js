@@ -32,6 +32,10 @@ export class gobang extends plugin {
           fnc: "drop",
         },
         {
+          reg: "^#弃子$",
+          fnc: "admitDefeat",
+        },
+        {
           reg: "^#强制退出五子棋$",
           fnc: "forceGobang",
         },
@@ -203,6 +207,19 @@ export class gobang extends plugin {
     }, 1000 * 60 * 3);
 
     this.e.reply(img);
+  }
+
+  async admitDefeat() {
+    await this.getGroupId();
+    if (!this.group_id) return;
+
+    gameing[this.group_id] = {};
+    count = 0;
+    gobangState[this.group_id] = new Array();
+
+    await this.e.reply(
+      `${this.e.sender.card || this.e.user_id} 认输，本轮五子棋结束！`
+    );
   }
 
   async forceGobang() {
