@@ -5,6 +5,9 @@ import Game from "../model/game.js";
 import moment from "moment";
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 import xxCfg from "../model/xxCfg.js";
+import common from "../../../lib/common/common.js";
+
+const _path = process.cwd() + "/plugins/xianxin-plugin";
 
 // PK信息存放
 let pkArr = {};
@@ -169,6 +172,12 @@ export class game extends plugin {
       this.reply("对手战力差距过大，触发战力保护机制无法进行挑战");
       return;
     }
+
+    await this.e.reply(
+      segment.image(`file:///${_path}/resources/img/other/pking.gif`)
+    );
+
+    await common.sleep(600);
 
     const message = [
       segment.at(this.e.user_id, this.e.sender.card || this.e.user_id),
