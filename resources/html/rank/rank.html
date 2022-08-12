@@ -16,12 +16,15 @@
   <body>
     <div class="container" id="container">
       <div class="head_box">
-        {{if isInvert}}
-        <h1 class="id_text">摆烂榜</h1>
-        <h1 class="day_text">群成员在群战中战力最低排行榜 - Top{{limitTop}}</h1>
-        {{else}}
+        {{if type=='rank'}}
         <h1 class="id_text">战榜</h1>
         <h1 class="day_text">群成员在群战中战力排行榜 - Top{{limitTop}}</h1>
+        {{else if type=='time'}}
+        <h1 class="id_text">战狂榜</h1>
+        <h1 class="day_text">群成员在战斗次数排行榜 - Top{{limitTop}}</h1>
+        {{else}}
+        <h1 class="id_text">摆烂榜</h1>
+        <h1 class="day_text">群成员在群战中战力最低排行榜 - Top{{limitTop}}</h1>
         {{/if}}
         <img class="genshin_logo" src="{{pluResPath}}img/rank/top.png" />
       </div>
@@ -45,7 +48,11 @@
 
           <div class="level">{{val.level}}</div>
 
+          {{if type=='time'}}
+          <div class="dec">战斗<span class="exp">{{val.time}}</span>场</div>
+          {{else}}
           <div class="dec">战力<span class="exp">{{val.exp}}</span>点</div>
+          {{/if}}
         </div>
         {{/each}}
       </div>

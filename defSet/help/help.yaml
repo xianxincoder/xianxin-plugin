@@ -26,18 +26,21 @@
     - icon: weapon
       title: "战@群友 #战@群友"
       desc: "@一名群友进行群战"
-    - icon: 记录
-      title: "#战榜"
-      desc: 查看群战rank榜
-    - icon: role
-      title: "#摆烂榜"
-      desc: 查看战力倒数排行榜
-    - icon: moster
-      title: "#战狂"
-      desc: 查看战榜中战斗次数最多的人
+    - icon: 攻略
+      title: "狂战@群友 #狂战@群友"
+      desc: 战狂(战斗次数最多)的专属技能
     - icon: sign
       title: "#逆天改命"
       desc: 战力最低的专属技能
+    - icon: 记录
+      title: "#战榜"
+      desc: 查看群战rank榜
+    - icon: moster
+      title: "#战狂榜"
+      desc: 查看战斗次数排行榜
+    - icon: role
+      title: "#摆烂榜"
+      desc: 查看战力倒数排行榜
 - group: 五子棋
   list:
     - icon: 打卡
@@ -46,9 +49,6 @@
     - icon: ledger
       title: "落子+字母+数字 落子H8"
       desc: "五子棋落子操作"
-    - icon: team
-      title: "#弃子"
-      desc: "五子棋认输操作"
 - group: 其他指令
   list:
     - icon: 问号

@@ -38,8 +38,16 @@ export class game extends plugin {
           fnc: "pk",
         },
         {
-          reg: "^#战狂$",
-          fnc: "time",
+          reg: "^(#)?狂战$",
+          fnc: "timepk",
+        },
+        // {
+        //   reg: "^#战狂$",
+        //   fnc: "time",
+        // },
+        {
+          reg: "^#战狂(榜)?$",
+          fnc: "timeRank",
         },
         {
           reg: "^#摆烂榜$",
@@ -168,7 +176,8 @@ export class game extends plugin {
 
     const retData = this.pkHandle(
       { ...selfInfo, user_id: this.e.user_id },
-      { ...enemyInfo, user_id: enemy }
+      { ...enemyInfo, user_id: enemy },
+      "pk"
     );
 
     const { winner, loser } = retData;
@@ -213,6 +222,135 @@ export class game extends plugin {
     await this.reply(message);
   }
 
+  async timepk() {
+    await this.getGroupId();
+    if (!this.group_id) return;
+
+    this.initPkArr();
+
+    if (!pkArr[this.group_id]) {
+      this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
+      return;
+    }
+
+    let selfInfo = pkArr[this.group_id].get(String(this.e.user_id));
+
+    if (!selfInfo) {
+      this.reply("首次战斗，请先使用 #加入群战 注册群战信息");
+      return;
+    }
+
+    if (moment().format("YYYYMMDD") !== selfInfo.lastpk) {
+      selfInfo.dayTime = 0;
+    }
+
+    if (
+      this.gameSetData.limitTimes !== 0 &&
+      selfInfo.dayTime >= this.gameSetData.limitTimes
+    ) {
+      this.reply(
+        `每日限制挑战次数为${this.gameSetData.limitTimes}次，请明日再战`
+      );
+      return;
+    }
+
+    const { enemy, enemyNick } = this.getEnemy();
+
+    if (!enemy) {
+      this.reply("没有对手的战斗，如何战斗。请发送#战@某位群友");
+      return;
+    }
+
+    if (enemy === this.e.user_id) {
+      this.reply("不可以和自己战斗哦，请@群中好友战斗");
+      return;
+    }
+
+    let enemyInfo = pkArr[this.group_id].get(String(enemy));
+
+    if (!enemyInfo) {
+      this.reply("对手未注册群战信息，请先让对手使用 #加入群战 注册群战信息");
+      return;
+    }
+
+    const players = this.getPlayers();
+
+    if (!players || !players.length) {
+      this.reply(`未找到玩家数据`);
+      return;
+    }
+
+    const sortTimePlayers = players.sort(function (a, b) {
+      return b.time - a.time;
+    });
+
+    const mostTimePlayer = sortTimePlayers[0];
+
+    if (mostTimePlayer.time !== selfInfo.time) {
+      this.reply(
+        "技能为战狂专属技能，您战斗次数还不够哦～。可以发送 #战狂榜 查看名次"
+      );
+      return;
+    }
+
+    /** cd 单位秒 */
+    let cd = 60 * 60 * 24; // 一天
+    let key = `Yz:gametimerank:${this.e.group_id}${this.e.user_id}`;
+    if (await redis.get(key)) {
+      this.reply("今天已经用过这个技能了，一天只能用一次哦");
+      return;
+    }
+    redis.set(key, "1", { EX: cd });
+
+    const retData = this.pkHandle(
+      { ...selfInfo, user_id: this.e.user_id },
+      { ...enemyInfo, user_id: enemy },
+      "timepk"
+    );
+
+    const { winner, loser } = retData;
+
+    if (!winner && !loser) {
+      redis.del(key);
+      this.reply("对手战力差距过大，触发战力保护机制无法进行挑战");
+      return;
+    }
+
+    await this.e.reply(
+      segment.image(`file:///${_path}/resources/img/other/pking.gif`)
+    );
+
+    await common.sleep(600);
+
+    const message = [
+      segment.at(this.e.user_id, this.e.sender.card || this.e.user_id),
+    ];
+
+    if (this.e.user_id == winner.user_id) {
+      message.push(" 狂战技能使用成功，完胜");
+      message.push(
+        `\n战胜了对手，并获得战力${winner.tempExp}点，当前战力为${winner.exp}\n`
+      );
+      message.push(segment.at(enemy, enemyNick));
+      message.push(" 惜败");
+      message.push(
+        `\n败给了对手，并损失战力${loser.tempExp}点，当前战力为${loser.exp}`
+      );
+    } else {
+      message.push(" 惜败");
+      message.push(
+        `\n败给了对手，并损失战力${loser.tempExp}点，当前战力为${loser.exp}\n`
+      );
+      message.push(segment.at(enemy, enemyNick));
+      message.push(" 完胜");
+      message.push(
+        `\n战胜了对手，并获得战力${winner.tempExp}点，当前战力为${winner.exp}`
+      );
+    }
+
+    await this.reply(message);
+  }
+
   async rank() {
     await this.getGroupId();
     if (!this.group_id) return;
@@ -234,7 +372,7 @@ export class game extends plugin {
 
     let img = await puppeteer.screenshot("rank", {
       ...data,
-      isInvert: false,
+      type: "rank",
       limitTop: this.gameSetData.limitTop || 20,
     });
     this.e.reply(img);
@@ -261,13 +399,13 @@ export class game extends plugin {
 
     let img = await puppeteer.screenshot("rank", {
       ...data,
-      isInvert: true,
+      type: "invert",
       limitTop: this.gameSetData.limitTop || 20,
     });
     this.e.reply(img);
   }
 
-  async time() {
+  async timeRank() {
     await this.getGroupId();
     if (!this.group_id) return;
 
@@ -282,16 +420,43 @@ export class game extends plugin {
       return b.time - a.time;
     });
 
-    const mostTimePlayer = sortTimePlayers[0];
+    const data = await new Game(this.e).getRankData(
+      sortTimePlayers.slice(0, this.gameSetData.limitTop || 20)
+    );
 
-    const data = await new Game(this.e).getTimeData(mostTimePlayer);
-
-    let img = await puppeteer.screenshot("time", {
+    let img = await puppeteer.screenshot("rank", {
       ...data,
-      level: "战狂",
+      type: "time",
+      limitTop: this.gameSetData.limitTop || 20,
     });
     this.e.reply(img);
   }
+
+  // async time() {
+  //   await this.getGroupId();
+  //   if (!this.group_id) return;
+
+  //   const players = this.getPlayers();
+
+  //   if (!players || !players.length) {
+  //     this.reply(`未找到玩家数据`);
+  //     return;
+  //   }
+
+  //   const sortTimePlayers = players.sort(function (a, b) {
+  //     return b.time - a.time;
+  //   });
+
+  //   const mostTimePlayer = sortTimePlayers[0];
+
+  //   const data = await new Game(this.e).getTimeData(mostTimePlayer);
+
+  //   let img = await puppeteer.screenshot("time", {
+  //     ...data,
+  //     level: "战狂",
+  //   });
+  //   this.e.reply(img);
+  // }
 
   async chance() {
     await this.getGroupId();
@@ -325,7 +490,9 @@ export class game extends plugin {
     const lowestExpPlayer = sortExpPlayers[players.length - 1];
 
     if (lowestExpPlayer.exp !== selfInfo.exp) {
-      this.reply("技能为战力最低专属技能，您战力过高还需摆烂～");
+      this.reply(
+        "技能为战力最低专属技能，您战力过高还需摆烂～。可以发送 #摆烂榜 查看名次"
+      );
       return;
     }
 
@@ -400,7 +567,7 @@ export class game extends plugin {
   }
 
   /** pk处理 */
-  pkHandle(self, enemy) {
+  pkHandle(self, enemy, skill) {
     if (!pkArr[this.group_id]) pkArr[this.group_id] = new Map();
 
     const { exp: selfExp, time: selfTime = 0, dayTime: selfDayTime = 0 } = self;
@@ -436,6 +603,10 @@ export class game extends plugin {
 
     if (probability > 0.9 || probability < 0.1) {
       return { winner: undefined, loser: undefined };
+    }
+
+    if (skill == "timepk") {
+      probability = 1;
     }
 
     if (randomNum > probability) {

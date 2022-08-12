@@ -1,4 +1,12 @@
 - {
+    version: 1.0.7,
+    data:
+      [
+        添加<span class="cmd">狂战@xx</span>战狂(战斗次数最多)的专属技能，每人每天最多用一次,
+        添加<span class="cmd">#战狂榜</span>查看战斗次数排行榜,
+      ],
+  }
+- {
     version: 1.0.6,
     data:
       [
@@ -6,7 +14,6 @@
         添加<span class="cmd">落子A1</span>进行五子棋落子,
         添加<span class="cmd">#cosdby</span>系列指令查看大别野的cos图,
         添加<span class="cmd">#摆烂榜</span>查看战力倒数排行榜,
-        添加<span class="cmd">#弃子</span>进行五子棋本局认输,
         优化如果五子棋开局后一方三分钟没有进行落子操作，那么将超时自动结束,
         修复五子棋如果一方胜利后无法再次开局问题,
         优化落子指令字母位置支持小写,
