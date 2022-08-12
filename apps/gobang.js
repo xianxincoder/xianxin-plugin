@@ -105,6 +105,14 @@ export class gobang extends plugin {
     }
 
     if (
+      count == 0 &&
+      gameing[this.group_id].self.user_id !== this.e.sender.user_id
+    ) {
+      this.e.reply("本轮请黑棋落子");
+      return;
+    }
+
+    if (
       gameing[this.group_id] &&
       gameing[this.group_id].self &&
       gameing[this.group_id].self.user_id !== this.e.sender.user_id &&
@@ -122,14 +130,6 @@ export class gobang extends plugin {
           "",
       ].includes(this.e.sender.user_id)
     ) {
-      return;
-    }
-
-    if (
-      count == 0 &&
-      gameing[this.group_id].self.user_id !== this.e.sender.user_id
-    ) {
-      this.e.reply("本轮请黑棋落子");
       return;
     }
 
