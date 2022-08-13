@@ -12,13 +12,7 @@ let nowDynamicPushList = new Map(); // 本次新增的需要推送的列表信�
 const BotHaveARest = 500; // 机器人每次发送间隔时间，腹泻式发送会不会不太妥？休息一下吧
 const BiliApiRequestTimeInterval = 2000; // B站动态获取api间隔多久请求一次，别太快防止被拉黑
 
-const DynamicPicCountLimit = 2; // 推送动态时，限制发送多少张图片
-const DynamicContentLenLimit = 50; // 推送文字和图文动态时，限制字数是多少
-const DynamicContentLineLimit = 3; // 推送文字和图文动态时，限制多少行文本
-
-const BiliDynamicApiUrl =
-  "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/space";
-const BiliDrawDynamicLinkUrl = "https://m.bilibili.com/dynamic/"; // 图文动态链接地址
+const BiliDrawDynamicLinkUrl = "https://m.bilibili.com/dynamic/"; // 图文动态链接地址前缀
 
 let nowPushDate = Date.now(); // 设置当前推送的开始时间
 let pushTimeInterval = 10;
@@ -297,8 +291,9 @@ export class bilibili extends plugin {
         continue;
       }
 
-      let url = `${BiliDynamicApiUrl}?host_mid=${biliUID}`;
-      const response = await fetch(url, { method: "get" });
+      const response = await new Bilibili(this.e).getBilibiliDynamicInfo(
+        biliUID
+      );
 
       if (!response.ok) {
         // 请求失败，不记录，跳过，下一个
@@ -425,6 +420,9 @@ export class bilibili extends plugin {
         pics = dynamic?.modules?.module_dynamic?.major?.draw?.items;
         if (!desc && !pics) return;
 
+        const DynamicPicCountLimit =
+          this.bilibiliSetData.pushPicCountLimit || 3;
+
         if (pics.length > DynamicPicCountLimit)
           pics.length = DynamicPicCountLimit; // 最多发DynamicPicCountLimit张图，不然要霸屏了
 
@@ -516,6 +514,12 @@ export class bilibili extends plugin {
   // 限制动态字数/行数，避免过长影响观感（霸屏）
   dynamicContentLimit(content, lineLimit, lenLimit) {
     content = content.split("\n");
+
+    const DynamicContentLenLimit =
+      this.bilibiliSetData.pushContentLenLimit || 100;
+
+    const DynamicContentLineLimit =
+      this.bilibiliSetData.pushContentLineLimit || 5;
 
     lenLimit = lenLimit || DynamicContentLenLimit;
     lineLimit = lineLimit || DynamicContentLineLimit;

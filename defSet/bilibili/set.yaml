@@ -3,3 +3,12 @@ pushTime: "*/8  * * * *"
 
 # 是否推送转发的动态 1 - 推送 0 - 不推送
 pushTransmit: 0
+
+# 推送动态时，限制发送多少张图片
+pushPicCountLimit: 3
+
+# 推送文字和图文动态时，限制字数是多少
+pushContentLenLimit: 100
+
+# 推送文字和图文动态时，限制多少行文本
+pushContentLineLimit: 5

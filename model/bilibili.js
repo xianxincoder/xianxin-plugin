@@ -13,4 +13,10 @@ export default class Bilibili extends base {
     const response = await fetch(url, { method: "get" });
     return response;
   }
+
+  async getBilibiliDynamicInfo(uid) {
+    let url = `https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/space?host_mid=${uid}`;
+    const response = await fetch(url, { method: "get" });
+    return response;
+  }
 }
