@@ -116,8 +116,6 @@ export class bilibili extends plugin {
       }
     }
 
-    logger.error(`b站动态定时推送`);
-
     // 将上一次推送的动态全部合并到历史记录中
     let hisArr = new Set(dynamicPushHistory);
     for (let [userId, pushList] of nowDynamicPushList) {
