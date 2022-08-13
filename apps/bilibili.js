@@ -463,7 +463,7 @@ export class bilibili extends plugin {
         if (!desc) return;
         if (!dynamic.orig) return;
 
-        let orig = buildSendDynamic(info, dynamic.orig);
+        let orig = this.buildSendDynamic(info, dynamic.orig);
         if (orig && orig.length) {
           // 掐头去尾
           orig.shift();
