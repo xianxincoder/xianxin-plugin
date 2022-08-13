@@ -180,7 +180,7 @@ export class bilibili extends plugin {
 
     xxCfg.saveSet("bilibili", "push", "config", data);
 
-    this.e.reply(`添加成功~\n${resJson?.data.name}：${uid}`);
+    this.e.reply(`添加b站推送成功~\n${resJson?.data.name}：${uid}`);
   }
 
   /** 删除b站推送 */
@@ -202,7 +202,7 @@ export class bilibili extends plugin {
 
     xxCfg.saveSet("bilibili", "push", "config", data);
 
-    this.e.reply(`添加成功~\n${data.name}：${uid}`);
+    this.e.reply(`删除b站推送成功~\n${uid}`);
   }
 
   /** b站推送列表 */
