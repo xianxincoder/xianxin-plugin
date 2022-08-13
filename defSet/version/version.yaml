@@ -1,4 +1,13 @@
 - {
+    version: 1.0.8,
+    data:
+      [
+        添加<span class="cmd">#添加up推送 UID</span>检测up的B站动态进行推送,
+        添加<span class="cmd">#删除up推送 UID</span>删除对应up的B站动态推送,
+        添加<span class="cmd">#up推送列表</span>查看本群添加的up推送列表,
+      ],
+  }
+- {
     version: 1.0.7,
     data:
       [

@@ -18,6 +18,17 @@
     - icon: wiki
       title: "#热门话题"
       desc: 查看米游社中热聊话题
+- group: bilibli
+  list:
+    - icon: 树脂
+      title: "#添加up推送 UID"
+      desc: 检测up的B站动态进行推送
+    - icon: 统计
+      title: "#删除up推送 UID"
+      desc: "删除对应up的B站动态推送"
+    - icon: 攻略
+      title: "#up推送列表"
+      desc: "查看本群添加的up推送列表"
 - group: 群战指令
   list:
     - icon: 养成计算
