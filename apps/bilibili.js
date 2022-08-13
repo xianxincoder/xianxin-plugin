@@ -364,7 +364,7 @@ export class bilibili extends plugin {
 
     for (let val of list) {
       let msg = this.buildSendDynamic(info, val);
-      if (msg === "can't push transmit") {
+      if (msg === "continue") {
         // 这不好在前边判断，只能放到这里了
         continue;
       }
@@ -459,6 +459,10 @@ export class bilibili extends plugin {
 
         return msg;
       case "DYNAMIC_TYPE_FORWARD": // 转发的动态
+        if (!this.bilibiliSetData.pushTransmit) {
+          return "continue";
+        }
+
         desc = dynamic?.modules?.module_dynamic?.desc;
         if (!desc) return;
         if (!dynamic.orig) return;

@@ -5,6 +5,8 @@
         添加<span class="cmd">#添加up推送 UID</span>检测up的B站动态进行推送,
         添加<span class="cmd">#删除up推送 UID</span>删除对应up的B站动态推送,
         添加<span class="cmd">#up推送列表</span>查看本群添加的up推送列表,
+        添加是否推送转发动态的设置,
+        修复特定情况下没有推送消息问题,
         修复添加删除up推送后没有立即生效问题,
       ],
   }
