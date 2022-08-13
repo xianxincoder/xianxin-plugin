@@ -73,6 +73,11 @@ export class bilibili extends plugin {
           fnc: "listPush",
           permission: "master",
         },
+        {
+          reg: "^#手动推送测试$",
+          fnc: "pushTask",
+          permission: "master",
+        },
       ],
     });
     this.bilibiliSetData = xxCfg.getConfig("bilibili", "set");
@@ -171,6 +176,8 @@ export class bilibili extends plugin {
 
     data[this.e.group_id].push({ uid, name: resJson?.data.name });
 
+    this.bilibiliPushData = data;
+
     xxCfg.saveSet("bilibili", "push", "config", data);
 
     this.e.reply(`添加成功~\n${resJson?.data.name}：${uid}`);
@@ -190,6 +197,8 @@ export class bilibili extends plugin {
     data[this.e.group_id] = data[this.e.group_id].filter(
       (item) => item.uid !== uid
     );
+
+    this.bilibiliPushData = data;
 
     xxCfg.saveSet("bilibili", "push", "config", data);
 
