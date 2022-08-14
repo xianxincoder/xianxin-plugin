@@ -3,6 +3,7 @@ import xxCfg from "../model/xxCfg.js";
 import fs from "node:fs";
 import fetch from "node-fetch";
 import { segment } from "oicq";
+import moment from "moment";
 import Bilibili from "../model/bilibili.js";
 import common from "../../../lib/common/common.js";
 
@@ -358,7 +359,7 @@ export class bilibili extends plugin {
     Bot.logger.mark(`B站动态推送[${pushID}]`);
 
     for (let val of list) {
-      let msg = this.buildSendDynamic(info, val);
+      let msg = this.buildSendDynamic(info, val, false);
       if (msg === "continue") {
         // 这不好在前边判断，只能放到这里了
         continue;
@@ -373,7 +374,7 @@ export class bilibili extends plugin {
       Bot.pickGroup(pushID)
         .sendMsg(msg)
         .catch((err) => {
-          pushAgain(pushID, msg);
+          this.pushAgain(pushID, msg);
         });
 
       await common.sleep(BotHaveARest); // 休息一下，别一口气发一堆
@@ -383,42 +384,62 @@ export class bilibili extends plugin {
   }
 
   // 构建动态消息
-  buildSendDynamic(info, dynamic) {
-    let desc, msg, pics;
+  buildSendDynamic(info, dynamic, isForward) {
+    let desc, msg, pics, author;
     let title = `B站【${info.name}】动态推送：\n`;
 
     // 以下对象结构参考米游社接口，接口在顶部定义了
     switch (dynamic.type) {
       case "DYNAMIC_TYPE_AV":
         desc = dynamic?.modules?.module_dynamic?.major?.archive;
-        if (!desc) return;
+        author = dynamic?.modules?.module_author;
+        if (!desc && !author) return;
 
         title = `B站【${info.name}】视频动态推送：\n`;
         // 视频动态仅由标题、封面、链接组成
         msg = [
           title,
-          desc.title,
+          `-----------------------------\n`,
+          `标题：${desc.title}\n`,
+          `${desc.desc}\n`,
+          `链接：${this.resetLinkUrl(desc.jump_url)}\n`,
+          `时间：${
+            author
+              ? moment(author.pub_ts * (isForward ? 1000 : 1)).format(
+                  "YYYY年MM月DD日 HH:mm:ss"
+                )
+              : ""
+          }\n`,
           segment.image(desc.cover),
-          this.resetLinkUrl(desc.jump_url),
         ];
 
         return msg;
       case "DYNAMIC_TYPE_WORD":
         desc = dynamic?.modules?.module_dynamic?.desc;
-        if (!desc) return;
+        author = dynamic?.modules?.module_author;
+        if (!desc && !author) return;
 
         title = `B站【${info.name}】动态推送：\n`;
         msg = [
           title,
-          `${this.dynamicContentLimit(desc.text)}\n`,
-          `${BiliDrawDynamicLinkUrl}${dynamic.id_str}`,
+          `-----------------------------\n`,
+          `内容：${this.dynamicContentLimit(desc.text)}\n`,
+          `链接：${BiliDrawDynamicLinkUrl}${dynamic.id_str}\n`,
+          `时间：${
+            author
+              ? moment(author.pub_ts * (isForward ? 1000 : 1)).format(
+                  "YYYY年MM月DD日 HH:mm:ss"
+                )
+              : ""
+          }`,
         ];
 
         return msg;
       case "DYNAMIC_TYPE_DRAW":
         desc = dynamic?.modules?.module_dynamic?.desc;
         pics = dynamic?.modules?.module_dynamic?.major?.draw?.items;
-        if (!desc && !pics) return;
+        author = dynamic?.modules?.module_author;
+        if (!desc && !pics && !author) return;
 
         const DynamicPicCountLimit =
           this.bilibiliSetData.pushPicCountLimit || 3;
@@ -434,15 +455,24 @@ export class bilibili extends plugin {
         // 图文动态由内容（经过删减避免过长）、图片、链接组成
         msg = [
           title,
+          `-----------------------------\n`,
           `${this.dynamicContentLimit(desc.text)}\n`,
+          `链接：${BiliDrawDynamicLinkUrl}${dynamic.id_str}\n`,
+          `时间：${
+            author
+              ? moment(author.pub_ts * (isForward ? 1000 : 1)).format(
+                  "YYYY年MM月DD日 HH:mm:ss"
+                )
+              : ""
+          }\n`,
           ...pics,
-          `${BiliDrawDynamicLinkUrl}${dynamic.id_str}`,
         ];
 
         return msg;
       case "DYNAMIC_TYPE_ARTICLE":
         desc = dynamic?.modules?.module_dynamic?.major?.article;
-        if (!desc) return;
+        author = dynamic?.modules?.module_author;
+        if (!desc && !author) return;
 
         pics = [];
         if (desc.covers && desc.covers.length) {
@@ -453,7 +483,20 @@ export class bilibili extends plugin {
 
         title = `B站【${info.name}】文章动态推送：\n`;
         // 专栏/文章动态由标题、图片、链接组成
-        msg = [title, desc.title, ...pics, this.resetLinkUrl(desc.jump_url)];
+        msg = [
+          title,
+          `-----------------------------\n`,
+          `标题：${desc.title}\n`,
+          `链接：${this.resetLinkUrl(desc.jump_url)}\n`,
+          `时间：${
+            author
+              ? moment(author.pub_ts * (isForward ? 1000 : 1)).format(
+                  "YYYY年MM月DD日 HH:mm:ss"
+                )
+              : ""
+          }\n`,
+          ...pics,
+        ];
 
         return msg;
       case "DYNAMIC_TYPE_FORWARD": // 转发的动态
@@ -462,14 +505,16 @@ export class bilibili extends plugin {
         }
 
         desc = dynamic?.modules?.module_dynamic?.desc;
-        if (!desc) return;
+        author = dynamic?.modules?.module_author;
+        if (!desc && !author) return;
         if (!dynamic.orig) return;
 
-        let orig = this.buildSendDynamic(info, dynamic.orig);
+        let orig = this.buildSendDynamic(info, dynamic.orig, true);
         if (orig && orig.length) {
           // 掐头去尾
-          orig.shift();
-          orig.pop();
+          orig = orig.slice(2);
+          // orig.shift();
+          // orig.pop();
         } else {
           return false;
         }
@@ -477,13 +522,18 @@ export class bilibili extends plugin {
         title = `B站【${info.name}】转发动态推送：\n`;
         msg = [
           title,
-          `${this.dynamicContentLimit(
-            desc.text,
-            1,
-            15
-          )}\n---以下为转发内容---\n`,
+          `-----------------------------\n`,
+          `${this.dynamicContentLimit(desc.text, 1, 15)}\n`,
+          `链接：${BiliDrawDynamicLinkUrl}${dynamic.id_str}\n`,
+          `时间：${
+            author
+              ? moment(author.pub_ts * (isForward ? 1000 : 1)).format(
+                  "YYYY年MM月DD日 HH:mm:ss"
+                )
+              : ""
+          }\n`,
+          "\n---以下为转发内容---\n",
           ...orig,
-          `${BiliDrawDynamicLinkUrl}${dynamic.id_str}`,
         ];
 
         return msg;
@@ -499,9 +549,15 @@ export class bilibili extends plugin {
         // 直播动态由标题、封面、链接组成
         msg = [
           title,
-          `${desc.title}\n`,
+          `-----------------------------\n`,
+          `标题：${desc.title}\n`,
+          `链接：${this.resetLinkUrl(desc.link)}\n`,
+          `时间：${
+            author
+              ? moment(desc.live_start_time).format("YYYY年MM月DD日 HH:mm:ss")
+              : ""
+          }\n`,
           segment.image(desc.cover),
-          this.resetLinkUrl(desc.link),
         ];
 
         return msg;
