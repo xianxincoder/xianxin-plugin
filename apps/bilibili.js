@@ -49,17 +49,17 @@ export class bilibili extends plugin {
       event: "message.group",
       priority: 500,
       rule: [
-        // {
-        //   reg: "^#up.*$",
-        //   fnc: "detail",
-        // },
         {
-          reg: "^#添加up推送\\s*.*$",
+          reg: "^#up\\s*[0-9]*$",
+          fnc: "detail",
+        },
+        {
+          reg: "^#*(添加|订阅|新增|增加)up推送\\s*.*$",
           fnc: "addPush",
           permission: "master",
         },
         {
-          reg: "^#删除up推送\\s*.*$",
+          reg: "^#(删除|取消|移除|去除)up推送\\s*.*$",
           fnc: "delPush",
           permission: "master",
         },
@@ -214,7 +214,7 @@ export class bilibili extends plugin {
   }
 
   async detail() {
-    let uid = this.e.msg.replace(/#up/g, "");
+    let uid = this.e.msg.replace(/#up/g, "").trim();
 
     const userRes = await fetch(
       `https://api.bilibili.com/x/relation/stat?vmid=${uid}`
@@ -239,7 +239,7 @@ export class bilibili extends plugin {
       return true;
     }
     const message = [
-      `\n昵称：${data.name}`,
+      `昵称：${data.name}`,
       `\n性别：${data.sex}`,
       `\n等级：${data.level}`,
       `\n粉丝人数：${userResJsonData.data.follower}`,
