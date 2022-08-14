@@ -59,7 +59,7 @@ export class bilibili extends plugin {
           permission: "master",
         },
         {
-          reg: "^#(删除|取消|移除|去除)up推送\\s*.*$",
+          reg: "^#*(删除|取消|移除|去除)up推送\\s*.*$",
           fnc: "delPush",
           permission: "master",
         },
@@ -137,7 +137,7 @@ export class bilibili extends plugin {
 
   /** 添加b站推送 */
   async addPush() {
-    let uid = this.e.msg.replace(/#添加up推送/g, "").trim();
+    let uid = this.e.msg.replace(/#*(添加|订阅|新增|增加)up推送/g, "").trim();
     if (!uid) {
       this.e.reply(`请输入推送的uid\n示例：#添加up推送 401742377`);
       return true;
@@ -178,7 +178,7 @@ export class bilibili extends plugin {
 
   /** 删除b站推送 */
   async delPush() {
-    let uid = this.e.msg.replace(/#删除up推送/g, "").trim();
+    let uid = this.e.msg.replace(/#*(删除|取消|移除|去除)up推送/g, "").trim();
     if (!uid) {
       this.e.reply(`请输入推送的uid\n示例：#删除up推送 401742377`);
       return true;
