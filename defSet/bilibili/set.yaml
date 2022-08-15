@@ -12,3 +12,6 @@ pushContentLenLimit: 100
 
 # 推送文字和图文动态时，限制多少行文本
 pushContentLineLimit: 5
+
+# 推送直播信息方式，0 使用老方式检测推送(直播后10分钟会检测到) 1 使用新方式检测推送
+pushLiveType: 0

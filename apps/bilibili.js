@@ -100,6 +100,7 @@ export class bilibili extends plugin {
 
   /** bilibili推送任务 */
   async pushTask() {
+    this.bilibiliPushData = xxCfg.getConfig("bilibili", "push");
     let data = this.bilibiliPushData || {};
 
     if (dynamicPushHistory.length === 0) {
@@ -127,6 +128,94 @@ export class bilibili extends plugin {
 
     nowPushDate = Date.now();
     nowDynamicPushList = new Map(); // 清空上次的推送列表
+
+    if (this.bilibiliSetData.pushLiveType) {
+      // todo 新方式检测直播信息
+
+      let lastLiveStatusInfo = {};
+
+      let lastTemp = await redis.get("xianxin:bililive:lastlivestatus");
+
+      if (lastTemp) {
+        lastLiveStatusInfo = JSON.parse(lastTemp);
+      }
+
+      const uidMap = new Map();
+      for (let key in data) {
+        const ups = data[key] || [];
+        for (let up of ups) {
+          if (!lastTemp) {
+            lastLiveStatusInfo[`${up.uid}`] = 0;
+          }
+          uidMap.set(up.uid, {
+            pushIds: Array.from(
+              new Set([
+                ...((uidMap.get(up.uid) && uidMap.get(up.uid).pushIds) || []),
+                key,
+              ])
+            ),
+            upName: up.name,
+          });
+        }
+      }
+
+      for (let [key, value] of uidMap) {
+        const accInfoRes = await fetch(
+          `https://api.bilibili.com/x/space/acc/info?mid=${key}&jsonp=jsonp`
+        );
+        if (!accInfoRes.ok) {
+          await common.sleep(BiliApiRequestTimeInterval);
+          continue;
+        }
+
+        const accInfoResJsonData = await accInfoRes.json();
+
+        const data = accInfoResJsonData?.data || null;
+        if (!data || !data.live_room) {
+          await common.sleep(BiliApiRequestTimeInterval);
+          continue;
+        }
+
+        const pushMapInfo = value || {};
+
+        const { pushIds, upName } = pushMapInfo;
+
+        if (
+          `${lastLiveStatusInfo[key] || 0}${data.live_room.liveStatus}` ==
+            "01" &&
+          pushIds &&
+          pushIds.length
+        ) {
+          // 直播动态由标题、封面、链接组成
+          let msg = [
+            `B站【${upName}】直播动态推送：\n`,
+            `-----------------------------\n`,
+            `标题：${data.live_room.title}\n`,
+            `链接：${this.resetLinkUrl(data.live_room.url)}\n`,
+            segment.image(data.live_room.cover),
+          ];
+          for (let pushID of pushIds) {
+            Bot.pickGroup(pushID)
+              .sendMsg(msg)
+              .catch((err) => {
+                this.pushAgain(pushID, msg);
+              });
+
+            await common.sleep(BotHaveARest); // 休息一下，别一口气发一堆
+          }
+        }
+
+        lastLiveStatusInfo[key] = data.live_room.liveStatus;
+
+        await redis.set(
+          "xianxin:bililive:lastlivestatus",
+          JSON.stringify(lastLiveStatusInfo),
+          { EX: 60 * 60 }
+        );
+
+        await common.sleep(BiliApiRequestTimeInterval);
+      }
+    }
 
     for (let key in data) {
       const pushList = data[key] || [];
@@ -538,6 +627,9 @@ export class bilibili extends plugin {
 
         return msg;
       case "DYNAMIC_TYPE_LIVE_RCMD":
+        if (this.bilibiliSetData.pushLiveType) {
+          return "continue";
+        }
         desc = dynamic?.modules?.module_dynamic?.major?.live_rcmd?.content;
         if (!desc) return;
 
