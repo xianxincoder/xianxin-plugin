@@ -2,7 +2,7 @@
 pushTime: "*/8  * * * *"
 
 # 是否推送转发的动态 1 - 推送 0 - 不推送
-pushTransmit: 0
+pushTransmit: 1
 
 # 推送动态时，限制发送多少张图片
 pushPicCountLimit: 3
