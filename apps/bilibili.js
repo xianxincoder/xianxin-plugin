@@ -93,7 +93,7 @@ export class bilibili extends plugin {
     Bot.pickGroup(groupId)
       .sendMsg(msg)
       .catch((err) => {
-        logger.error(`群[${groupId}]推送失败：${err}`);
+        logger.error(`群[${groupId}]推送失败：${JSON.stringify(err)}`);
       });
 
     return;
