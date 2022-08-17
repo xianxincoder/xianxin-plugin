@@ -7,7 +7,7 @@
 <h1 align="center">xianxin-plugin</h1>
 
 <div align="center">
-是[Yunzai-Bot](https://gitee.com/Le-niao/Yunzai-Bot) 关于原神cos、B站推送和群战等功能的扩展插件
+是 <a href="https://gitee.com/Le-niao/Yunzai-Bot" target="_blank">Yunzai-Bot</a> 关于原神cos、B站推送和群战等功能的扩展插件
 </div>
 
 
