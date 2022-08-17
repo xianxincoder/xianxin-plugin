@@ -240,6 +240,10 @@ export class mys extends plugin {
     const wikiData = await new Mys().getWikiSearchData(keyword);
 
     if (wikiData.length) {
+      if (this.mysSetData.isExactMatch) {
+        wikiData.length = 1;
+      }
+
       let msgList = [];
       for (let item of wikiData) {
         msgList.push({

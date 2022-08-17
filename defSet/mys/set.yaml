@@ -3,3 +3,6 @@ isReplyMulti: 0
 
 # 随机图库大小，设置过大可能会造成搜索精准度下降，也会有概率找不到cos的问题
 cosRandomMax: 100
+
+# 设置wiki 搜索是否精确匹配 0: 模糊搜索展示搜索的列表 1精确搜索，默认展示第一条wiki信息
+isExactMatch: 1
