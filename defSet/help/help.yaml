@@ -16,8 +16,8 @@
       title: "#同人 #同人1 #同人详情"
       desc: 查看米游社中同人榜
     - icon: wiki
-      title: "#热门话题"
-      desc: 查看米游社中热聊话题
+      title: "#wiki xxx"
+      desc: 查询原神wiki的内容
 - group: bilibli
   list:
     - icon: 树脂

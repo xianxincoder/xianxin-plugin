@@ -42,6 +42,10 @@ export class mys extends plugin {
           reg: "^#*cos(dby)*\\s*.*$",
           fnc: "searchCos",
         },
+        {
+          reg: "^#*wiki\\s*.*$",
+          fnc: "searchWiki",
+        },
       ],
     });
 
@@ -227,6 +231,33 @@ export class mys extends plugin {
       }
     } else {
       this.reply("额。没有找到合适的cos信息～");
+    }
+  }
+
+  async searchWiki() {
+    let keyword = this.e.msg.replace(/#*wiki/g, "").trim();
+
+    const wikiData = await new Mys().getWikiSearchData(keyword);
+
+    if (wikiData.length) {
+      let msgList = [];
+      for (let item of wikiData) {
+        msgList.push({
+          message: `标题：${item.title}\n标签：${item.tags.join("，")}\n链接：${
+            item.href
+          }`,
+          nickname: Bot.nickname,
+          user_id: Bot.uin,
+        });
+      }
+
+      if (msgList.length == 1) {
+        await this.e.reply(msgList[0].message);
+      } else {
+        await this.e.reply(await Bot.makeForwardMsg(msgList));
+      }
+    } else {
+      this.reply("额。没有找到wiki内容～");
     }
   }
 }

@@ -1,4 +1,12 @@
 - {
+    version: 1.0.9,
+    data:
+      [
+        添加<span class="cmd">#wiki xxx</span>查询原神wiki的内容,
+        例如：<span class="cmd">#wiki 陌野不识故人</span>查看任务信息,
+      ],
+  }
+- {
     version: 1.0.8,
     data:
       [

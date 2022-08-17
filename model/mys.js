@@ -2,6 +2,7 @@ import moment from "moment";
 import lodash from "lodash";
 import base from "./base.js";
 import fetch from "node-fetch";
+import { channel } from "diagnostics_channel";
 
 export default class Mys extends base {
   constructor(e) {
@@ -168,5 +169,33 @@ export default class Mys extends base {
       });
     }
     return cosData;
+  }
+
+  async getWikiSearchData(keyword) {
+    const wikiData = [];
+
+    const fetchData = await fetch(
+      `https://api-takumi.mihoyo.com/common/blackboard/ys_obc/v1/search/content?app_sn=ys_obc&keyword=${keyword}&page=1`
+    );
+
+    const resJsonData = await fetchData.json();
+
+    if (
+      resJsonData &&
+      resJsonData.retcode === 0 &&
+      resJsonData.data.list &&
+      resJsonData.data.list.length
+    ) {
+      resJsonData.data.list.map((item) => {
+        wikiData.push({
+          title: item.title,
+          href: item.bbs_url,
+          tags: item.channels.map((channel) => channel.name),
+        });
+        return item;
+      });
+    }
+
+    return wikiData;
   }
 }
