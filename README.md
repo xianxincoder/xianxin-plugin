@@ -11,7 +11,6 @@
 </div>
 <br />
 <br />
-<br />
 
 
 ## ✨ 功能
@@ -56,20 +55,20 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 
 - [爱发电](https://afdian.net/@xianxin)
 
-<a title="Fei."><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="林木森つ"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="星辰之梦"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="唉嘿"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="萍"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="Lie"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="妙娃种子不妙了"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="遇到问题摆大烂"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="Gimme"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="吃瓜群众"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="长楠"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="Tears"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a href="https://gitee.com/TimeRainStarSky" target="_blank" title="时雨🌌星空"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="夏-.-曙＆宙@象"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
-<a title="枫叶霜华"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="Fei."><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="林木森つ"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="星辰之梦"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="唉嘿"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="萍"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="Lie"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="妙娃种子不妙了"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="遇到问题摆大烂"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="Gimme"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="吃瓜群众"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="长楠"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="Tears"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a href="https://gitee.com/TimeRainStarSky" target="_blank" title="时雨🌌星空"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="夏-.-曙＆宙@象"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="枫叶霜华"><img style="box-shadow: 0 0 0 2px #fff;border-radius: 50%;" src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
 
 
