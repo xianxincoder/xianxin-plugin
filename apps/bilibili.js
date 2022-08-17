@@ -80,7 +80,9 @@ export class bilibili extends plugin {
 
     /** 定时任务 */
     this.task = {
-      cron: this.bilibiliSetData.pushTime,
+      cron: !!this.bilibiliSetData.pushStatus
+        ? this.bilibiliSetData.pushTime
+        : "",
       name: "检测b站推送定时任务",
       fnc: () => this.pushTask(),
       log: !!this.bilibiliSetData.pushTaskLog,
