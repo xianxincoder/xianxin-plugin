@@ -9,12 +9,12 @@
 <div align="center">
 是 <a href="https://gitee.com/Le-niao/Yunzai-Bot" target="_blank">Yunzai-Bot</a> 关于原神cos、B站推送和群战等功能的扩展插件
 </div>
-
-
+<br />
+<br />
+<br />
 
 
 ## ✨ 功能
-
 
 | 命令 | 🌰 |
 | --- | --- |
