@@ -1,14 +1,20 @@
-# xianxin-plugin
+<p align="center">
+  <a href="https://gitee.com/xianxincoder/xianxin-plugin">
+    <img width="200" src="https://gitee.com/xianxincoder/xianxin-plugin/raw/master/resources/img/rank/top.png">
+  </a>
+</p>
 
-[xianxin-plugin](https://gitee.com/xianxincoder/xianxin-plugin)是[Yunzai-Bot](https://gitee.com/Le-niao/Yunzai-Bot) v3的插件
+<h1 align="center">xianxin-plugin</h1>
 
-## 依赖
+<div align="center">
+是[Yunzai-Bot](https://gitee.com/Le-niao/Yunzai-Bot) 关于原神cos、B站推送和群战等功能的扩展插件
+</div>
 
-- [Yunzai-Bot v3](https://gitee.com/Le-niao/Yunzai-Bot)
 
-## 功能说明
 
-#### 具体可使用 \#闲心功能 指令来查看
+
+## ✨ 功能
+
 
 | 命令 | 🌰 |
 | --- | --- |
@@ -26,7 +32,11 @@
 | #闲心插件更新 | 拉取最新代码更新插件，更新失败时可尝试 #闲心插件强制更新 |
 
 
-## 安装与更新
+## 🖥 依赖
+
+- [Yunzai-Bot v3](https://gitee.com/Le-niao/Yunzai-Bot)
+
+## 📦 安装与更新
 
 推荐使用 git 进行安装，以方便后续升级。在[Yunzai-Bot](https://gitee.com/Le-niao/Yunzai-Bot)根目录打开终端，运行如下命令进行安装。
 
@@ -35,36 +45,31 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 ```
 
 
-## 其他
+## 🌈 其他
 - 素材来源于网络，仅供交流学习使用
 - 严禁用于任何商业用途和非法行为
 - xianxin-plugin QQ群：426961091
 
 
 
-## 赞助，全凭自愿哦
+## ❤️ 赞助者
 
 - [爱发电](https://afdian.net/@xianxin)
 
-
-| 赞助 | 金额 |
-| --- | --- |
-| Fei. | 33 |
-| 林木森つ | 20 |
-| 星辰之梦 | 6.6 |
-| 唉嘿 | 5.2 |
-| 萍| 5 |
-| Lie| 15 |
-| 妙娃种子不妙了| 5 |
-| 遇到问题摆大烂| 5 |
-| Gimme| 10 |
-| 吃瓜群众| 20 |
-| 长楠| 10 |
-| Tears| 10 |
-| [时雨🌌星空](https://gitee.com/TimeRainStarSky) | 5 |
-| 夏-.-曙＆宙@象 | 5 |
-| 枫叶霜华 | 10 |
-
-
+<a title="Fei."><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="林木森つ"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="星辰之梦"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="唉嘿"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="萍"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="Lie"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="妙娃种子不妙了"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="遇到问题摆大烂"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="Gimme"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="吃瓜群众"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="长楠"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="Tears"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a href="https://gitee.com/TimeRainStarSky" target="_blank" title="时雨🌌星空"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="夏-.-曙＆宙@象"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
+<a title="枫叶霜华"><img src="https://joeschmoe.io/api/v1/random" width="36" height="36"/></a>
 
 
