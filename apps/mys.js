@@ -39,7 +39,7 @@ export class mys extends plugin {
           fnc: "cosDetail",
         },
         {
-          reg: "^#cos[a-z]* .*[0-9]*$",
+          reg: "^#*cos(dby)*\\s*.*$",
           fnc: "searchCos",
         },
       ],
@@ -171,7 +171,7 @@ export class mys extends plugin {
 
   async searchCos() {
     const isPrivate = this.e.isPrivate;
-    let role = this.e.msg.replace(/#cos /g, "").replace(/#cosdby /g, "");
+    let role = this.e.msg.replace(/#*cos(dby)*/g, "").trim();
 
     let key = "ys";
     if (this.e.msg.indexOf("dby") !== -1) {
