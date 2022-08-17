@@ -4,6 +4,7 @@
       [
         添加<span class="cmd">#wiki xxx</span>查询原神wiki的内容,
         例如：<span class="cmd">#wiki 陌野不识故人</span>查看任务信息,
+        优化wiki链接地址只保留简短有效地址,
       ],
   }
 - {

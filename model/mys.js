@@ -189,7 +189,7 @@ export default class Mys extends base {
       resJsonData.data.list.map((item) => {
         wikiData.push({
           title: item.title,
-          href: item.bbs_url,
+          href: item.bbs_url.replace("?bbs_presentation_style=no_header", ""),
           tags: item.channels.map((channel) => channel.name),
         });
         return item;
