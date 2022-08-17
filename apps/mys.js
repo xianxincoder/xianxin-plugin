@@ -240,25 +240,52 @@ export class mys extends plugin {
     const wikiData = await new Mys().getWikiSearchData(keyword);
 
     if (wikiData.length) {
-      if (this.mysSetData.isExactMatch) {
-        wikiData.length = 1;
-      }
+      if (this.mysSetData.wikiMode) {
+        if (this.mysSetData.isExactMatch) {
+          wikiData.length = 1;
+        }
 
-      let msgList = [];
-      for (let item of wikiData) {
-        msgList.push({
-          message: `标题：${item.title}\n标签：${item.tags.join("，")}\n链接：${
-            item.href
-          }`,
-          nickname: Bot.nickname,
-          user_id: Bot.uin,
-        });
-      }
+        let msgList = [];
+        for (let item of wikiData) {
+          msgList.push({
+            message: `标题：${item.title}\n标签：${item.tags.join(
+              "，"
+            )}\n链接：${item.href}`,
+            nickname: Bot.nickname,
+            user_id: Bot.uin,
+          });
+        }
 
-      if (msgList.length == 1) {
-        await this.e.reply(msgList[0].message);
+        if (msgList.length == 1) {
+          await this.e.reply(msgList[0].message);
+        } else {
+          await this.e.reply(await Bot.makeForwardMsg(msgList));
+        }
       } else {
-        await this.e.reply(await Bot.makeForwardMsg(msgList));
+        const data = wikiData[0];
+        const img = await new Mys().getWikiPage(data);
+        if (!img) return;
+
+        if (img.length == 1) {
+          await this.e.reply(img[0]);
+        } else {
+          let msgList = [];
+
+          msgList.unshift({
+            message: data.title,
+            nickname: Bot.nickname,
+            user_id: Bot.uin,
+          });
+          for (let item of img) {
+            msgList.push({
+              message: item,
+              nickname: Bot.nickname,
+              user_id: Bot.uin,
+            });
+          }
+
+          await this.e.reply(await Bot.makeForwardMsg(msgList));
+        }
       }
     } else {
       this.reply("额。没有找到wiki内容～");

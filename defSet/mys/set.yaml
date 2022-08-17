@@ -6,3 +6,6 @@ cosRandomMax: 100
 
 # 设置wiki 搜索是否精确匹配 0: 模糊搜索展示搜索的列表 1精确搜索，默认展示第一条wiki信息
 isExactMatch: 1
+
+# 设置wiki消息模式 0: 图片模式(会消耗服务器流量哦) 1文字模式
+wikiMode: 1

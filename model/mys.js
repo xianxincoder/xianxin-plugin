@@ -1,8 +1,9 @@
 import moment from "moment";
 import lodash from "lodash";
 import base from "./base.js";
+import { segment } from "oicq";
 import fetch from "node-fetch";
-import { channel } from "diagnostics_channel";
+import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 
 export default class Mys extends base {
   constructor(e) {
@@ -197,5 +198,95 @@ export default class Mys extends base {
     }
 
     return wikiData;
+  }
+
+  async getWikiPage(data) {
+    const img = await this.renderWiki(data);
+
+    return img;
+  }
+
+  async renderWiki(data) {
+    const pageHeight = 3000;
+
+    await puppeteer.browserInit();
+
+    const page = await puppeteer.browser.newPage();
+
+    await page.goto(data.href);
+    const body = await page.$(".detail__body");
+
+    let divHandle = await page.$(".header-bar");
+    await page.evaluate(
+      (el, value) => el.setAttribute("style", value),
+      divHandle,
+      "display: none"
+    );
+
+    let headerHandle = await page.$(".mhy-bbs-app-header");
+    await page.evaluate(
+      (el, value) => el.setAttribute("style", value),
+      headerHandle,
+      "display: none"
+    );
+
+    let header1Handle = await page.$(".detail__header-placeholder");
+    await page.evaluate(
+      (el, value) => el.setAttribute("style", value),
+      header1Handle,
+      "display: none"
+    );
+
+    const boundingBox = await body.boundingBox();
+
+    const num = Math.round(boundingBox.height / pageHeight) || 1;
+
+    if (num > 1) {
+      await page.setViewport({
+        width: boundingBox.width,
+        height: pageHeight,
+      });
+    }
+
+    const img = [];
+    for (let i = 1; i <= num; i++) {
+      const randData = {
+        type: "jpeg",
+        quality: 90,
+      };
+
+      let buff;
+      if (num == 1) {
+        buff = await body.screenshot(randData);
+      } else {
+        buff = await page.screenshot(randData);
+      }
+
+      puppeteer.renderNum++;
+      /** 计算图片大小 */
+      const kb = (buff.length / 1024).toFixed(2) + "kb";
+
+      logger.mark(`[图片生成][${this.model}][${puppeteer.renderNum}次] ${kb}`);
+
+      img.push(segment.image(buff));
+
+      if (i < num) {
+        let scrollArea = await page.$(".root__scroll-body");
+        await page.evaluate(
+          (el, val) => {
+            el.scrollTo(0, val * 3000);
+          },
+          scrollArea,
+          i
+        );
+      }
+    }
+
+    page.close().catch((err) => logger.error(err));
+
+    if (num > 1) {
+      logger.mark(`[图片生成][${this.model}] 处理完成`);
+    }
+    return img;
   }
 }
