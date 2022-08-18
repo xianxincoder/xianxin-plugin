@@ -1,34 +1,36 @@
 import { segment } from "oicq";
-import lodash from "lodash";
 import plugin from "../../../lib/plugins/plugin.js";
 import Mys from "../model/mys.js";
 import common from "../../../lib/common/common.js";
 import xxCfg from "../model/xxCfg.js";
 import fs from "node:fs";
 
+/**
+ * 初始化米游社设置文件
+ */
 let mysSetFile = "./plugins/xianxin-plugin/config/mys.set.yaml";
 if (!fs.existsSync(mysSetFile)) {
   fs.copyFileSync("./plugins/xianxin-plugin/defSet/mys/set.yaml", mysSetFile);
 }
+
+/**
+ * 米游社相关内容
+ */
 export class mys extends plugin {
   constructor() {
     super({
       name: "米游社相关内容",
-      dsc: "处理米游社中获取话题、同人、cos内容",
+      dsc: "处理米游社中获取wiki、攻略、cos、话题、同人等内容",
       event: "message",
       priority: 300,
       rule: [
         {
-          reg: "^#热门话题[0-9]*$",
-          fnc: "hotchat",
+          reg: "^#*攻略\\s*.*$",
+          fnc: "searchStrategy",
         },
         {
-          reg: "^#同人[0-9]*$",
-          fnc: "acgn",
-        },
-        {
-          reg: "^#同人[0-9]*详情$",
-          fnc: "acgnDetail",
+          reg: "^#*wiki\\s*.*$",
+          fnc: "searchWiki",
         },
         {
           reg: "^#cos[a-z]*[0-9]*$",
@@ -43,31 +45,43 @@ export class mys extends plugin {
           fnc: "searchCos",
         },
         {
-          reg: "^#*wiki\\s*.*$",
-          fnc: "searchWiki",
+          reg: "^#同人[0-9]*$",
+          fnc: "acgn",
         },
         {
-          reg: "^#*攻略\\s*.*$",
-          fnc: "searchStrategy",
+          reg: "^#同人[0-9]*详情$",
+          fnc: "acgnDetail",
+        },
+        {
+          reg: "^#热门话题[0-9]*$",
+          fnc: "hotchat",
         },
       ],
     });
 
+    /** 读取米游社相关设置数据 */
     this.mysSetData = xxCfg.getConfig("mys", "set");
   }
 
+  /**
+   * rule - 米游社热门话题
+   */
   async hotchat() {
     let index = this.e.msg.replace(/#热门话题/g, "") || 0;
     const chatData = await new Mys().getChatData();
 
     const data = chatData[index];
     if (data) {
-      this.reply(`热门话题：${data.title}\n话题地址：${data.url}`);
+      this.e.reply(`热门话题：${data.title}\n话题地址：${data.url}`);
     } else {
-      this.reply("额，没有找到合适的话题哦～");
+      this.e.reply("额，没有找到合适的话题哦～");
     }
   }
 
+  /**
+   * rule - 米游社同人
+   * @returns
+   */
   async acgn() {
     const isPrivate = this.e.isPrivate;
 
@@ -99,22 +113,29 @@ export class mys extends plugin {
         await this.e.reply(await Bot.makeForwardMsg(msgList));
       }
     } else {
-      this.reply("额。没有找到合适的同人信息～");
+      this.e.reply("额。没有找到合适的同人信息～");
     }
   }
 
+  /**
+   * rule - 米游社同人详情
+   */
   async acgnDetail() {
     let index = this.e.msg.replace(/#同人/g, "").replace("详情", "") || 0;
     const acgnData = await new Mys().getAcgnData();
     const data = acgnData[index];
     if (data) {
       const message = `标题：${data.title}\n地址：${data.url}\n作者：${data.nickname}\n点赞：${data.like_num}`;
-      this.reply(message);
+      this.e.reply(message);
     } else {
-      this.reply("额。没有找到合适的同人信息～");
+      this.e.reply("额。没有找到合适的同人信息～");
     }
   }
 
+  /**
+   * rule - 米游社cos
+   * @returns
+   */
   async cos() {
     const isPrivate = this.e.isPrivate;
     let index = this.e.msg.replace(/#cos/g, "").replace(/dby/g, "") || 0;
@@ -158,6 +179,9 @@ export class mys extends plugin {
     }
   }
 
+  /**
+   * rule - 米游社cos详情
+   */
   async cosDetail() {
     let index =
       this.e.msg.replace(/#cos/g, "").replace(/dby/g, "").replace("详情", "") ||
@@ -177,6 +201,10 @@ export class mys extends plugin {
     }
   }
 
+  /**
+   * rule - 搜索米游社cos
+   * @returns
+   */
   async searchCos() {
     const isPrivate = this.e.isPrivate;
     let role = this.e.msg.replace(/#*cos(dby)*/g, "").trim();
@@ -238,6 +266,10 @@ export class mys extends plugin {
     }
   }
 
+  /**
+   * rule - 米游社搜索wiki内容
+   * @returns
+   */
   async searchWiki() {
     let keyword = this.e.msg.replace(/#*wiki/g, "").trim();
 
@@ -292,10 +324,14 @@ export class mys extends plugin {
         }
       }
     } else {
-      this.reply("额。没有找到wiki内容～");
+      this.reply("额。没有找到wiki内容，换个关键词试试吧～");
     }
   }
 
+  /**
+   * rule - 米游社搜索攻略内容
+   * @returns
+   */
   async searchStrategy() {
     let keyword = this.e.msg.replace(/#*攻略/g, "").trim();
 
@@ -350,7 +386,7 @@ export class mys extends plugin {
         }
       }
     } else {
-      this.reply("额。没有找到攻略内容～");
+      this.e.reply("额。没有找到攻略内容，换个关键词试试吧～");
     }
   }
 }
