@@ -361,8 +361,34 @@ export class mys extends plugin {
         }
       } else {
         const data = wikiData[0];
-        const img = await new Mys().strategySearch(data);
-        if (!img) return;
+        const renderInfo = await new Mys().strategySearch(data);
+        if (!renderInfo) return;
+
+        const { img, code } = renderInfo;
+
+        if (code === "limit") {
+          if (this.mysSetData.isExactMatch) {
+            wikiData.length = 1;
+          }
+
+          let msgList = [];
+          for (let item of wikiData) {
+            msgList.push({
+              message: `标题：${item.title}\n标签：${item.tags.join(
+                "，"
+              )}\n链接：${item.href}`,
+              nickname: Bot.nickname,
+              user_id: Bot.uin,
+            });
+          }
+
+          if (msgList.length == 1) {
+            await this.e.reply(msgList[0].message);
+          } else {
+            await this.e.reply(await Bot.makeForwardMsg(msgList));
+          }
+          return "return";
+        }
 
         if (img.length == 1) {
           await this.e.reply(img[0]);

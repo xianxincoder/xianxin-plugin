@@ -305,11 +305,15 @@ export default class Mys extends base {
     const matchArr = url.match(/[^\/]*$/);
     const postId = matchArr[0];
 
+    if (!/^[0-9]+.?[0-9]*/.test(postId)) {
+      return { img: [], code: "limit" };
+    }
+
     const param = await this.newsDetail(postId);
 
-    const img = await this.render(param);
+    const renderInfo = await this.render(param);
 
-    return img;
+    return renderInfo;
   }
 
   async newsDetail(postId) {
@@ -450,6 +454,11 @@ export default class Mys extends base {
     return emp;
   }
 
+  /**
+   * 处理米游社详情页图片生成
+   * @param {object} param
+   * @returns {img: string[], code: string}
+   */
   async render(param) {
     // const pageHeight = 3000;
 
@@ -476,6 +485,7 @@ export default class Mys extends base {
     }
 
     const img = [];
+    let code = "success";
     for (let i = 1; i <= num; i++) {
       const randData = {
         type: "jpeg",
@@ -492,6 +502,9 @@ export default class Mys extends base {
       puppeteer.renderNum++;
       /** 计算图片大小 */
       const kb = (buff.length / 1024).toFixed(2) + "kb";
+      if ((buff.length / 1024).toFixed(2) > 3800) {
+        code = "limit";
+      }
 
       logger.mark(`[图片生成][${this.model}][${puppeteer.renderNum}次] ${kb}`);
 
@@ -506,6 +519,6 @@ export default class Mys extends base {
     if (num > 1) {
       logger.mark(`[图片生成][${this.model}] 处理完成`);
     }
-    return img;
+    return { img: img, code: code };
   }
 }
