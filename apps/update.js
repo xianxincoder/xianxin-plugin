@@ -6,8 +6,6 @@ import { Restart } from "../../other/restart.js";
 const require = createRequire(import.meta.url);
 const { exec, execSync } = require("child_process");
 
-const _path = process.cwd();
-
 // 是否在更新中
 let uping = false;
 
@@ -192,7 +190,7 @@ export class update extends plugin {
     let nickname = Bot.nickname;
     if (this.e.isGroup) {
       let info = await Bot.getGroupMemberInfo(this.e.group_id, Bot.uin);
-      nickname = info.card ?? info.nickname;
+      nickname = info.card || info.nickname;
     }
     let userInfo = {
       user_id: Bot.uin,
