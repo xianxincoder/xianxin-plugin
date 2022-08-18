@@ -1,5 +1,11 @@
 - group: 常用指令
   list:
+    - icon: wiki
+      title: "#wiki xxx"
+      desc: 查询原神wiki的内容
+    - icon: abyss
+      title: "#攻略 xxx"
+      desc: 查询原神精选的玩家攻略内容
     - icon: 绑定账号
       title: "#cos 角色名 #cos 刻晴"
       desc: 指定角色随机查看cos图片
@@ -12,12 +18,6 @@
     - icon: 纠缠之缘
       title: "#cosdby #cosdby1 #cosdby详情"
       desc: 查看米游社中大别野cos榜
-    - icon: abyss
-      title: "#同人 #同人1 #同人详情"
-      desc: 查看米游社中同人榜
-    - icon: wiki
-      title: "#wiki xxx"
-      desc: 查询原神wiki的内容
 - group: bilibli
   list:
     - icon: 树脂
@@ -55,16 +55,19 @@
 - group: 五子棋
   list:
     - icon: 打卡
-      title: "#五子棋"
-      desc: 开局进行五子棋小游戏
+      title: "#五子棋 #弃子"
+      desc: 开局/认输五子棋小游戏
     - icon: ledger
       title: "落子+字母+数字 落子H8"
       desc: "五子棋落子操作"
-    - icon: team
-      title: "#弃子"
-      desc: "五子棋认输操作"
 - group: 其他指令
   list:
+    - icon: abyss
+      title: "#同人 #同人1 #同人详情"
+      desc: 查看米游社中同人榜
+    - icon: team
+      title: "#热门话题"
+      desc: 查看米游社中热聊话题
     - icon: 问号
       title: "#闲心插件版本"
       desc: 查看，最近维护的版本信息

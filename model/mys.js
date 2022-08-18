@@ -172,12 +172,15 @@ export default class Mys extends base {
     return cosData;
   }
 
-  async getWikiSearchData(keyword) {
+  async getWikiSearchData(keyword, type) {
     const wikiData = [];
 
-    const fetchData = await fetch(
-      `https://api-takumi.mihoyo.com/common/blackboard/ys_obc/v1/search/content?app_sn=ys_obc&keyword=${keyword}&page=1`
-    );
+    const urlMap = {
+      wiki: `https://api-takumi.mihoyo.com/common/blackboard/ys_obc/v1/search/content?app_sn=ys_obc&keyword=${keyword}&page=1`,
+      strategy: `https://api-takumi.mihoyo.com/common/blackboard/ys_strategy/v1/search/content?app_sn=ys_strategy&keyword=${keyword}&page=1`,
+    };
+
+    const fetchData = await fetch(urlMap[type]);
 
     const resJsonData = await fetchData.json();
 

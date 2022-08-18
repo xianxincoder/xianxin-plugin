@@ -46,6 +46,10 @@ export class mys extends plugin {
           reg: "^#*wiki\\s*.*$",
           fnc: "searchWiki",
         },
+        {
+          reg: "^#*攻略\\s*.*$",
+          fnc: "searchStrategy",
+        },
       ],
     });
 
@@ -237,7 +241,7 @@ export class mys extends plugin {
   async searchWiki() {
     let keyword = this.e.msg.replace(/#*wiki/g, "").trim();
 
-    const wikiData = await new Mys().getWikiSearchData(keyword);
+    const wikiData = await new Mys().getWikiSearchData(keyword, "wiki");
 
     if (wikiData.length) {
       if (this.mysSetData.wikiMode) {
@@ -289,6 +293,64 @@ export class mys extends plugin {
       }
     } else {
       this.reply("额。没有找到wiki内容～");
+    }
+  }
+
+  async searchStrategy() {
+    let keyword = this.e.msg.replace(/#*攻略/g, "").trim();
+
+    const wikiData = await new Mys().getWikiSearchData(keyword, "strategy");
+
+    if (wikiData.length) {
+      if (this.mysSetData.wikiMode) {
+        if (this.mysSetData.isExactMatch) {
+          wikiData.length = 1;
+        }
+
+        let msgList = [];
+        for (let item of wikiData) {
+          msgList.push({
+            message: `标题：${item.title}\n标签：${item.tags.join(
+              "，"
+            )}\n链接：${item.href}`,
+            nickname: Bot.nickname,
+            user_id: Bot.uin,
+          });
+        }
+
+        if (msgList.length == 1) {
+          await this.e.reply(msgList[0].message);
+        } else {
+          await this.e.reply(await Bot.makeForwardMsg(msgList));
+        }
+      } else {
+        const data = wikiData[0];
+        const img = await new Mys().getWikiPage(data);
+        if (!img) return;
+
+        if (img.length == 1) {
+          await this.e.reply(img[0]);
+        } else {
+          let msgList = [];
+
+          msgList.unshift({
+            message: data.title,
+            nickname: Bot.nickname,
+            user_id: Bot.uin,
+          });
+          for (let item of img) {
+            msgList.push({
+              message: item,
+              nickname: Bot.nickname,
+              user_id: Bot.uin,
+            });
+          }
+
+          await this.e.reply(await Bot.makeForwardMsg(msgList));
+        }
+      }
+    } else {
+      this.reply("额。没有找到攻略内容～");
     }
   }
 }
