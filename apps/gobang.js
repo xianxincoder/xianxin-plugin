@@ -312,7 +312,7 @@ export class gobang extends plugin {
       }
       luc++;
     }
-    if (hc == 5 || vc == 5 || rdc == 5 || luc == 5) {
+    if (hc >= 5 || vc >= 5 || rdc >= 5 || luc >= 5) {
       if (s == 0) {
         return gameing[this.group_id].self;
       } else {
