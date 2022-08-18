@@ -30,9 +30,14 @@ export class update extends plugin {
     });
   }
 
+  /**
+   * rule - 更新闲心插件
+   * @returns
+   */
   async update() {
     if (!this.e.isMaster) return false;
 
+    /** 检查是否正在更新中 */
     if (uping) {
       await this.reply("已有命令更新中..请勿重复操作");
       return;
@@ -52,10 +57,18 @@ export class update extends plugin {
     }
   }
 
+  /**
+   * 云崽重启操作
+   */
   restart() {
     new Restart(this.e).restart();
   }
 
+  /**
+   * 闲心插件更新函数
+   * @param {boolean} isForce 是否为强制更新
+   * @returns
+   */
   async runUpdate(isForce) {
     let command = "git -C ./plugins/xianxin-plugin/ pull --no-rebase";
     if (isForce) {
@@ -64,11 +77,10 @@ export class update extends plugin {
     } else {
       this.e.reply("正在执行更新操作，请稍等");
     }
+    /** 获取上次提交的commitId，用于获取日志时判断新增的更新日志 */
     this.oldCommitId = await this.getcommitId("xianxin-plugin");
     uping = true;
-
     let ret = await this.execSync(command);
-
     uping = false;
 
     if (ret.error) {
@@ -77,15 +89,15 @@ export class update extends plugin {
       return false;
     }
 
+    /** 获取插件提交的最新时间 */
     let time = await this.getTime("xianxin-plugin");
-
-    console.log(ret.stdout);
 
     if (/(Already up[ -]to[ -]date|已经是最新的)/.test(ret.stdout)) {
       await this.reply(`闲心插件已经是最新版本\n最后更新时间：${time}`);
     } else {
       await this.reply(`闲心插件\n最后更新时间：${time}`);
       this.isUp = true;
+      /** 获取闲心组件的更新日志 */
       let log = await this.getLog("xianxin-plugin");
       await this.reply(log);
     }
@@ -95,6 +107,11 @@ export class update extends plugin {
     return true;
   }
 
+  /**
+   * 获取闲心插件的更新日志
+   * @param {string} plugin 插件名称
+   * @returns
+   */
   async getLog(plugin = "") {
     let cm = `cd ./plugins/${plugin}/ && git log  -20 --oneline --pretty=format:"%h||[%cd]  %s" --date=format:"%m-%d %H:%M"`;
 
@@ -131,6 +148,11 @@ export class update extends plugin {
     return log;
   }
 
+  /**
+   * 获取上次提交的commitId
+   * @param {string} plugin 插件名称
+   * @returns
+   */
   async getcommitId(plugin = "") {
     let cm = `git -C ./plugins/${plugin}/ rev-parse --short HEAD`;
 
@@ -140,6 +162,11 @@ export class update extends plugin {
     return commitId;
   }
 
+  /**
+   * 获取本次更新插件的最后一次提交时间
+   * @param {string} plugin 插件名称
+   * @returns
+   */
   async getTime(plugin = "") {
     let cm = `cd ./plugins/${plugin}/ && git log -1 --oneline --pretty=format:"%cd" --date=format:"%m-%d %H:%M"`;
 
@@ -151,10 +178,16 @@ export class update extends plugin {
       logger.error(error.toString());
       time = "获取时间失败";
     }
-
     return time;
   }
 
+  /**
+   * 制作转发消息
+   * @param {string} title 标题 - 首条消息
+   * @param {string} msg 日志信息
+   * @param {string} end 最后一条信息
+   * @returns
+   */
   async makeForwardMsg(title, msg, end) {
     let nickname = Bot.nickname;
     if (this.e.isGroup) {
@@ -200,6 +233,12 @@ export class update extends plugin {
     return forwardMsg;
   }
 
+  /**
+   * 处理更新失败的相关函数
+   * @param {string} err
+   * @param {string} stdout
+   * @returns
+   */
   async gitErr(err, stdout) {
     let msg = "更新失败！";
     let errMsg = err.toString();
@@ -239,6 +278,11 @@ export class update extends plugin {
     await this.reply([errMsg, stdout]);
   }
 
+  /**
+   * 异步执行git相关命令
+   * @param {string} cmd git命令
+   * @returns
+   */
   async execSync(cmd) {
     return new Promise((resolve, reject) => {
       exec(cmd, { windowsHide: true }, (error, stdout, stderr) => {
@@ -247,6 +291,10 @@ export class update extends plugin {
     });
   }
 
+  /**
+   * 检查git是否安装
+   * @returns
+   */
   async checkGit() {
     let ret = await execSync("git --version", { encoding: "utf-8" });
     if (!ret || !ret.includes("git version")) {
