@@ -451,7 +451,7 @@ export default class Mys extends base {
   }
 
   async render(param) {
-    const pageHeight = 3000;
+    // const pageHeight = 3000;
 
     await puppeteer.browserInit();
 
@@ -465,7 +465,8 @@ export default class Mys extends base {
     const body = (await page.$("#container")) || (await page.$("body"));
     const boundingBox = await body.boundingBox();
 
-    const num = Math.round(boundingBox.height / pageHeight) || 1;
+    // const num = Math.round(boundingBox.height / pageHeight) || 1;
+    const num = 1;
 
     if (num > 1) {
       await page.setViewport({

@@ -302,7 +302,7 @@ export class mys extends plugin {
     const wikiData = await new Mys().getWikiSearchData(keyword, "strategy");
 
     if (wikiData.length) {
-      if (this.mysSetData.wikiMode) {
+      if (this.mysSetData.strategyMode) {
         if (this.mysSetData.isExactMatch) {
           wikiData.length = 1;
         }
