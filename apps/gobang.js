@@ -15,6 +15,9 @@ let gameing = {};
 // 定时器如果一段时间没有人下棋那么清除五子棋进行中状态
 let gobangTimer = {};
 
+/**
+ * 五子棋小游戏处理
+ */
 export class gobang extends plugin {
   constructor(e) {
     super({
@@ -37,14 +40,6 @@ export class gobang extends plugin {
         },
       ],
     });
-
-    this.path = "./data/pkJson/";
-  }
-
-  async init() {
-    if (!fs.existsSync(this.path)) {
-      fs.mkdirSync(this.path);
-    }
   }
 
   /** 群号key */
@@ -52,6 +47,10 @@ export class gobang extends plugin {
     return `Yz:group_id:${this.e.user_id}`;
   }
 
+  /**
+   * rule - #五子棋开局
+   * @returns
+   */
   async startGobang() {
     await this.getGroupId();
     if (!this.group_id) return;
@@ -95,6 +94,10 @@ export class gobang extends plugin {
     this.e.reply(message);
   }
 
+  /**
+   * rule - #落子
+   * @returns
+   */
   async drop() {
     await this.getGroupId();
     if (!this.group_id) return;
@@ -160,8 +163,6 @@ export class gobang extends plugin {
     }
 
     this.dropArray({ x, y });
-    // gobangState[1][2] = 1;
-    // gobangState[6][2] = 0;
 
     const data = await new Gobang(this.e).getGobangData({
       gobangData: JSON.stringify({ state: gobangState[this.group_id] }),
@@ -205,6 +206,10 @@ export class gobang extends plugin {
     this.e.reply(img);
   }
 
+  /**
+   * rule - #弃子认输
+   * @returns
+   */
   async admitDefeat() {
     await this.getGroupId();
     if (!this.group_id) return;
@@ -231,6 +236,9 @@ export class gobang extends plugin {
     );
   }
 
+  /**
+   * 初始化五子棋数据
+   */
   initArray() {
     if (!gobangState[this.group_id]) gobangState[this.group_id] = new Array();
     for (var i = 0; i < 15; i++) {
@@ -241,6 +249,10 @@ export class gobang extends plugin {
     }
   }
 
+  /**
+   * 落子后改变Array数据
+   * @param {object} position x - x轴位置 y - y轴位置
+   */
   dropArray(position) {
     if (!gobangState[this.group_id]) gobangState[this.group_id] = new Array();
 
@@ -257,13 +269,20 @@ export class gobang extends plugin {
     }
   }
 
+  /**
+   * 获取五子棋落子是否获胜
+   * @param {number} ix 落子x轴位置
+   * @param {number} iy 落子y轴位置
+   * @returns
+   */
   getRule(ix, iy) {
     const state = gobangState[this.group_id];
     const s = count;
     var hc = 0,
       vc = 0,
       rdc = 0,
-      luc = 0; //horizontal
+      luc = 0;
+    /** 横向连珠数量 */
     for (var i = ix; i < 15; i++) {
       if (state[i][iy] != s) {
         break;
@@ -275,7 +294,8 @@ export class gobang extends plugin {
         break;
       }
       hc++;
-    } //vertical
+    }
+    /** 竖向连珠数量 */
     for (var j = iy; j < 15; j++) {
       if (state[ix][j] != s) {
         break;
@@ -287,7 +307,8 @@ export class gobang extends plugin {
         break;
       }
       vc++;
-    } //rightdown
+    }
+    /** 斜向连珠数量 */
     for (var i = ix, j = iy; i < 15 && j < 15; i++, j++) {
       if (state[i][j] != s) {
         break;
@@ -299,7 +320,7 @@ export class gobang extends plugin {
         break;
       }
       rdc++;
-    } //leftup
+    }
     for (var i = ix, j = iy; i < 15 && j >= 0; i++, j--) {
       if (state[i][j] != s) {
         break;
