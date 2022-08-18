@@ -75,5 +75,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | [时雨🌌星空](https://gitee.com/TimeRainStarSky) | 5 |
 | 夏-.-曙＆宙@象 | 5 |
 | 枫叶霜华 | 10 |
+| 抛物线 | 38 |
+| 白熊 | 6.66 |
 
 
