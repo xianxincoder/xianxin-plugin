@@ -79,7 +79,9 @@ export class update extends plugin {
 
     let time = await this.getTime("xianxin-plugin");
 
-    if (ret.stdout.includes("Already up")) {
+    console.log(ret.stdout);
+
+    if (/(Already up[ -]to[ -]date|已经是最新的)/.test(ret.stdout)) {
       await this.reply(`闲心插件已经是最新版本\n最后更新时间：${time}`);
     } else {
       await this.reply(`闲心插件\n最后更新时间：${time}`);
