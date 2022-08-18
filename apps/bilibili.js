@@ -451,6 +451,10 @@ export class bilibili extends plugin {
     Bot.logger.mark(`B站动态推送[${pushID}]`);
 
     for (let val of list) {
+      if (info.type && info.type.length && !info.type.includes(val.type)) {
+        continue;
+      }
+
       let msg = this.buildSendDynamic(info, val, false);
       if (msg === "continue") {
         // 这不好在前边判断，只能放到这里了
