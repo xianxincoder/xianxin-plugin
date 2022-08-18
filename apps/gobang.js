@@ -1,5 +1,4 @@
 import plugin from "../../../lib/plugins/plugin.js";
-import fs from "node:fs";
 import Gobang from "../model/gobang.js";
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 
