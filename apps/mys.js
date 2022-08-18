@@ -325,7 +325,7 @@ export class mys extends plugin {
         }
       } else {
         const data = wikiData[0];
-        const img = await new Mys().getWikiPage(data);
+        const img = await new Mys().strategySearch(data);
         if (!img) return;
 
         if (img.length == 1) {
