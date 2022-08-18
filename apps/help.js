@@ -24,10 +24,13 @@ export class help extends plugin {
     });
   }
 
+  /**
+   * rule - 闲心插件帮助
+   * @returns
+   */
   async help() {
     let data = await Help.get(this.e);
     if (!data) return;
-
     let img = await this.cache(data);
     await this.reply(img);
   }
