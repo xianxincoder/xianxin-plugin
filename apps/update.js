@@ -2,6 +2,9 @@ import plugin from "../../../lib/plugins/plugin.js";
 import { createRequire } from "module";
 import lodash from "lodash";
 import { Restart } from "../../other/restart.js";
+import Version from "../model/version.js";
+import xxCfg from "../model/xxCfg.js";
+import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 
 const require = createRequire(import.meta.url);
 const { exec, execSync } = require("child_process");
@@ -24,8 +27,14 @@ export class update extends plugin {
           reg: "^#闲心(插件)?(强制)?更新",
           fnc: "update",
         },
+        {
+          reg: "^#闲心(插件)?版本$",
+          fnc: "version",
+        },
       ],
     });
+
+    this.versionData = xxCfg.getdefSet("version", "version");
   }
 
   /**
@@ -53,6 +62,17 @@ export class update extends plugin {
     if (this.isUp) {
       setTimeout(() => this.restart(), 2000);
     }
+  }
+
+  /**
+   * rule - 插件版本信息
+   */
+  async version() {
+    const data = await new Version(this.e).getData(
+      this.versionData.slice(0, 3)
+    );
+    let img = await puppeteer.screenshot("version", data);
+    this.e.reply(img);
   }
 
   /**
