@@ -53,6 +53,11 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 - xianxin-plugin QQ群：426961091
 
 
+## 🔗 链接
+
+- [云崽](https://gitee.com/Le-niao/Yunzai-Bot)
+- [插件库](https://gitee.com/Hikari666/Yunzai-Bot-plugins-index)
+
 
 ## ❤️ 赞助者
 
