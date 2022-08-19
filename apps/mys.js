@@ -338,7 +338,7 @@ export class mys extends plugin {
     const wikiData = await new Mys().getWikiSearchData(keyword, "strategy");
 
     if (wikiData.length) {
-      if (this.mysSetData.strategyMode) {
+      if (this.mysSetData.strategyMode == 1) {
         if (this.mysSetData.isExactMatch) {
           wikiData.length = 1;
         }
@@ -361,7 +361,8 @@ export class mys extends plugin {
         }
       } else {
         const data = wikiData[0];
-        const renderInfo = await new Mys().strategySearch(data);
+        const isSplit = this.mysSetData.strategyMode == 2;
+        const renderInfo = await new Mys().strategySearch(data, isSplit);
         if (!renderInfo) return;
 
         const { img, code } = renderInfo;

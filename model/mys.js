@@ -299,7 +299,7 @@ export default class Mys extends base {
     return img;
   }
 
-  async strategySearch(data) {
+  async strategySearch(data, isSplit) {
     const url = data.href;
 
     const matchArr = url.match(/[^\/]*$/);
@@ -311,7 +311,7 @@ export default class Mys extends base {
 
     const param = await this.newsDetail(postId);
 
-    const renderInfo = await this.render(param);
+    const renderInfo = await this.render(param, isSplit);
 
     return renderInfo;
   }
@@ -457,12 +457,15 @@ export default class Mys extends base {
   /**
    * 处理米游社详情页图片生成
    * @param {object} param
+   * @param {boolean} isSplit 是否为分片截图
    * @returns {img: string[], code: string}
    */
-  async render(param) {
-    // const pageHeight = 3000;
+  async render(param, isSplit) {
+    const pageHeight = 3000;
 
     await puppeteer.browserInit();
+
+    if (!puppeteer.browser) return false;
 
     const savePath = puppeteer.dealTpl("mysDetail", param);
 
@@ -470,55 +473,79 @@ export default class Mys extends base {
 
     const page = await puppeteer.browser.newPage();
 
-    await page.goto(`file://${_path}${lodash.trim(savePath, ".")}`);
-    const body = (await page.$("#container")) || (await page.$("body"));
-    const boundingBox = await body.boundingBox();
-
-    // const num = Math.round(boundingBox.height / pageHeight) || 1;
-    const num = 1;
-
-    if (num > 1) {
-      await page.setViewport({
-        width: boundingBox.width,
-        height: pageHeight + 100,
+    try {
+      await page.goto(`file://${_path}${lodash.trim(savePath, ".")}`, {
+        timeout: 120000,
       });
-    }
+      const body = (await page.$("#container")) || (await page.$("body"));
+      const boundingBox = await body.boundingBox();
 
-    const img = [];
-    let code = "success";
-    for (let i = 1; i <= num; i++) {
-      const randData = {
-        type: "jpeg",
-        quality: 90,
-      };
+      const num = isSplit
+        ? Math.round(boundingBox.height / pageHeight) || 1
+        : 1;
 
-      let buff;
-      if (num == 1) {
-        buff = await body.screenshot(randData);
-      } else {
-        buff = await page.screenshot(randData);
+      if (num > 1) {
+        await page.setViewport({
+          width: Math.round(boundingBox.width),
+          height: pageHeight + 100,
+        });
       }
 
-      puppeteer.renderNum++;
-      /** 计算图片大小 */
-      const kb = (buff.length / 1024).toFixed(2) + "kb";
-      if ((buff.length / 1024).toFixed(2) > 3800) {
-        code = "limit";
+      const img = [];
+      let code = "success";
+      for (let i = 1; i <= num; i++) {
+        const randData = {
+          type: "jpeg",
+          quality: 90,
+        };
+
+        if (i != 1 && i == num) {
+          await page.setViewport({
+            width: Math.round(boundingBox.width),
+            height: parseInt(boundingBox.height) - pageHeight * (num - 1),
+          });
+        }
+
+        if (i != 1 && i <= num) {
+          await page.evaluate(() => window.scrollBy(0, 3000));
+        }
+
+        let buff;
+        if (num == 1) {
+          buff = await body.screenshot(randData);
+        } else {
+          buff = await page.screenshot(randData);
+        }
+
+        if (num > 2) await common.sleep(200);
+
+        puppeteer.renderNum++;
+        /** 计算图片大小 */
+        const kb = (buff.length / 1024).toFixed(2) + "kb";
+        if ((buff.length / 1024).toFixed(2) > 3500) {
+          code = "limit";
+        }
+
+        logger.mark(
+          `[图片生成][${this.model}][${puppeteer.renderNum}次] ${kb}`
+        );
+
+        img.push(segment.image(buff));
       }
+      page.close().catch((err) => logger.error(err));
 
-      logger.mark(`[图片生成][${this.model}][${puppeteer.renderNum}次] ${kb}`);
-
-      img.push(segment.image(buff));
-
-      if (i < num) {
-        await page.evaluate(() => window.scrollBy(0, 3000));
+      if (num > 1) {
+        logger.mark(`[图片生成][${this.model}] 处理完成`);
       }
+      return { img: img, code: code };
+    } catch (error) {
+      logger.error(`图片生成失败:${this.model}:${error}`);
+      /** 关闭浏览器 */
+      if (puppeteer.browser) {
+        await puppeteer.browser.close().catch((err) => logger.error(err));
+      }
+      puppeteer.browser = false;
+      return { img: [], code: "limit" };
     }
-    page.close().catch((err) => logger.error(err));
-
-    if (num > 1) {
-      logger.mark(`[图片生成][${this.model}] 处理完成`);
-    }
-    return { img: img, code: code };
   }
 }
