@@ -1,17 +1,17 @@
 - group: 常用指令
   list:
-    - icon: wiki
-      title: "#wiki xxx"
-      desc: 查询原神wiki的内容
-    - icon: abyss
-      title: "#攻略 xxx"
-      desc: 查询原神精选的玩家攻略内容
     - icon: 绑定账号
       title: "#cos 角色名 #cos 刻晴"
       desc: 指定角色随机查看cos图片
     - icon: paimon
       title: "#cos #cos1 #cos详情"
       desc: 查看米游社中cos榜
+    - icon: abyss
+      title: "#攻略 xxx"
+      desc: 查询原神精选的玩家攻略内容
+    - icon: wiki
+      title: "#wiki xxx"
+      desc: 查询原神wiki的内容
     - icon: 原石
       title: "#cosdby 角色名 #cosdby 西施"
       desc: 指定角色随机查看大别野cos图片
