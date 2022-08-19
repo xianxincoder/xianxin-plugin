@@ -6,7 +6,7 @@ import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 let gobangState = {};
 
 // 五子棋当前棋子 0黑色 1 白色
-let count = 0;
+let count = {};
 
 // 正在游戏的数据
 let gameing = {};
@@ -85,7 +85,7 @@ export class gobang extends plugin {
     gobangTimer[this.group_id] && clearTimeout(gobangTimer[this.group_id]);
     gobangTimer[this.group_id] = setTimeout(() => {
       gameing[this.group_id] = {};
-      count = 0;
+      count[this.group_id] = 0;
       gobangState[this.group_id] = new Array();
       this.e.reply("对战超时，已自动结束本局#五子棋");
     }, 1000 * 60 * 3);
@@ -107,7 +107,7 @@ export class gobang extends plugin {
     }
 
     if (
-      count == 0 &&
+      count[this.group_id] == 0 &&
       gameing[this.group_id].self.user_id !== this.e.sender.user_id
     ) {
       this.e.reply("本轮请黑棋落子");
@@ -136,7 +136,7 @@ export class gobang extends plugin {
     }
 
     if (
-      count == 1 &&
+      count[this.group_id] == 1 &&
       ((gameing[this.group_id].enemy && gameing[this.group_id].enemy.user_id) ||
         "") !== this.e.sender.user_id
     ) {
@@ -174,16 +174,16 @@ export class gobang extends plugin {
 
     const info = this.getRule(x, y);
 
-    if (count == 0) {
-      count = 1;
+    if (count[this.group_id] == 0) {
+      count[this.group_id] = 1;
     } else {
-      count = 0;
+      count[this.group_id] = 0;
     }
 
     if (info != "gaming") {
       gobangTimer[this.group_id] && clearTimeout(gobangTimer[this.group_id]);
       gameing[this.group_id] = {};
-      count = 0;
+      count[this.group_id] = 0;
       gobangState[this.group_id] = new Array();
 
       const message = [
@@ -197,7 +197,7 @@ export class gobang extends plugin {
     gobangTimer[this.group_id] && clearTimeout(gobangTimer[this.group_id]);
     gobangTimer[this.group_id] = setTimeout(() => {
       gameing[this.group_id] = {};
-      count = 0;
+      count[this.group_id] = 0;
       gobangState[this.group_id] = new Array();
       this.e.reply("对战超时，已自动结束本局#五子棋");
     }, 1000 * 60 * 3);
@@ -227,7 +227,7 @@ export class gobang extends plugin {
     gobangTimer[this.group_id] && clearTimeout(gobangTimer[this.group_id]);
 
     gameing[this.group_id] = {};
-    count = 0;
+    count[this.group_id] = 0;
     gobangState[this.group_id] = new Array();
 
     await this.e.reply(
@@ -239,6 +239,9 @@ export class gobang extends plugin {
    * 初始化五子棋数据
    */
   initArray() {
+    gobangTimer[this.group_id] && clearTimeout(gobangTimer[this.group_id]);
+    gameing[this.group_id] = {};
+    count[this.group_id] = 0;
     if (!gobangState[this.group_id]) gobangState[this.group_id] = new Array();
     for (var i = 0; i < 15; i++) {
       gobangState[this.group_id][i] = new Array();
@@ -262,7 +265,7 @@ export class gobang extends plugin {
         gobangState[this.group_id][i] = new Array();
       for (var j = 0; j < 15; j++) {
         if (y == j && x == i) {
-          gobangState[this.group_id][i][j] = count;
+          gobangState[this.group_id][i][j] = count[this.group_id];
         }
       }
     }
@@ -276,7 +279,7 @@ export class gobang extends plugin {
    */
   getRule(ix, iy) {
     const state = gobangState[this.group_id];
-    const s = count;
+    const s = count[this.group_id];
     var hc = 0,
       vc = 0,
       rdc = 0,
