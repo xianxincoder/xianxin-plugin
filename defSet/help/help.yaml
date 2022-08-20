@@ -34,6 +34,9 @@
     - icon: 养成计算
       title: "#加入群战 #群战信息"
       desc: 初始化群战信息
+    - icon: 史莱姆
+      title: "#战宝"
+      desc: 战胜战宝获得双倍战力
     - icon: weapon
       title: "战@群友 #战@群友"
       desc: "@一名群友进行群战"

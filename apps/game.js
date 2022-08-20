@@ -12,6 +12,8 @@ const _path = process.cwd() + "/plugins/xianxin-plugin";
 // PK信息存放
 let pkArr = {};
 
+let expPlayer = {};
+
 let gameSetFile = "./plugins/xianxin-plugin/config/game.set.yaml";
 if (!fs.existsSync(gameSetFile)) {
   fs.copyFileSync("./plugins/xianxin-plugin/defSet/game/set.yaml", gameSetFile);
@@ -56,6 +58,10 @@ export class game extends plugin {
         {
           reg: "^#逆天改命$",
           fnc: "chance",
+        },
+        {
+          reg: "^#战宝$",
+          fnc: "exp",
         },
         {
           reg: "^#重置群战战力$",
@@ -197,7 +203,19 @@ export class game extends plugin {
       segment.at(this.e.user_id, this.e.sender.card || this.e.user_id),
     ];
 
+    let expMessage = [];
+
     if (this.e.user_id == winner.user_id) {
+      if (
+        expPlayer[this.group_id] == loser.user_id &&
+        Number(Math.random().toFixed(2)) > 0.5
+      ) {
+        expPlayer[this.group_id] = this.e.user_id;
+        expMessage.push("当前战宝变更为：");
+        expMessage.push(
+          segment.at(this.e.user_id, this.e.sender.card || this.e.user_id)
+        );
+      }
       message.push(" 完胜");
       message.push(
         `\n战胜了对手，并获得战力${winner.tempExp}点，当前战力为${winner.exp}\n`
@@ -220,6 +238,11 @@ export class game extends plugin {
     }
 
     await this.reply(message);
+
+    if (expMessage.length) {
+      await common.sleep(600);
+      await this.e.reply(expMessage);
+    }
   }
 
   async timepk() {
@@ -326,7 +349,19 @@ export class game extends plugin {
       segment.at(this.e.user_id, this.e.sender.card || this.e.user_id),
     ];
 
+    let expMessage = [];
+
     if (this.e.user_id == winner.user_id) {
+      if (
+        expPlayer[this.group_id] == loser.user_id &&
+        Number(Math.random().toFixed(2)) > 0.5
+      ) {
+        expPlayer[this.group_id] = this.e.user_id;
+        expMessage.push("当前战宝变更为：");
+        expMessage.push(
+          segment.at(this.e.user_id, this.e.sender.card || this.e.user_id)
+        );
+      }
       message.push(" 狂战技能使用成功，完胜");
       message.push(
         `\n战胜了对手，并获得战力${winner.tempExp}点，当前战力为${winner.exp}\n`
@@ -348,7 +383,12 @@ export class game extends plugin {
       );
     }
 
-    await this.reply(message);
+    await this.e.reply(message);
+
+    if (expMessage.length) {
+      await common.sleep(600);
+      await this.e.reply(expMessage);
+    }
   }
 
   async rank() {
@@ -526,6 +566,35 @@ export class game extends plugin {
     ]);
   }
 
+  async exp() {
+    await this.getGroupId();
+
+    if (!this.group_id) return;
+
+    const players = this.getPlayers();
+
+    if (!players || !players.length) {
+      this.reply(`未找到玩家数据`);
+      return;
+    }
+
+    // 判断有没有战宝，有则直接返回
+    if (expPlayer[this.group_id]) {
+      this.e.reply(
+        `当前战宝：${
+          players.find((item) => item.user_id === expPlayer[this.group_id]).nick
+        }`
+      );
+    } else {
+      this.e.reply("当前还没有战宝，正在随机生成...");
+      let random = Math.floor(Math.random() * players.length);
+      const tempExpPlayer = players[random];
+      expPlayer[this.group_id] = tempExpPlayer.user_id;
+      await common.sleep(1000);
+      this.e.reply(`当前战宝：${tempExpPlayer.nick}`);
+    }
+  }
+
   async reset() {
     await this.getGroupId();
     if (!this.group_id) return;
@@ -634,6 +703,10 @@ export class game extends plugin {
       // 增加的经验值为对手的1/10经验
       let add = Math.round(enemyExp * 0.1);
 
+      if (enemy.user_id == expPlayer[this.group_id]) {
+        add = add * 2;
+      }
+
       // 如果增加的经验值比自己全部的经验都多，那么自己的经验最多翻倍
       if (add > selfExp) {
         add = selfExp;
@@ -641,9 +714,12 @@ export class game extends plugin {
 
       tempSelfExp = selfExp + add;
 
-      tempEnemyExp = enemyExp - add;
+      if (enemy.user_id == expPlayer[this.group_id]) {
+        tempEnemyExp = enemyExp - Math.round(add / 4);
 
-      loserReduce = add;
+        loserReduce = Math.round(add / 4);
+      }
+
       if (tempEnemyExp < 10) {
         tempEnemyExp = 10;
         loserReduce = tempEnemyExp - 10;
