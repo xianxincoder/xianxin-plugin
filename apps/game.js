@@ -168,7 +168,7 @@ export class game extends plugin {
       return;
     }
 
-    if (enemy === this.e.user_id) {
+    if (enemy == this.e.user_id) {
       this.reply("不可以和自己战斗哦，请@群中好友战斗");
       return;
     }
@@ -284,7 +284,7 @@ export class game extends plugin {
       return;
     }
 
-    if (enemy === this.e.user_id) {
+    if (enemy == this.e.user_id) {
       this.reply("不可以和自己战斗哦，请@群中好友战斗");
       return;
     }
@@ -582,7 +582,7 @@ export class game extends plugin {
     if (expPlayer[this.group_id]) {
       this.e.reply(
         `当前战宝：${
-          players.find((item) => item.user_id === expPlayer[this.group_id]).nick
+          players.find((item) => item.user_id == expPlayer[this.group_id]).nick
         }`
       );
     } else {
