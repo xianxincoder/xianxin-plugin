@@ -718,6 +718,9 @@ export class game extends plugin {
         tempEnemyExp = enemyExp - Math.round(add / 4);
 
         loserReduce = Math.round(add / 4);
+      } else {
+        tempEnemyExp = enemyExp - add;
+        loserReduce = add;
       }
 
       if (tempEnemyExp < 10) {
