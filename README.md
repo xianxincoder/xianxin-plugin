@@ -76,8 +76,8 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 遇到问题摆大烂| 5 |
 | Gimme| 10 |
 | 吃瓜群众| 20 |
-| 长楠| 10 |
-| Tears| 10 |
+| 长楠| 15 |
+| Tears| 40 |
 | [时雨🌌星空](https://gitee.com/TimeRainStarSky) | 5 |
 | 夏-.-曙＆宙@象 | 5 |
 | 枫叶霜华 | 10 |
