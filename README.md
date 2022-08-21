@@ -85,4 +85,6 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 白熊 | 6.66 |
 | 肆拾壹号糖水铺 | 5 |
 | 啊这. | 6.66 |
+| 漠漠轻寒 | 5 |
+| 迷路的孩子 | 5 |
 
