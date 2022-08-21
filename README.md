@@ -88,4 +88,8 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 漠漠轻寒 | 5 |
 | 迷路的孩子 | 5 |
 | 白无常啊(wdnmd) | 5 |
+| Persistent.zw | 5.88 |
+| 闪光Asuna | 5 |
+| 墨水囊王 | 5 |
+|   | 10 |
 
