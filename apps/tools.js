@@ -29,7 +29,7 @@ export class tools extends plugin {
           fnc: "thumbsUpMe",
         },
         {
-          reg: "^#*(woc|卧槽|嘿嘿|r18|祷图|整点涩的|瑟瑟|涩涩|色色)$",
+          reg: "^#*(woc|卧槽|嘿嘿|r18|祷图|整点涩的|涩涩|色色)$",
           fnc: "woc",
           permission: "master",
         },
@@ -40,6 +40,7 @@ export class tools extends plugin {
     this.toolsSetData = xxCfg.getConfig("tools", "set");
 
     this.rule[1].permission = this.toolsSetData.permission;
+    this.rule[1].reg = `^#*(${this.toolsSetData.keywords.join("|")})$`;
   }
 
   async thumbsUpMe() {
