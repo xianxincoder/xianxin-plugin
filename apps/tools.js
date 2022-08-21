@@ -31,7 +31,7 @@ export class tools extends plugin {
         {
           reg: "^#*(woc|卧槽|嘿嘿|r18|祷图|整点涩的|瑟瑟|涩涩|色色)$",
           fnc: "woc",
-          permission: "master",
+          // permission: "master",
         },
       ],
     });
@@ -39,7 +39,7 @@ export class tools extends plugin {
     /** 读取工具相关设置数据 */
     this.toolsSetData = xxCfg.getConfig("tools", "set");
 
-    this.rule[1].permission = this.toolsSetData.permission;
+    // this.rule[1].permission = this.toolsSetData.permission;
   }
 
   async thumbsUpMe() {
@@ -52,6 +52,24 @@ export class tools extends plugin {
 
     if (!this.toolsSetData.isPrivate && isPrivate) {
       return "return";
+    }
+
+    if (this.toolsSetData.permission == "master" && !this.e.isMaster) {
+      return "return";
+    }
+
+    if (this.toolsSetData.permission == "admin" && !this.e.member.is_admin) {
+      return "return";
+    }
+    if (this.toolsSetData.permission == "owner" && !this.e.member.is_owner) {
+      return "return";
+    }
+
+    if (this.toolsSetData.cd != 0) {
+      /** cd */
+      let key = `Yz:woc:${this.e.group_id}`;
+      if (await redis.get(key)) return;
+      redis.set(key, "1", { EX: Number(this.toolsSetData.cd) });
     }
 
     const randomMax = 600;
@@ -93,7 +111,9 @@ export class tools extends plugin {
       let msgList = [];
       for (let imageItem of images) {
         if (isPrivate) {
-          await this.e.reply(segment.image(imageItem));
+          await this.e.reply(segment.image(imageItem), false, {
+            recallMsg: this.toolsSetData.delMsg,
+          });
           await common.sleep(600);
         } else {
           msgList.push({
@@ -105,7 +125,9 @@ export class tools extends plugin {
       if (isPrivate) {
         return;
       }
-      await this.e.reply(await Bot.makeForwardMsg(msgList));
+      await this.e.reply(await Bot.makeForwardMsg(msgList), false, {
+        recallMsg: this.toolsSetData.delMsg,
+      });
     } else {
       this.reply("额。没有找到合适的cos信息～");
     }

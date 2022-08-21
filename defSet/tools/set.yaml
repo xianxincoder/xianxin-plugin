@@ -6,3 +6,9 @@ permission: "master"
 
 # 转发的消息中 谁发的消息 bot:机器人 replyer:触发该命令的人
 forwarder: "replyer"
+
+# 触发指令cd，避免触发太快，单位秒， 0:无cd
+cd: 3
+
+# 自动撤回消息时间，单位秒， 0:不撤回
+delMsg: 0
