@@ -84,4 +84,5 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 抛物线 | 38 |
 | 白熊 | 6.66 |
 | 肆拾壹号糖水铺 | 5 |
+| 啊这. | 6.66 |
 
