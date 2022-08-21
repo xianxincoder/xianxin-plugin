@@ -1,6 +1,7 @@
 import plugin from "../../../lib/plugins/plugin.js";
 import fetch from "node-fetch";
 import { segment } from "oicq";
+import common from "../../../lib/common/common.js";
 import xxCfg from "../model/xxCfg.js";
 import fs from "node:fs";
 
@@ -91,10 +92,18 @@ export class tools extends plugin {
     if (images && images.length) {
       let msgList = [];
       for (let imageItem of images) {
-        msgList.push({
-          message: segment.image(imageItem),
-          ...forwarder,
-        });
+        if (isPrivate) {
+          await this.e.reply(segment.image(imageItem));
+          await common.sleep(600);
+        } else {
+          msgList.push({
+            message: segment.image(imageItem),
+            ...forwarder,
+          });
+        }
+      }
+      if (isPrivate) {
+        return;
       }
       await this.e.reply(await Bot.makeForwardMsg(msgList));
     } else {
