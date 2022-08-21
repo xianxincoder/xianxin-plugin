@@ -79,6 +79,11 @@ export class tools extends plugin {
 
     const page = Math.ceil(randomIndex / 10);
 
+    /**
+     * 目前已知图片源
+     * 1 https://yingtall.com/wp-json/wp/v2/posts?page=
+     * 2 https://dimtown.com/wp-json/wp/v2/posts?filter[cat]=8&page=
+     */
     const fetchData = await fetch(
       `https://yingtall.com/wp-json/wp/v2/posts?page=${page}`
     );
