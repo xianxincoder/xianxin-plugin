@@ -1,0 +1,8 @@
+# 是否支持私聊 1支持 0不支持
+isPrivate: 0
+
+# 权限 master:主人 owner:群主 admin:管理员 all:所有人
+permission: "master"
+
+# 转发的消息中 谁发的消息 bot:机器人 replyer:触发该命令的人
+forwarder: "replyer"
