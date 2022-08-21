@@ -31,7 +31,7 @@ export class tools extends plugin {
         {
           reg: "^#*(woc|卧槽|嘿嘿|r18|祷图|整点涩的|瑟瑟|涩涩|色色)$",
           fnc: "woc",
-          // permission: "master",
+          permission: "master",
         },
       ],
     });
@@ -39,7 +39,7 @@ export class tools extends plugin {
     /** 读取工具相关设置数据 */
     this.toolsSetData = xxCfg.getConfig("tools", "set");
 
-    // this.rule[1].permission = this.toolsSetData.permission;
+    this.rule[1].permission = this.toolsSetData.permission;
   }
 
   async thumbsUpMe() {
@@ -54,16 +54,16 @@ export class tools extends plugin {
       return "return";
     }
 
-    if (this.toolsSetData.permission == "master" && !this.e.isMaster) {
-      return "return";
-    }
+    // if (this.toolsSetData.permission == "master" && !this.e.isMaster) {
+    //   return "return";
+    // }
 
-    if (this.toolsSetData.permission == "admin" && !this.e.member.is_admin) {
-      return "return";
-    }
-    if (this.toolsSetData.permission == "owner" && !this.e.member.is_owner) {
-      return "return";
-    }
+    // if (this.toolsSetData.permission == "admin" && !this.e.member.is_admin) {
+    //   return "return";
+    // }
+    // if (this.toolsSetData.permission == "owner" && !this.e.member.is_owner) {
+    //   return "return";
+    // }
 
     if (this.toolsSetData.cd != 0) {
       /** cd */
