@@ -92,4 +92,5 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 闪光Asuna | 5 |
 | 墨水囊王 | 5 |
 |   | 10 |
+| Victoria. | 15 |
 
