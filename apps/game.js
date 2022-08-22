@@ -608,6 +608,8 @@ export class game extends plugin {
 
     if (!this.group_id) return;
 
+    this.initPkArr();
+
     if (!pkArr[this.group_id]) pkArr[this.group_id] = new Map();
 
     pkArr[this.group_id].delete(String(this.e.user_id));
