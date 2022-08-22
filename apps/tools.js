@@ -19,7 +19,7 @@ if (!fs.existsSync(toolsSetFile)) {
 export class tools extends plugin {
   constructor() {
     super({
-      name: "小工具",
+      name: "闲心插件小工具",
       dsc: "处理一些杂项小工具",
       event: "message",
       priority: 5000,
@@ -29,7 +29,7 @@ export class tools extends plugin {
           fnc: "thumbsUpMe",
         },
         {
-          reg: "^#*(woc|卧槽|嘿嘿|r18|祷图|整点涩的|涩涩|色色)$",
+          reg: "^#*(woc|卧槽)$",
           fnc: "woc",
           permission: "master",
         },
