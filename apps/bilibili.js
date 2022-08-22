@@ -462,7 +462,7 @@ export class bilibili extends plugin {
       }
       if (!msg) {
         Bot.logger.mark(
-          `B站动态推送[${pushID}] - [${biliUser.name}]，推送失败，动态信息解析失败`
+          `B站动态推送[${pushID}] - [${info.name}]，推送失败，动态信息解析失败`
         );
         continue;
       }
