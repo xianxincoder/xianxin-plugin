@@ -64,6 +64,10 @@ export class game extends plugin {
           fnc: "exp",
         },
         {
+          reg: "^#注销群战$",
+          fnc: "logout",
+        },
+        {
           reg: "^#重置群战战力$",
           permission: "master",
           fnc: "reset",
@@ -593,6 +597,24 @@ export class game extends plugin {
       await common.sleep(1000);
       this.e.reply(`当前战宝：${tempExpPlayer.nick}`);
     }
+  }
+
+  /**
+   * rule - #注销群战
+   * @returns
+   */
+  async logout() {
+    await this.getGroupId();
+
+    if (!this.group_id) return;
+
+    if (!pkArr[this.group_id]) pkArr[this.group_id] = new Map();
+
+    pkArr[this.group_id].delete(String(this.e.user_id));
+
+    this.saveJson();
+
+    this.e.reply("已成功注销群战");
   }
 
   async reset() {
