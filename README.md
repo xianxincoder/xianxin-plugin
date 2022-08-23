@@ -12,6 +12,9 @@
 
 [![访问量](https://profile-counter.glitch.me/xianxin-plugin/count.svg)](https://gitee.com/xianxincoder/xianxin-plugin)
 
+
+<img src="https://cdn.jsdelivr.net/gh/xianxincoder/xianxincoder/assets/github-contribution-grid-snake.svg">
+
 </div>
 <br />
 <br />
