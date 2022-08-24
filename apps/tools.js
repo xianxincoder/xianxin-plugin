@@ -4,7 +4,6 @@ import { segment } from "oicq";
 import common from "../../../lib/common/common.js";
 import xxCfg from "../model/xxCfg.js";
 import fs from "node:fs";
-import http from "http";
 
 /**
  * 初始化工具设置文件
@@ -141,8 +140,7 @@ export class tools extends plugin {
   }
 
   getImages(string) {
-    const imgRex =
-      /<img.*?src="(https?:\/\/.*?.(png|jpg|gif|jpeg|webp))"[^>]+>/g;
+    const imgRex = /<img.*?src="(.*?)"[^>]+>/g;
     const images = [];
     let img;
     while ((img = imgRex.exec(string))) {
