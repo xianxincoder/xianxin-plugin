@@ -87,7 +87,7 @@ export class game extends plugin {
 
   /** 群号key */
   get grpKey() {
-    return `Yz:group_id:${this.e.user_id}`;
+    return `Yz:pkgroup_id:${this.e.user_id}`;
   }
 
   async mypk() {
