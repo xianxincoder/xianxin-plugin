@@ -201,6 +201,7 @@ export default class Mys extends base {
           title: item.title,
           href: item.bbs_url.replace("?bbs_presentation_style=no_header", ""),
           tags: item.channels.map((channel) => channel.name),
+          id: item.id,
         });
         return item;
       });
@@ -364,6 +365,10 @@ export default class Mys extends base {
         break;
       case "emoticon":
         host = "https://bbs-api-static.mihoyo.com/misc/api/emoticon_set?";
+        break;
+      case "wiki":
+        host =
+          "https://api-static.mihoyo.com/common/blackboard/ys_obc/v1/content/info?app_sn=ys_obc&content_id=";
         break;
     }
     return host + param;
