@@ -1,12 +1,10 @@
 import plugin from "../../../lib/plugins/plugin.js";
-import Gobang from "../model/gobang.js";
 import { segment } from "oicq";
-import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 
 // 21点信息存放
 let blackjaceState = {};
 
-// 21点当前方 0自己 1 对方
+// 21点当前方 1自己 0对方
 let count = {};
 
 // 正在游戏的数据
@@ -23,7 +21,7 @@ let cards = {};
 export class blackjack extends plugin {
   constructor(e) {
     super({
-      name: "21点小游戏",
+      name: "21点",
       dsc: "21点小游戏",
       event: "message.group",
       priority: 500,
@@ -39,10 +37,6 @@ export class blackjack extends plugin {
         {
           reg: "^(#)?停牌$",
           fnc: "stop",
-        },
-        {
-          reg: "^#21点认输$",
-          fnc: "admitDefeat",
         },
       ],
     });
@@ -77,7 +71,7 @@ export class blackjack extends plugin {
 
     const message = [
       `${this.e.sender.card || this.e.user_id} 发起了小游戏 21点！`,
-      `\n发送“叫牌”获取牌点`,
+      `\n任意玩家发送“叫牌”即可入局`,
     ];
 
     blackjackTimer[this.group_id] &&
@@ -106,7 +100,7 @@ export class blackjack extends plugin {
     }
 
     if (
-      count[this.group_id] == 0 &&
+      count[this.group_id] == 1 &&
       gameing[this.group_id].self.user_id !== this.e.sender.user_id
     ) {
       this.e.reply([
@@ -145,11 +139,11 @@ export class blackjack extends plugin {
     }
 
     if (
-      count[this.group_id] == 1 &&
+      count[this.group_id] == 0 &&
       ((gameing[this.group_id].enemy && gameing[this.group_id].enemy.user_id) ||
         "") !== this.e.sender.user_id
     ) {
-      this.e.reply(
+      this.e.reply([
         "本轮请",
         !!gameing[this.group_id].enemy
           ? segment.at(
@@ -157,8 +151,8 @@ export class blackjack extends plugin {
               gameing[this.group_id].enemy.nick
             )
           : "对方",
-        "叫牌"
-      );
+        "叫牌",
+      ]);
       return;
     }
 
@@ -198,17 +192,20 @@ export class blackjack extends plugin {
       msg.push(` = ${selfPoint}点`);
     }
 
-    if (gameing[this.group_id].enemy) {
+    if (
+      state[gameing[this.group_id].self.user_id] &&
+      state[gameing[this.group_id].self.user_id].length
+    ) {
       msg.push("\n对方牌点情况：\n");
       let enemyPoint = 0;
       if (
-        state[gameing[this.group_id].self.user_id] &&
-        state[gameing[this.group_id].self.user_id].length
+        state[gameing[this.group_id].enemy.user_id] &&
+        state[gameing[this.group_id].enemy.user_id].length
       ) {
-        state[gameing[this.group_id].self.user_id].map((item, index) => {
+        state[gameing[this.group_id].enemy.user_id].map((item, index) => {
           enemyPoint += this.cardToNum(item[1]);
           msg.push(`${item[0]}${item[1]}`);
-          if (index != state[gameing[this.group_id].self.user_id].length - 1) {
+          if (index != state[gameing[this.group_id].enemy.user_id].length - 1) {
             msg.push(" + ");
           }
         });
@@ -273,7 +270,14 @@ export class blackjack extends plugin {
     if (!this.group_id) return;
     if (count[this.group_id] == 0) {
       count[this.group_id] = 1;
-      this.e.reply("当前已停牌，请对手叫牌。任意玩家发送“叫牌”即可入局");
+      this.e.reply([
+        "当前已停牌，请",
+        segment.at(
+          gameing[this.group_id].self.user_id,
+          gameing[this.group_id].self.nick
+        ),
+        "叫牌。",
+      ]);
     } else {
       count[this.group_id] = 0;
       const state = blackjaceState[this.group_id];
@@ -297,19 +301,22 @@ export class blackjack extends plugin {
         msg.push(` = ${selfPoint}点`);
       }
 
-      if (gameing[this.group_id].enemy) {
+      if (
+        state[gameing[this.group_id].self.user_id] &&
+        state[gameing[this.group_id].self.user_id].length
+      ) {
         msg.push("\n对方牌点情况：\n");
         let enemyPoint = 0;
         if (
-          state[gameing[this.group_id].self.user_id] &&
-          state[gameing[this.group_id].self.user_id].length
+          state[gameing[this.group_id].enemy.user_id] &&
+          state[gameing[this.group_id].enemy.user_id].length
         ) {
-          state[gameing[this.group_id].self.user_id].map((item, index) => {
+          state[gameing[this.group_id].enemy.user_id].map((item, index) => {
             enemyPoint += this.cardToNum(item[1]);
             msg.push(`${item[0]}${item[1]}`);
             if (
               index !=
-              state[gameing[this.group_id].self.user_id].length - 1
+              state[gameing[this.group_id].enemy.user_id].length - 1
             ) {
               msg.push(" + ");
             }
@@ -341,37 +348,6 @@ export class blackjack extends plugin {
       this.e.reply(message);
       return;
     }
-  }
-
-  /**
-   * rule - #认输
-   * @returns
-   */
-  async admitDefeat() {
-    await this.getGroupId();
-    if (!this.group_id) return;
-
-    if (
-      ![
-        gameing[this.group_id].self.user_id,
-        (gameing[this.group_id].enemy &&
-          gameing[this.group_id].enemy.user_id) ||
-          "",
-      ].includes(this.e.sender.user_id)
-    ) {
-      return;
-    }
-
-    blackjackTimer[this.group_id] &&
-      clearTimeout(blackjackTimer[this.group_id]);
-
-    gameing[this.group_id] = {};
-    count[this.group_id] = 0;
-    blackjaceState[this.group_id] = new Array();
-
-    await this.e.reply(
-      `${this.e.sender.card || this.e.user_id} 认输，本轮21点结束！`
-    );
   }
 
   /**

@@ -19,7 +19,7 @@ if (!fs.existsSync(toolsSetFile)) {
 export class tools extends plugin {
   constructor() {
     super({
-      name: "闲心插件小工具",
+      name: "闲心小工具",
       dsc: "处理一些杂项小工具",
       event: "message",
       priority: 5000,

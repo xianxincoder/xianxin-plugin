@@ -1,4 +1,4 @@
-- group: 常用指令
+- group: 米游社功能
   list:
     - icon: 绑定账号
       title: "#cos 角色名 #cos 刻晴"
@@ -18,7 +18,13 @@
     - icon: 纠缠之缘
       title: "#cosdby #cosdby1 #cosdby详情"
       desc: 查看米游社中大别野cos榜
-- group: bilibli
+    - icon: abyss
+      title: "#同人 #同人1 #同人详情"
+      desc: 查看米游社中同人榜
+    - icon: team
+      title: "#热门话题"
+      desc: 查看米游社中热聊话题
+- group: B站功能
   list:
     - icon: 树脂
       title: "#添加up推送 UID"
@@ -29,7 +35,7 @@
     - icon: 攻略
       title: "#up推送列表"
       desc: "查看本群添加的up推送列表"
-- group: 群战指令
+- group: 群战
   list:
     - icon: 养成计算
       title: "#加入群战 #群战信息"
@@ -58,22 +64,41 @@
 - group: 五子棋
   list:
     - icon: 打卡
-      title: "#五子棋 #弃子"
-      desc: 开局/认输五子棋小游戏
+      title: "#五子棋 "
+      desc: 开局五子棋游戏
     - icon: ledger
       title: "落子+字母+数字 落子H8"
-      desc: "五子棋落子操作"
+      desc: "五子棋落子"
+    - icon: 养成计算
+      title: "#弃子"
+      desc: "五子棋认输"
+- group: 21点
+  list:
+    - icon: 绑定账号
+      title: "#21点"
+      desc: 开局21点游戏
+    - icon: 纠缠之缘
+      title: "叫牌"
+      desc: "21点叫牌"
+    - icon: ledger
+      title: "停牌"
+      desc: "停止叫牌"
+- group: 闲心小工具
+  list:
+    - icon: 打卡
+      title: "#赞我"
+      desc: QQ名片点赞
+    - icon: ledger
+      title: "神秘指令"
+      desc: "情绪激动时易触发"
 - group: 其他指令
   list:
-    - icon: abyss
-      title: "#同人 #同人1 #同人详情"
-      desc: 查看米游社中同人榜
-    - icon: team
-      title: "#热门话题"
-      desc: 查看米游社中热聊话题
     - icon: 问号
       title: "#闲心插件版本"
       desc: 查看，最近维护的版本信息
     - icon: 史莱姆
       title: "#闲心插件更新"
       desc: "进行更新闲心插件"
+    - icon: 原石
+      title: "#闲心插件强制更新"
+      desc: "进行强制更新闲心插件"

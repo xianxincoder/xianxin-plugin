@@ -1,4 +1,13 @@
 - {
+    version: 1.1.1,
+    data:
+      [
+        添加<span class="cmd">#21点</span>进行21点小游戏,
+        <span class="cmd">叫牌</span>进行要牌,
+        <span class="cmd">停牌</span>停止要牌，对方开始叫牌,
+      ],
+  }
+- {
     version: 1.1.0,
     data:
       [

@@ -22,7 +22,7 @@ if (!fs.existsSync(gameSetFile)) {
 export class game extends plugin {
   constructor(e) {
     super({
-      name: "群战小游戏",
+      name: "群战",
       dsc: "群战小游戏",
       event: "message.group",
       priority: 500,

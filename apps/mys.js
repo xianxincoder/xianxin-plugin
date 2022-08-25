@@ -19,7 +19,7 @@ if (!fs.existsSync(mysSetFile)) {
 export class mys extends plugin {
   constructor() {
     super({
-      name: "米游社相关内容",
+      name: "米游社功能",
       dsc: "处理米游社中获取wiki、攻略、cos、话题、同人等内容",
       event: "message",
       priority: 300,

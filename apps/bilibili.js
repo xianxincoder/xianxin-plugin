@@ -44,7 +44,7 @@ if (!fs.existsSync(bilibiliPushFile)) {
 export class bilibili extends plugin {
   constructor() {
     super({
-      name: "b站相关指令",
+      name: "B站功能",
       dsc: "b站相关指令",
       event: "message.group",
       priority: 500,

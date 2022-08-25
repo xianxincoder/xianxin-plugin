@@ -100,4 +100,5 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 墨水囊王 | 5 |
 |   | 10 |
 | Victoria. | 15 |
+| 三十一. | 15 |
 
