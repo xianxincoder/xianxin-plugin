@@ -268,6 +268,61 @@ export class blackjack extends plugin {
   async stop() {
     await this.getGroupId();
     if (!this.group_id) return;
+
+    if (
+      count[this.group_id] == 1 &&
+      gameing[this.group_id].self.user_id !== this.e.sender.user_id
+    ) {
+      this.e.reply([
+        "本轮到",
+        segment.at(
+          gameing[this.group_id].self.user_id,
+          gameing[this.group_id].self.nick
+        ),
+        "停牌",
+      ]);
+      return;
+    }
+
+    // 如果不是对战的两个人那么直接拦截
+    if (
+      ![
+        gameing[this.group_id].self.user_id,
+        (gameing[this.group_id].enemy &&
+          gameing[this.group_id].enemy.user_id) ||
+          "",
+      ].includes(this.e.sender.user_id)
+    ) {
+      return;
+    }
+
+    if (
+      count[this.group_id] == 0 &&
+      ((gameing[this.group_id].enemy && gameing[this.group_id].enemy.user_id) ||
+        "") !== this.e.sender.user_id
+    ) {
+      this.e.reply([
+        "本轮到",
+        !!gameing[this.group_id].enemy
+          ? segment.at(
+              gameing[this.group_id].enemy.user_id,
+              gameing[this.group_id].enemy.nick
+            )
+          : "对方",
+        "停牌",
+      ]);
+      return;
+    }
+
+    const state = blackjaceState[this.group_id];
+
+    if (
+      !(state[this.e.sender.user_id] && state[this.e.sender.user_id].length)
+    ) {
+      this.e.reply(["请至少叫牌一次，再进行停牌"]);
+      return;
+    }
+
     if (count[this.group_id] == 0) {
       count[this.group_id] = 1;
       this.e.reply([
@@ -280,7 +335,7 @@ export class blackjack extends plugin {
       ]);
     } else {
       count[this.group_id] = 0;
-      const state = blackjaceState[this.group_id];
+
       const info = this.getRule(true);
       const msg = [];
       msg.push(
