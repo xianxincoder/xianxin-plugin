@@ -210,114 +210,51 @@ export default class Mys extends base {
     return wikiData;
   }
 
-  async getWikiPage(data) {
-    const img = await this.renderWiki(data);
+  async getWikiPage(data, isSplit) {
+    const id = data.id;
 
-    return img;
+    const param = await this.wikiDetail(id);
+
+    const renderInfo = await this.render(param, isSplit, true);
+
+    return renderInfo;
   }
 
-  async renderWiki(data) {
-    const pageHeight = 3000;
+  async wikiDetail(id) {
+    const res = await this.postData("wiki", {
+      content_id: id,
+    });
 
-    await puppeteer.browserInit();
+    this.model = "wikiDetail";
+    const data = res;
 
-    if (!puppeteer.browser) return false;
+    const content = this.GetTagByClassUsingRegex(
+      "div",
+      "wiki-map-card",
+      data.data.content.contents[0].text
+    );
 
-    const page = await puppeteer.browser.newPage();
+    return {
+      ...this.screenData,
+      saveId: id,
+      dataConent: content,
+      data,
+    };
+  }
 
-    try {
-      await page.goto(data.href, { timeout: 120000 });
-      const body = await page.$(".detail__body");
-
-      let divHandle = await page.$(".header-bar");
-      await page.evaluate(
-        (el, value) => el && el.setAttribute("style", value),
-        divHandle,
-        "display: none"
-      );
-
-      let headerHandle = await page.$(".mhy-bbs-app-header");
-      await page.evaluate(
-        (el, value) => el && el.setAttribute("style", value),
-        headerHandle,
-        "display: none"
-      );
-
-      let header1Handle = await page.$(".detail__header-placeholder");
-      await page.evaluate(
-        (el, value) => el && el.setAttribute("style", value),
-        header1Handle,
-        "display: none"
-      );
-
-      const boundingBox = await body.boundingBox();
-
-      const num = Math.round(boundingBox.height / pageHeight) || 1;
-
-      if (num > 1) {
-        await page.setViewport({
-          width: Math.round(boundingBox.width),
-          height: pageHeight + 100,
-        });
-      }
-
-      const img = [];
-      for (let i = 1; i <= num; i++) {
-        const randData = {
-          type: "jpeg",
-          quality: 90,
-        };
-        if (i != 1 && i == num) {
-          await page.setViewport({
-            width: Math.round(boundingBox.width),
-            height: parseInt(boundingBox.height) - pageHeight * (num - 1),
-          });
-        }
-        if (i != 1 && i <= num) {
-          let scrollArea = await page.$(".root__scroll-body");
-          await page.evaluate(
-            (el, val) => {
-              el.scrollTo(0, val * 3000);
-            },
-            scrollArea,
-            i
-          );
-        }
-
-        let buff;
-        if (num == 1) {
-          buff = await body.screenshot(randData);
-        } else {
-          buff = await page.screenshot(randData);
-        }
-
-        if (num > 2) await common.sleep(200);
-
-        puppeteer.renderNum++;
-        /** 计算图片大小 */
-        const kb = (buff.length / 1024).toFixed(2) + "kb";
-
-        logger.mark(
-          `[图片生成][${this.model}][${puppeteer.renderNum}次] ${kb}`
-        );
-
-        img.push(segment.image(buff));
-      }
-
-      page.close().catch((err) => logger.error(err));
-
-      if (num > 1) {
-        logger.mark(`[图片生成][${this.model}] 处理完成`);
-      }
-      return img;
-    } catch (error) {
-      logger.error(`图片生成失败:${this.model}:${error}`);
-      /** 关闭浏览器 */
-      if (puppeteer.browser) {
-        await puppeteer.browser.close().catch((err) => logger.error(err));
-      }
-      puppeteer.browser = false;
-    }
+  GetTagByClassUsingRegex(tag, cls, html) {
+    // tag:标签名，cls：类名，html：要处理的字符串
+    var reg = new RegExp(
+      "<" +
+        tag +
+        "[^>]*class[\\s]?=[\\s]?['\"]" +
+        cls +
+        "[^'\"]*['\"][\\s\\S]*?</" +
+        tag +
+        ">",
+      "g"
+    );
+    return html.replace(reg, "");
   }
 
   async strategySearch(data, isSplit) {
@@ -332,7 +269,7 @@ export default class Mys extends base {
 
     const param = await this.newsDetail(postId);
 
-    const renderInfo = await this.render(param, isSplit);
+    const renderInfo = await this.render(param, isSplit, false);
 
     return renderInfo;
   }
@@ -343,6 +280,7 @@ export default class Mys extends base {
       read: 1,
       post_id: postId,
     });
+    this.model = "mysDetail";
     const data = await this.detalData(res.data.post);
 
     return {
@@ -368,7 +306,7 @@ export default class Mys extends base {
         break;
       case "wiki":
         host =
-          "https://api-static.mihoyo.com/common/blackboard/ys_obc/v1/content/info?app_sn=ys_obc&content_id=";
+          "https://api-static.mihoyo.com/common/blackboard/ys_obc/v1/content/info?app_sn=ys_obc&";
         break;
     }
     return host + param;
@@ -485,14 +423,17 @@ export default class Mys extends base {
    * @param {boolean} isSplit 是否为分片截图
    * @returns {img: string[], code: string}
    */
-  async render(param, isSplit) {
+  async render(param, isSplit, isWiki) {
     const pageHeight = 3000;
 
     await puppeteer.browserInit();
 
     if (!puppeteer.browser) return false;
 
-    const savePath = puppeteer.dealTpl("mysDetail", param);
+    const savePath = puppeteer.dealTpl(
+      isWiki ? "wikiDetail" : "mysDetail",
+      param
+    );
 
     if (!savePath) return false;
 
