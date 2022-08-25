@@ -23,7 +23,9 @@
       </div>
       {{each helpData val}}
       <div class="data_box">
-        <div class="tab_lable">{{val.group}}</div>
+        <div class="tab_lable">
+          {{val.group}}{{val.disable ? ' - 已禁用' : ''}}
+        </div>
         <div class="list">
           {{each val.list item}}
           <div class="item">

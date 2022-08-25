@@ -16,7 +16,19 @@ export default class Help extends base {
   async getData() {
     let helpData = xxCfg.getdefSet("help", "help");
 
+    let groupCfg = cfg.getGroup(this.group_id);
+
+    if (groupCfg.disable && groupCfg.disable.length) {
+      helpData.map((item) => {
+        if (groupCfg.disable.includes(item.group)) {
+          item.disable = true;
+        }
+        return item;
+      });
+    }
+
     let versionData = xxCfg.getdefSet("version", "version");
+
     const version =
       (versionData && versionData.length && versionData[0].version) || "1.0.0";
 
