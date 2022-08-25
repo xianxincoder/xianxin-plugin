@@ -13,13 +13,13 @@
 body {
   font-family: sans-serif;
   font-size: 16px;
-  width: 792px;
+  width: 788px;
   color: #1e1f20;
   transform: scale(1.5);
   transform-origin: 0 0;
 }
 .container {
-  width: 792px;
+  width: 788px;
   padding: 20px 15px 10px 15px;
   background-image: url(../../img/bg.jpeg);
   background-size: 100%;
@@ -40,7 +40,7 @@ body {
 }
 .head_box .genshin_logo {
   position: absolute;
-  top: -1px;
+  top: -10px;
   right: 15px;
   width: 97px;
 }
