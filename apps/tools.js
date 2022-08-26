@@ -131,9 +131,12 @@ export class tools extends plugin {
       if (isPrivate) {
         return;
       }
-      await this.e.reply(await Bot.makeForwardMsg(msgList), false, {
+      const res = await this.e.reply(await Bot.makeForwardMsg(msgList), false, {
         recallMsg: this.toolsSetData.delMsg,
       });
+      if (!res) {
+        this.reply("不用等了，你想要的已经被神秘的力量吞噬了～");
+      }
     } else {
       this.reply("额。没有找到合适的cos信息～");
     }
