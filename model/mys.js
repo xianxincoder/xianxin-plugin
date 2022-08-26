@@ -424,7 +424,7 @@ export default class Mys extends base {
    * @returns {img: string[], code: string}
    */
   async render(param, isSplit, isWiki) {
-    const pageHeight = 3000;
+    const pageHeight = 10000;
 
     await puppeteer.browserInit();
 
@@ -473,7 +473,7 @@ export default class Mys extends base {
         }
 
         if (i != 1 && i <= num) {
-          await page.evaluate(() => window.scrollBy(0, 3000));
+          await page.evaluate(() => window.scrollBy(0, 10000));
         }
 
         let buff;

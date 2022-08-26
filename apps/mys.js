@@ -271,6 +271,7 @@ export class mys extends plugin {
    * @returns
    */
   async searchWiki() {
+    const isPrivate = this.e.isPrivate;
     let keyword = this.e.msg.replace(/#*wiki/g, "").trim();
 
     const wikiData = await new Mys().getWikiSearchData(keyword, "wiki");
@@ -340,11 +341,19 @@ export class mys extends plugin {
             user_id: Bot.uin,
           });
           for (let item of img) {
-            msgList.push({
-              message: item,
-              nickname: Bot.nickname,
-              user_id: Bot.uin,
-            });
+            if (isPrivate) {
+              await this.e.reply(item);
+              await common.sleep(600);
+            } else {
+              msgList.push({
+                message: item,
+                nickname: Bot.nickname,
+                user_id: Bot.uin,
+              });
+            }
+          }
+          if (isPrivate) {
+            return;
           }
 
           await this.e.reply(await Bot.makeForwardMsg(msgList));
@@ -360,6 +369,7 @@ export class mys extends plugin {
    * @returns
    */
   async searchStrategy() {
+    const isPrivate = this.e.isPrivate;
     let keyword = this.e.msg.replace(/#*攻略/g, "").trim();
 
     const wikiData = await new Mys().getWikiSearchData(keyword, "strategy");
@@ -429,13 +439,21 @@ export class mys extends plugin {
             user_id: Bot.uin,
           });
           for (let item of img) {
-            msgList.push({
-              message: item,
-              nickname: Bot.nickname,
-              user_id: Bot.uin,
-            });
+            if (isPrivate) {
+              await this.e.reply(item);
+              await common.sleep(600);
+            } else {
+              msgList.push({
+                message: item,
+                nickname: Bot.nickname,
+                user_id: Bot.uin,
+              });
+            }
           }
 
+          if (isPrivate) {
+            return;
+          }
           await this.e.reply(await Bot.makeForwardMsg(msgList));
         }
       }
