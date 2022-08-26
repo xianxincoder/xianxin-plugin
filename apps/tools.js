@@ -73,6 +73,8 @@ export class tools extends plugin {
       redis.set(key, "1", { EX: Number(this.toolsSetData.cd) });
     }
 
+    this.e.reply("正在探索未知的神秘空间，请稍等...");
+
     const randomMax = 600;
 
     const randomIndex = Math.floor(Math.random() * randomMax) + 1;
@@ -92,14 +94,14 @@ export class tools extends plugin {
     const index = randomIndex % 10;
 
     if (!resJsonData.length) {
-      this.reply("额。没有找到合适的cos信息，换个姿势再来一次吧～");
+      this.e.reply("额。没有探索到，换个姿势再来一次吧～");
       return "return";
     }
 
     const content = resJsonData[index].content;
 
     if (!content || !content.rendered) {
-      this.reply("额。没有找到合适的cos信息，换个姿势再来一次吧～");
+      this.e.reply("额。没有探索到，换个姿势再来一次吧～");
       return "return";
     }
 
@@ -138,7 +140,7 @@ export class tools extends plugin {
         this.reply("不用等了，你想要的已经被神秘的力量吞噬了～");
       }
     } else {
-      this.reply("额。没有找到合适的cos信息～");
+      this.reply("额。没有探索到，换个姿势再来一次吧～");
     }
   }
 
