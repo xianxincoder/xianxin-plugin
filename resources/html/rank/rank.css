@@ -168,10 +168,10 @@ body {
   font-size: 14px;
   margin-left: 6px;
   line-height: 20px;
-  width: 42px;
+  width: 92px;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
 }
 .list .item:nth-child(1) .level{
   font-size: 20px;
