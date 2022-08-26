@@ -27,13 +27,13 @@
 - group: B站功能
   list:
     - icon: 树脂
-      title: "#添加up推送 UID"
+      title: "#订阅up推送 UID"
       desc: 检测up的B站动态进行推送
     - icon: 统计
-      title: "#删除up推送 UID"
+      title: "#取消up推送 UID"
       desc: "删除对应up的B站动态推送"
     - icon: 攻略
-      title: "#up推送列表"
+      title: "#推送up列表"
       desc: "查看本群添加的up推送列表"
 - group: 群战
   list:

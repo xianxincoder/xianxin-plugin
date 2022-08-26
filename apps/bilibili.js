@@ -64,13 +64,8 @@ export class bilibili extends plugin {
           permission: "master",
         },
         {
-          reg: "^#up推送列表$",
+          reg: "^#推送(up)?列表$",
           fnc: "listPush",
-          permission: "master",
-        },
-        {
-          reg: "^#手动推送测试$",
-          fnc: "pushTask",
           permission: "master",
         },
       ],
@@ -89,7 +84,7 @@ export class bilibili extends plugin {
     };
   }
 
-  // 群推送失败了，再推一次，再失败就算球了
+  // 群推送失败了，再推一次，再失败就结束
   async pushAgain(groupId, msg) {
     await common.sleep(10000);
     Bot.pickGroup(groupId)
