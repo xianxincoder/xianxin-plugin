@@ -68,6 +68,11 @@ export class bilibili extends plugin {
           fnc: "listPush",
           permission: "master",
         },
+        {
+          reg: "^#手动推送up$",
+          fnc: "pushTask",
+          permission: "master",
+        },
       ],
     });
     this.bilibiliSetData = xxCfg.getConfig("bilibili", "set");
@@ -459,6 +464,13 @@ export class bilibili extends plugin {
         Bot.logger.mark(
           `B站动态推送[${pushID}] - [${info.name}]，推送失败，动态信息解析失败`
         );
+        continue;
+      }
+
+      // 包含关键字不推送
+      let banWords = eval(`/${this.bilibiliSetData.banWords.join("|")}/g`);
+
+      if (new RegExp(banWords).test(msg.join(""))) {
         continue;
       }
 

@@ -21,3 +21,8 @@ pushLiveType: 0
 
 # 是否展示定时任务的日志，0 不显示 1 显示
 pushTaskLog: 0
+
+# 包含关键字不推送
+banWords:
+  - 关键词1
+  - 测试
