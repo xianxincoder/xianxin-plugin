@@ -331,3 +331,16 @@ a {
   padding: 0;
   display: block;
 }
+
+.obc-tmpl-character td.obc-tmpl-character__avatar {
+  padding: 0;
+  vertical-align: middle;
+}
+
+.obc-tmpl-character td.obc-tmpl-character__avatar img {
+  width: 100%;
+}
+
+.obc-tmpl table td>img:only-child {
+  display: block;
+}
