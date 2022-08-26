@@ -73,7 +73,7 @@ export class tools extends plugin {
       redis.set(key, "1", { EX: Number(this.toolsSetData.cd) });
     }
 
-    this.e.reply("正在探索未知的神秘空间，请稍等...");
+    this.e.reply("触发探索未知的神秘空间，请稍等...");
 
     const randomMax = 600;
 
