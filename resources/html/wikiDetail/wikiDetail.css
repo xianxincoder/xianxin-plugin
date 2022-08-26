@@ -172,8 +172,9 @@ table td, table th {
 
 .obc-tmpl-strategy__url {
   display: block;
-    text-decoration: none;
-    width: 100%;
+  text-decoration: none;
+  width: 100%;
+  padding: 20px;
 }
 
 a {
@@ -207,6 +208,7 @@ a {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   word-break: break-all;
+  text-align: center;
 }
 
 .obc-tmpl-character__voice-item {
@@ -320,6 +322,12 @@ a {
   background-position: center center;
 }
 
-.obc-tmp-character__pc {
+.obc-tmp-character__pc, .obc-tmpl-character-table--pc {
   display: none;
+}
+
+.obc-tmpl ul {
+  list-style: none;
+  padding: 0;
+  display: block;
 }
