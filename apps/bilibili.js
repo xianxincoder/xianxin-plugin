@@ -33,12 +33,12 @@ export class bilibili extends plugin {
           fnc: "detail",
         },
         {
-          reg: "^#*(添加|订阅|新增|增加)up推送\\s*.*$",
+          reg: "^#*(添加|订阅|新增|增加)up推送\\s*(直播\\s*|视频\\s*|图文\\s*|文章\\s*|转发\\s*|直播\\s*)*.*$",
           fnc: "addPush",
           permission: "master",
         },
         {
-          reg: "^#*(删除|取消|移除|去除)up推送\\s*.*$",
+          reg: "^#*(删除|取消|移除|去除)up推送\\s*(直播\\s*|视频\\s*|图文\\s*|文章\\s*|转发\\s*|直播\\s*)*.*$",
           fnc: "delPush",
           permission: "master",
         },
@@ -75,19 +75,39 @@ export class bilibili extends plugin {
 
   /** 添加b站推送 */
   async addPush() {
-    let uid = this.e.msg.replace(/#*(添加|订阅|新增|增加)up推送/g, "").trim();
+    let uid = this.e.msg
+      .replace(
+        /#*(添加|订阅|新增|增加)up推送\s*(直播\s*|视频\s*|图文\s*|文章\s*|转发\s*|直播\s*)*/g,
+        ""
+      )
+      .trim();
+    // (直播\\s*|视频\\s*|图文\\s*|文章\\s*|转发\\s*|直播\\s*)*
     if (!uid) {
-      this.e.reply(`请输入推送的uid\n示例：#添加up推送 401742377`);
+      this.e.reply(
+        `请输入推送的uid\n示例1(订阅全部动态)：#订阅up推送 401742377\n示例2(订阅直播动态)：#订阅up推送 直播 401742377\n示例3(订阅直播、转发、图文、文章、视频动态)：#订阅up推送 直播 转发 图文 文章 视频 401742377`
+      );
       return true;
     }
+
     let data = this.bilibiliPushData || {};
 
     if (!data[this.e.group_id]) data[this.e.group_id] = new Array();
 
-    const existUids = data[this.e.group_id].map((item) => item.uid || "");
+    // const existUids = data[this.e.group_id].map((item) => item.uid || "");
 
-    if (existUids.includes(uid)) {
-      this.e.reply("这个uid已经添加过了");
+    const upData = data[this.e.group_id].find((item) => item.uid == uid);
+
+    if (upData) {
+      data[this.e.group_id].map((item) => {
+        if (item.uid == uid) {
+          item.type = this.typeHandle(item, this.e.msg, "add");
+        }
+        return item;
+      });
+
+      this.bilibiliPushData = data;
+      xxCfg.saveSet("bilibili", "push", "config", data);
+      this.e.reply(`添加b站推送成功~\n${upData.name}：${uid}`);
       return;
     }
 
@@ -101,11 +121,24 @@ export class bilibili extends plugin {
     const resJson = await res.json();
 
     if (resJson.code != 0 || !resJson?.data) {
-      this.e.reply("uid不对啊老兄，别乱搞哦～");
+      this.e.reply(
+        "uid不对啊老兄，别乱搞哦～\n示例1(订阅全部动态)：#订阅up推送 401742377\n示例2(订阅直播动态)：#订阅up推送 直播 401742377\n示例3(订阅直播、转发、图文、文章、视频动态)：#订阅up推送 直播 转发 图文 文章 视频 401742377"
+      );
       return;
     }
 
-    data[this.e.group_id].push({ uid, name: resJson?.data.name });
+    data[this.e.group_id].push({
+      uid,
+      name: resJson?.data.name,
+      type: this.typeHandle(
+        {
+          uid,
+          name: resJson?.data.name,
+        },
+        this.e.msg,
+        "add"
+      ),
+    });
 
     this.bilibiliPushData = data;
 
@@ -116,24 +149,47 @@ export class bilibili extends plugin {
 
   /** 删除b站推送 */
   async delPush() {
-    let uid = this.e.msg.replace(/#*(删除|取消|移除|去除)up推送/g, "").trim();
+    let uid = this.e.msg
+      .replace(
+        /#*(删除|取消|移除|去除)up推送\s*(直播\s*|视频\s*|图文\s*|转发\s*|直播\s*)*/g,
+        ""
+      )
+      .trim();
     if (!uid) {
-      this.e.reply(`请输入推送的uid\n示例：#删除up推送 401742377`);
+      this.e.reply(
+        `请输入推送的uid\n示例1(取消全部动态推送)：#取消up推送 401742377\n示例2(取消订阅直播动态)：#取消up推送 直播 401742377\n示例3(取消订阅直播、转发、图文、文章、视频动态)：#取消up推送 直播 转发 图文 文章 视频 401742377`
+      );
       return true;
     }
     let data = this.bilibiliPushData || {};
 
     if (!data[this.e.group_id]) data[this.e.group_id] = new Array();
 
-    data[this.e.group_id] = data[this.e.group_id].filter(
-      (item) => item.uid !== uid
-    );
+    const upData = data[this.e.group_id].find((item) => item.uid == uid);
+
+    const newType = this.typeHandle(upData, this.e.msg, "del");
+
+    let isDel = false;
+
+    if (newType.length) {
+      data[this.e.group_id].map((item) => {
+        if (item.uid == uid) {
+          item.type = newType;
+        }
+        return item;
+      });
+    } else {
+      isDel = true;
+      data[this.e.group_id] = data[this.e.group_id].filter(
+        (item) => item.uid !== uid
+      );
+    }
 
     this.bilibiliPushData = data;
 
     xxCfg.saveSet("bilibili", "push", "config", data);
 
-    this.e.reply(`删除b站推送成功~\n${uid}`);
+    this.e.reply(`${isDel ? "删除" : "修改"}b站推送成功~\n${uid}`);
   }
 
   /** b站推送列表 */
@@ -143,8 +199,30 @@ export class bilibili extends plugin {
 
     const messages = [];
 
+    const typeMap = {
+      DYNAMIC_TYPE_AV: "视频",
+      DYNAMIC_TYPE_WORD: "图文",
+      DYNAMIC_TYPE_DRAW: "图文",
+      DYNAMIC_TYPE_ARTICLE: "文章",
+      DYNAMIC_TYPE_FORWARD: "转发",
+      DYNAMIC_TYPE_LIVE_RCMD: "直播",
+    };
+
     data[this.e.group_id].map((item) => {
-      messages.push(`${item.uid}  ${item.name}`);
+      const types = new Set();
+
+      if (item.type && item.type.length) {
+        item.type.map((typeItem) => {
+          types.add(typeMap[typeItem]);
+          return typeItem;
+        });
+      }
+
+      messages.push(
+        `${item.uid}  ${item.name}${
+          types.size ? `[${Array.from(types).join("、")}]` : "[全部动态]"
+        }`
+      );
       return item;
     });
 
@@ -198,5 +276,45 @@ export class bilibili extends plugin {
     }
 
     this.reply(message);
+  }
+
+  typeHandle(up, msg, type) {
+    const newType = new Set(up.type || []);
+    if (type == "add") {
+      if (msg.indexOf("直播") !== -1) {
+        newType.add("DYNAMIC_TYPE_LIVE_RCMD");
+      }
+      if (msg.indexOf("转发") !== -1) {
+        newType.add("DYNAMIC_TYPE_FORWARD");
+      }
+      if (msg.indexOf("文章") !== -1) {
+        newType.add("DYNAMIC_TYPE_ARTICLE");
+      }
+      if (msg.indexOf("图文") !== -1) {
+        newType.add("DYNAMIC_TYPE_DRAW");
+        newType.add("DYNAMIC_TYPE_WORD");
+      }
+      if (msg.indexOf("视频") !== -1) {
+        newType.add("DYNAMIC_TYPE_AV");
+      }
+    } else if (type == "del") {
+      if (msg.indexOf("直播") !== -1) {
+        newType.delete("DYNAMIC_TYPE_LIVE_RCMD");
+      }
+      if (msg.indexOf("转发") !== -1) {
+        newType.delete("DYNAMIC_TYPE_FORWARD");
+      }
+      if (msg.indexOf("文章") !== -1) {
+        newType.delete("DYNAMIC_TYPE_ARTICLE");
+      }
+      if (msg.indexOf("图文") !== -1) {
+        newType.delete("DYNAMIC_TYPE_DRAW");
+        newType.delete("DYNAMIC_TYPE_WORD");
+      }
+      if (msg.indexOf("视频") !== -1) {
+        newType.delete("DYNAMIC_TYPE_AV");
+      }
+    }
+    return Array.from(newType);
   }
 }

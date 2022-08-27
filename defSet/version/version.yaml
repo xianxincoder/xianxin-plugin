@@ -2,6 +2,9 @@
     version: 1.1.1,
     data:
       [
+        b站up推送优化，支持只订阅某个up的几种动态消息,
+        例如(只推送直播动态)：<span class="cmd">#订阅up推送 直播 401742377</span>,
+        可以通过<span class="cmd">#推送up列表</span>查看订阅列表详情,
         添加<span class="cmd">#21点</span>进行21点小游戏,
         <span class="cmd">叫牌</span>进行要牌,
         <span class="cmd">停牌</span>停止要牌，对方开始叫牌,

@@ -13,7 +13,7 @@
       title: "#wiki xxx"
       desc: 查询原神wiki的内容
     - icon: 原石
-      title: "#cosdby 角色名 #cosdby 西施"
+      title: "#cosdby 角色名<br/>#cosdby 西施"
       desc: 指定角色随机查看大别野cos图片
     - icon: 纠缠之缘
       title: "#cosdby #cosdby1 #cosdby详情"
@@ -27,11 +27,11 @@
 - group: B站功能
   list:
     - icon: 树脂
-      title: "#订阅up推送 UID"
+      title: "#订阅up推送 UID<br/>#订阅up推送 直播 UID"
       desc: 检测up的B站动态进行推送
     - icon: 统计
-      title: "#取消up推送 UID"
-      desc: "删除对应up的B站动态推送"
+      title: "#取消up推送 UID<br/>#取消up推送 直播 UID"
+      desc: "删除对应up的B站对应动态推送"
     - icon: 攻略
       title: "#推送up列表"
       desc: "查看本群添加的up推送列表"
