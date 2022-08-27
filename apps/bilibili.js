@@ -314,7 +314,9 @@ export class bilibili extends plugin {
     res.data.result.map((item, index) => {
       if (index < 5) {
         messages.push(
-          `${index + 1}、${item.uname} UID：${item.mid} 粉丝数：${item.fans}`
+          `${item.uname}\nUID：${item.mid}\n粉丝数：${item.fans}${
+            index < 4 ? "\n" : ""
+          }`
         );
       }
       return item;
