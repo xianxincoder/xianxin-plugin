@@ -199,9 +199,7 @@ export default class Bilibili extends base {
           `链接：${this.resetLinkUrl(desc.jump_url)}\n`,
           `时间：${
             author
-              ? moment(author.pub_ts * (isForward ? 0.001 : 1000)).format(
-                  "YYYY年MM月DD日 HH:mm:ss"
-                )
+              ? moment(author.pub_ts * 1000).format("YYYY年MM月DD日 HH:mm:ss")
               : ""
           }\n`,
           segment.image(desc.cover),
@@ -221,9 +219,7 @@ export default class Bilibili extends base {
           `链接：${BiliDrawDynamicLinkUrl}${dynamic.id_str}\n`,
           `时间：${
             author
-              ? moment(author.pub_ts * (isForward ? 0.001 : 1000)).format(
-                  "YYYY年MM月DD日 HH:mm:ss"
-                )
+              ? moment(author.pub_ts * 1000).format("YYYY年MM月DD日 HH:mm:ss")
               : ""
           }`,
         ];
@@ -253,9 +249,7 @@ export default class Bilibili extends base {
           `链接：${BiliDrawDynamicLinkUrl}${dynamic.id_str}\n`,
           `时间：${
             author
-              ? moment(author.pub_ts * (isForward ? 0.001 : 1000)).format(
-                  "YYYY年MM月DD日 HH:mm:ss"
-                )
+              ? moment(author.pub_ts * 1000).format("YYYY年MM月DD日 HH:mm:ss")
               : ""
           }\n`,
           ...pics,
@@ -283,9 +277,7 @@ export default class Bilibili extends base {
           `链接：${this.resetLinkUrl(desc.jump_url)}\n`,
           `时间：${
             author
-              ? moment(author.pub_ts * (isForward ? 0.001 : 1000)).format(
-                  "YYYY年MM月DD日 HH:mm:ss"
-                )
+              ? moment(author.pub_ts * 1000).format("YYYY年MM月DD日 HH:mm:ss")
               : ""
           }\n`,
           ...pics,
@@ -320,9 +312,7 @@ export default class Bilibili extends base {
           `链接：${BiliDrawDynamicLinkUrl}${dynamic.id_str}\n`,
           `时间：${
             author
-              ? moment(author.pub_ts * (isForward ? 0.001 : 1000)).format(
-                  "YYYY年MM月DD日 HH:mm:ss"
-                )
+              ? moment(author.pub_ts * 1000).format("YYYY年MM月DD日 HH:mm:ss")
               : ""
           }\n`,
           "\n---以下为转发内容---\n",

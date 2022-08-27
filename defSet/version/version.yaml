@@ -2,6 +2,7 @@
     version: 1.1.1,
     data:
       [
+        修复b站转发动态时间不对问题,
         b站up推送优化，支持只订阅某个up的几种动态消息,
         例如(只推送直播动态)：<span class="cmd">#订阅up推送 直播 401742377</span>,
         可以通过<span class="cmd">#推送up列表</span>查看订阅列表详情,
