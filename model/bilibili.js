@@ -23,6 +23,21 @@ export default class Bilibili extends base {
     return response;
   }
 
+  async getBilibiliUp(keyword) {
+    let url = `https://api.bilibili.com/x/web-interface/search/type?keyword=${keyword}&page=1&search_type=bili_user&order=totalrank&pagesize=5`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        authority: "api.bilibili.com",
+        cookie:
+          "_uuid=04A91AF9-817E-5568-C260-F738C6992B3E65500infoc; buvid3=89F4F8FC-EC89-F339-53E0-BEB8917E839A65849infoc; buvid4=2D3B9929-A59A-751A-A267-64B84561875568042-022072912-ptQYXgw9NYmp0JTqr/FVmw%3D%3D; PVID=1; CURRENT_FNVAL=4048; nostalgia_conf=-1; i-wanna-go-back=-1; b_ut=7; innersign=0; b_lsid=D95BBB69_182DE35FC2B; fingerprint=8d0ef00128271df9bb681430277b95d0; buvid_fp_plain=undefined; buvid_fp=8d0ef00128271df9bb681430277b95d0",
+        "User-Agent": "apifox/1.0.0 (https://www.apifox.cn)",
+      },
+      redirect: "follow",
+    });
+    return response;
+  }
+
   async upTask() {
     let setData = xxCfg.getConfig("bilibili", "set");
     let pushData = xxCfg.getConfig("bilibili", "push");

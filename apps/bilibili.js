@@ -48,6 +48,11 @@ export class bilibili extends plugin {
           permission: "master",
         },
         {
+          reg: "^#*搜索up.*$",
+          fnc: "searchup",
+          permission: "master",
+        },
+        {
           reg: "^#手动推送up$",
           fnc: "newPushTask",
           permission: "master",
@@ -283,6 +288,39 @@ export class bilibili extends plugin {
     }
 
     this.reply(message);
+  }
+
+  /**
+   * rule - 根据名称搜索up信息
+   */
+  async searchup() {
+    let keyword = this.e.msg.replace(/#*搜索up/g, "").trim();
+
+    let response = await new Bilibili(this.e).getBilibiliUp(keyword);
+    if (!response.ok) {
+      this.reply("诶嘿，出了点网络问题，等会再试试吧~");
+      return;
+    }
+
+    const res = await response.json();
+
+    if (res.code !== 0 || !res.data.result || !res.data.result.length) {
+      this.reply("没有搜索到该用户，请换个关键词试试吧");
+      return;
+    }
+
+    const messages = [];
+
+    res.data.result.map((item, index) => {
+      if (index < 5) {
+        messages.push(
+          `${index + 1}、${item.uname} UID：${item.mid} 粉丝数：${item.fans}`
+        );
+      }
+      return item;
+    });
+
+    this.e.reply(messages.join("\n"));
   }
 
   typeHandle(up, msg, type) {
