@@ -93,6 +93,9 @@ export default class Bilibili extends base {
         if (Number(now - author.pub_ts) > interval) {
           continue;
         }
+        if (dynamicItem.type == "DYNAMIC_TYPE_LIVE_RCMD") {
+          continue;
+        }
         willPushDynamicList.push(dynamicItem);
       }
 
