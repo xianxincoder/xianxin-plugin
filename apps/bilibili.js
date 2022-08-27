@@ -107,7 +107,7 @@ export class bilibili extends plugin {
 
       this.bilibiliPushData = data;
       xxCfg.saveSet("bilibili", "push", "config", data);
-      this.e.reply(`添加b站推送成功~\n${upData.name}：${uid}`);
+      this.e.reply(`修改b站推送动态类型成功~\n${upData.name}：${uid}`);
       return;
     }
 
@@ -159,13 +159,20 @@ export class bilibili extends plugin {
       this.e.reply(
         `请输入推送的uid\n示例1(取消全部动态推送)：#取消up推送 401742377\n示例2(取消订阅直播动态)：#取消up推送 直播 401742377\n示例3(取消订阅直播、转发、图文、文章、视频动态)：#取消up推送 直播 转发 图文 文章 视频 401742377`
       );
-      return true;
+      return;
     }
     let data = this.bilibiliPushData || {};
 
     if (!data[this.e.group_id]) data[this.e.group_id] = new Array();
 
     const upData = data[this.e.group_id].find((item) => item.uid == uid);
+
+    if (!upData) {
+      this.e.reply(
+        `未找到该uid，请核实是否输入指令正确\n示例1(取消全部动态推送)：#取消up推送 401742377\n示例2(取消订阅直播动态)：#取消up推送 直播 401742377\n示例3(取消订阅直播、转发、图文、文章、视频动态)：#取消up推送 直播 转发 图文 文章 视频 401742377`
+      );
+      return;
+    }
 
     const newType = this.typeHandle(upData, this.e.msg, "del");
 
@@ -279,7 +286,7 @@ export class bilibili extends plugin {
   }
 
   typeHandle(up, msg, type) {
-    const newType = new Set(up.type || []);
+    let newType = new Set(up.type || []);
     if (type == "add") {
       if (msg.indexOf("直播") !== -1) {
         newType.add("DYNAMIC_TYPE_LIVE_RCMD");
@@ -298,6 +305,17 @@ export class bilibili extends plugin {
         newType.add("DYNAMIC_TYPE_AV");
       }
     } else if (type == "del") {
+      if (!newType.length) {
+        newType = new Set([
+          "DYNAMIC_TYPE_LIVE_RCMD",
+          "DYNAMIC_TYPE_FORWARD",
+          "DYNAMIC_TYPE_ARTICLE",
+          "DYNAMIC_TYPE_DRAW",
+          "DYNAMIC_TYPE_WORD",
+          "DYNAMIC_TYPE_AV",
+        ]);
+      }
+
       if (msg.indexOf("直播") !== -1) {
         newType.delete("DYNAMIC_TYPE_LIVE_RCMD");
       }
