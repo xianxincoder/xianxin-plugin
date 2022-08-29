@@ -33,7 +33,7 @@ export class mys extends plugin {
           fnc: "searchWiki",
         },
         {
-          reg: "^#cos[a-z]*[0-9]*$",
+          reg: "^#*cos[a-z]*[0-9]*$",
           fnc: "cos",
         },
         {
@@ -41,7 +41,7 @@ export class mys extends plugin {
           fnc: "cosDetail",
         },
         {
-          reg: "^#*cos(dby)*\\s*.*$",
+          reg: "^#cos(dby)*\\s*.*$",
           fnc: "searchCos",
         },
         {
