@@ -345,7 +345,7 @@ export class bilibili extends plugin {
         newType.add("DYNAMIC_TYPE_AV");
       }
     } else if (type == "del") {
-      if (!newType.length) {
+      if (!newType.size) {
         newType = new Set([
           "DYNAMIC_TYPE_LIVE_RCMD",
           "DYNAMIC_TYPE_FORWARD",
@@ -356,21 +356,31 @@ export class bilibili extends plugin {
         ]);
       }
 
+      let isDelType = false;
+
       if (msg.indexOf("直播") !== -1) {
         newType.delete("DYNAMIC_TYPE_LIVE_RCMD");
+        isDelType = true;
       }
       if (msg.indexOf("转发") !== -1) {
         newType.delete("DYNAMIC_TYPE_FORWARD");
+        isDelType = true;
       }
       if (msg.indexOf("文章") !== -1) {
         newType.delete("DYNAMIC_TYPE_ARTICLE");
+        isDelType = true;
       }
       if (msg.indexOf("图文") !== -1) {
         newType.delete("DYNAMIC_TYPE_DRAW");
         newType.delete("DYNAMIC_TYPE_WORD");
+        isDelType = true;
       }
       if (msg.indexOf("视频") !== -1) {
         newType.delete("DYNAMIC_TYPE_AV");
+        isDelType = true;
+      }
+      if (!isDelType) {
+        newType.clear();
       }
     }
     return Array.from(newType);
