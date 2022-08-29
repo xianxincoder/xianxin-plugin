@@ -137,7 +137,24 @@ export class tools extends plugin {
         recallMsg: this.toolsSetData.delMsg,
       });
       if (!res) {
-        this.reply("不用等了，你想要的已经被神秘的力量吞噬了～");
+        if (!res) {
+          if (this.e.group.is_admin) {
+            if (
+              Number(Math.random().toFixed(2)) * 100 <
+              this.toolsSetData.mute
+            ) {
+              let duration = Math.floor(Math.random() * 600) + 1;
+              this.e.group.muteMember(this.e.sender.user_id, duration);
+              await this.e.reply(
+                `不用等了，你想要的已经被神秘的力量吞噬了～ 并随手将你禁锢${duration}秒`
+              );
+            } else {
+              this.reply("不用等了，你想要的已经被神秘的力量吞噬了～");
+            }
+          } else {
+            this.reply("不用等了，你想要的已经被神秘的力量吞噬了～");
+          }
+        }
       }
     } else {
       this.reply("额。没有探索到，换个姿势再来一次吧～");
