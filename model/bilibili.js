@@ -200,6 +200,98 @@ export default class Bilibili extends base {
     await common.sleep(1000);
   }
 
+  /**
+   * 处理b站动态页图片生成
+   * @param {object} param
+   * @returns {img: string[], code: string}
+   */
+  async render(param) {
+    const pageHeight = 5000;
+
+    await puppeteer.browserInit();
+
+    if (!puppeteer.browser) return false;
+
+    const savePath = puppeteer.dealTpl("bilibili", param);
+
+    if (!savePath) return false;
+
+    const page = await puppeteer.browser.newPage();
+
+    try {
+      await page.goto(`file://${_path}${lodash.trim(savePath, ".")}`, {
+        timeout: 120000,
+      });
+      const body = (await page.$("#container")) || (await page.$("body"));
+      const boundingBox = await body.boundingBox();
+
+      const num = 1;
+
+      if (num > 1) {
+        await page.setViewport({
+          width: Math.round(boundingBox.width),
+          height: pageHeight + 100,
+        });
+      }
+
+      const img = [];
+      let code = "success";
+      for (let i = 1; i <= num; i++) {
+        const randData = {
+          type: "jpeg",
+          quality: 90,
+        };
+
+        if (i != 1 && i == num) {
+          await page.setViewport({
+            width: Math.round(boundingBox.width),
+            height: parseInt(boundingBox.height) - pageHeight * (num - 1),
+          });
+        }
+
+        if (i != 1 && i <= num) {
+          await page.evaluate(() => window.scrollBy(0, 10000));
+        }
+
+        let buff;
+        if (num == 1) {
+          buff = await body.screenshot(randData);
+        } else {
+          buff = await page.screenshot(randData);
+        }
+
+        if (num > 2) await common.sleep(200);
+
+        puppeteer.renderNum++;
+        /** 计算图片大小 */
+        const kb = (buff.length / 1024).toFixed(2) + "kb";
+        if ((buff.length / 1024).toFixed(2) > 3500) {
+          code = "limit";
+        }
+
+        logger.mark(
+          `[图片生成][${this.model}][${puppeteer.renderNum}次] ${kb}`
+        );
+
+        img.push(segment.image(buff));
+      }
+      page.close().catch((err) => logger.error(err));
+
+      if (num > 1) {
+        logger.mark(`[图片生成][${this.model}] 处理完成`);
+      }
+      return { img: img, code: code };
+    } catch (error) {
+      logger.error(`图片生成失败:${this.model}:${error}`);
+      /** 关闭浏览器 */
+      if (puppeteer.browser) {
+        await puppeteer.browser.close().catch((err) => logger.error(err));
+      }
+      puppeteer.browser = false;
+      return { img: [], code: "limit" };
+    }
+  }
+
   // 构建动态消息
   buildSendDynamic(upName, dynamic, isForward, setData) {
     const BiliDrawDynamicLinkUrl = "https://m.bilibili.com/dynamic/";
