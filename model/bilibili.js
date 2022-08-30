@@ -105,10 +105,19 @@ export default class Bilibili extends base {
       for (let dynamicItem of tempDynamicList) {
         let author = dynamicItem?.modules?.module_author || {};
         if (!author?.pub_ts) continue;
+        /** 不满足时间的不放入待推送动态 */
         if (Number(now - author.pub_ts) > interval) {
           continue;
         }
+        /** 不放入直播的动态，直接走新接口 */
         if (dynamicItem.type == "DYNAMIC_TYPE_LIVE_RCMD") {
+          continue;
+        }
+        /** 如果关闭了转发动态不推送, 那么直接在这里不放入待推送数据里 */
+        if (
+          dynamicItem.type == "DYNAMIC_TYPE_FORWARD" &&
+          !setData.pushTransmit
+        ) {
           continue;
         }
         willPushDynamicList.push(dynamicItem);
@@ -300,10 +309,6 @@ export default class Bilibili extends base {
 
         return msg;
       case "DYNAMIC_TYPE_FORWARD": // 转发的动态
-        if (!setData.pushTransmit) {
-          return "continue";
-        }
-
         desc = dynamic?.modules?.module_dynamic?.desc;
         author = dynamic?.modules?.module_author;
         if (!desc && !author) return;
