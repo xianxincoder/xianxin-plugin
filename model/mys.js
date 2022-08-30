@@ -263,7 +263,7 @@ export default class Mys extends base {
     const matchArr = url.match(/[^\/]*$/);
     const postId = matchArr[0];
 
-    if (!/^[0-9]+.?[0-9]*/.test(postId)) {
+    if (!/^\d+$/.test(postId)) {
       return { img: [], code: "limit" };
     }
 
