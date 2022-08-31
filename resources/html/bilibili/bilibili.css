@@ -77,6 +77,9 @@ body {
   padding: 10px;
   white-space: pre-wrap;
 }
+.ql-editor .content {
+  white-space: pre-wrap;
+}
 .mhy-simple-editor .ql-editor[contenteditable="false"] {
   background: #f0f1f5;
 }
@@ -1782,7 +1785,7 @@ textarea::placeholder {
   /* margin-top: 24px; */
 }
 .mhy-article-page__footer {
-  margin-top: 28px;
+  margin-top: 36px;
 }
 .mhy-article-page__auth {
   display: -webkit-box;
@@ -2986,7 +2989,7 @@ textarea::placeholder {
   height: 20px; */
   color: rgba(72 159 209);
   position: absolute;
-  right: 75px;
+  right: 20px;
 }
 .bottom-bilibili-logo {
   /* width: 20px;
