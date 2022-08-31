@@ -3,12 +3,16 @@ import lodash from "lodash";
 import xxCfg from "../model/xxCfg.js";
 import { segment } from "oicq";
 import base from "./base.js";
+import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 import fetch from "node-fetch";
 import common from "../../../lib/common/common.js";
+
+const _path = process.cwd();
 
 export default class Bilibili extends base {
   constructor(e) {
     super(e);
+    this.model = "bilibili";
   }
 
   async getBilibiliUserInfo(uid) {
@@ -178,27 +182,130 @@ export default class Bilibili extends base {
 
     this.e.group = Bot.pickGroup(Number(groupId));
 
-    const dynamicMsg = this.buildSendDynamic(
-      upName,
-      pushDynamicData,
-      false,
-      setData
-    );
+    if (!!setData.pushMsgMode) {
+      const data = this.dynamicDataHandle(pushDynamicData);
+      // 包含关键字不推送
+      let banWords = eval(`/${setData.banWords.join("|")}/g`);
+      if (new RegExp(banWords).test(`${data.title}${data.content}`)) {
+        return "return";
+      }
 
-    redis.set(`${this.key}${groupId}:${id_str}`, "1", { EX: 3600 * 10 });
+      const dynamicMsg = await this.render(data);
+      redis.set(`${this.key}${groupId}:${id_str}`, "1", { EX: 3600 * 10 });
 
-    if (dynamicMsg == "continue") {
-      return "return";
+      const { img, code } = dynamicMsg;
+
+      await this.e.group.sendMsg(img[0]);
+      await common.sleep(1000);
+    } else {
+      const dynamicMsg = this.buildSendDynamic(
+        upName,
+        pushDynamicData,
+        false,
+        setData
+      );
+
+      redis.set(`${this.key}${groupId}:${id_str}`, "1", { EX: 3600 * 10 });
+
+      if (dynamicMsg == "continue") {
+        return "return";
+      }
+
+      // 包含关键字不推送
+      let banWords = eval(`/${setData.banWords.join("|")}/g`);
+      if (new RegExp(banWords).test(dynamicMsg.join(""))) {
+        return "return";
+      }
+      await this.e.group.sendMsg(dynamicMsg);
+      await common.sleep(1000);
     }
-
-    // 包含关键字不推送
-    let banWords = eval(`/${setData.banWords.join("|")}/g`);
-    if (new RegExp(banWords).test(dynamicMsg.join(""))) {
-      return "return";
-    }
-    await this.e.group.sendMsg(dynamicMsg);
-    await common.sleep(1000);
   }
+
+  dynamicDataHandle = (data) => {
+    const BiliDrawDynamicLinkUrl = "https://m.bilibili.com/dynamic/";
+    let desc,
+      pics = [];
+    let dynamic = { data: {} };
+
+    let author = data?.modules?.module_author || {};
+
+    dynamic.data.face = author.face;
+    dynamic.data.name = author.name;
+
+    dynamic.data.type = data.type;
+    if (data.type == "DYNAMIC_TYPE_AV") {
+      desc = data?.modules?.module_dynamic?.major?.archive || {};
+      dynamic.data.title = desc.title;
+      dynamic.data.content = desc.desc;
+      dynamic.data.url = desc.jump_url;
+      dynamic.data.pubTime = author.pub_time;
+      dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
+        "YYYY年MM月DD日 HH:mm:ss"
+      );
+      dynamic.data.pics = [desc.cover];
+    } else if (data.type == "DYNAMIC_TYPE_WORD") {
+      desc = data?.modules?.module_dynamic?.desc || {};
+      dynamic.data.title = "";
+      dynamic.data.content = desc.text;
+      dynamic.data.url = `${BiliDrawDynamicLinkUrl}${data.id_str}`;
+      dynamic.data.pubTime = author.pub_time;
+      dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
+        "YYYY年MM月DD日 HH:mm:ss"
+      );
+      dynamic.data.pics = [];
+    } else if (data.type == "DYNAMIC_TYPE_DRAW") {
+      desc = data?.modules?.module_dynamic?.desc || {};
+      pics = data?.modules?.module_dynamic?.major?.draw?.items || [];
+      pics = pics.map((item) => {
+        return item.src;
+      });
+      dynamic.data.title = "";
+      dynamic.data.content = desc.text;
+      dynamic.data.url = `${BiliDrawDynamicLinkUrl}${data.id_str}`;
+      dynamic.data.pubTime = author.pub_time;
+      dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
+        "YYYY年MM月DD日 HH:mm:ss"
+      );
+      dynamic.data.pics = pics;
+    } else if (data.type == "DYNAMIC_TYPE_ARTICLE") {
+      desc = data?.modules?.module_dynamic?.major?.article || {};
+      if (desc.covers && desc.covers.length) {
+        pics = desc.covers;
+      }
+      dynamic.data.title = desc.title;
+      dynamic.data.content = "";
+      dynamic.data.url = desc.jump_url;
+      dynamic.data.pubTime = author.pub_time;
+      dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
+        "YYYY年MM月DD日 HH:mm:ss"
+      );
+      dynamic.data.pics = pics;
+    } else if (data.type == "DYNAMIC_TYPE_FORWARD") {
+      desc = data?.modules?.module_dynamic?.desc || {};
+      dynamic.data.title = "";
+      dynamic.data.content = desc.text;
+      dynamic.data.pubTime = author.pub_time;
+      dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
+        "YYYY年MM月DD日 HH:mm:ss"
+      );
+      dynamic.data.url = `${BiliDrawDynamicLinkUrl}${data.id_str}`;
+      dynamic.data.pics = [data.cover];
+      dynamic.data.orig = this.dynamicDataHandle(dynamic.orig);
+    } else if (data.type == "DYNAMIC_TYPE_LIVE_RCMD") {
+      dynamic.data.title = data.title;
+      dynamic.data.content = "";
+      dynamic.data.pubTime = "";
+      dynamic.data.pubTs = "";
+      dynamic.data.url = data.url;
+      dynamic.data.pics = [data.cover];
+    }
+
+    return {
+      ...this.screenData,
+      saveId: data.id_str,
+      ...dynamic,
+    };
+  };
 
   /**
    * 处理b站动态页图片生成
@@ -212,7 +319,10 @@ export default class Bilibili extends base {
 
     if (!puppeteer.browser) return false;
 
+    console.log(param);
+
     const savePath = puppeteer.dealTpl("bilibili", param);
+    console.log(savePath);
 
     if (!savePath) return false;
 

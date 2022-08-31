@@ -23,3 +23,6 @@ pushTaskLog: 0
 banWords:
   - 关键词1
   - 关键词2
+
+# 设置B站动态消息模式 0 文字模式 1 图片模式
+pushMsgMode: 0

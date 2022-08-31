@@ -21,30 +21,12 @@
                   class="mhy-img-icon mhy-symbol-icon"
               /></span>
             </div>
-            <img src="{{data.user.avatar_url}}" class="mhy-account-avatar" />
+            <img src="{{data.face}}" class="mhy-account-avatar" />
             <div class="account-info">
-              <div class="mhy-account-title">
-                {{data.user.nickname}}
-                <img
-                  src="https://img-static.mihoyo.com/level/level{{data.user.level_exp.level}}.png"
-                  class="mhy-img-icon account-title"
-                />
-
-                {{if data.user?.certification?.type == 1}}
-                <img
-                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAQBAMAAAD34QLcAAAAKlBMVEVHcEzmyZbmyZbmyZbmyZbmyZbmyZbmyZbmyZbmyZbmyZbmyZbmyZbmyZYjOgR8AAAADXRSTlMA3US7mWbm50xKTUnks2tyCAAAAIJJREFUCNdj2HYXCWQzZDEggWUMFxgYmB1ATBDJy3AhFqTqKpB/CcwNAUm52oIELwO5DLJ3715kYGAB6QBxhRgYFIHcACgXIssMVKwAlQUCRgWgHFT2rgJDLAOUC5RlVmAQAZkAl2UUYGAIRMgaMzDevQTmIgFehgxkbjvDdGQPngQAQ39Au8pquMcAAAAASUVORK5CYII="
-                  class="mhy-img-icon account-title"
-                />
-                {{/if}}
-              </div>
-              <p class="account-label">
-                {{data.user?.certification?.label || ""}}
-              </p>
+              <div class="mhy-account-title">{{data.name || ""}}</div>
+              <p class="account-label">{{data.pub_time || ""}}</p>
             </div>
-            <div
-              class="mhy-follow-button sm-btn android-margin"
-              id="qrcode"
-            ></div>
+
             <svg
               t="1626764977164"
               class="mhy-logo"
@@ -66,76 +48,24 @@
           </div>
           <div class="mhy-article-page__header">
             <div class="mhy-article-page__title">
-              <h1>{{data.post.subject}}</h1>
-            </div>
-
-            <div class="mhy-article-page-info">
-              <div class="mhy-article-page-info__from">
-                <span>来自版块：</span>
-                <a
-                  href=""
-                  class="mhy-router-link mhy-article-page-info__from-name"
-                  target="_blank"
-                  >{{data?.forum?.name || ""}}
-                </a>
-              </div>
-              <div class="mhy-article-page-info__count">
-                <div class="mhy-article-page-info__count-item">
-                  <i class="mhy-icon iconfont icon-liulanshu"></i>
-                  <span title="">{{data.stat.view_num}}</span>
-                </div>
-                <div class="mhy-article-page-info__count-item">
-                  <i class="mhy-icon iconfont icon-dianzan"></i>
-                  <span title="">{{data.stat.like_num}}</span>
-                </div>
-                <div class="mhy-article-page-info__count-item mhy-clickable">
-                  <i class="mhy-icon iconfont icon-liuyanshu"></i>
-                  <span title="">{{data.stat.reply_num}}</span>
-                </div>
-                <!-- <div class="mhy-article-page-info__count-item">
-                  <i class="mhy-icon iconfont icon-shoucang"></i> <span title="">{{data.stat.bookmark_num}}</span>
-                </div> -->
-              </div>
-            </div>
-            <div class="mhy-article-page-updatetime">
-              <span>文章发表：{{data.post.created_time}}</span>
+              <h1>{{data.title}}</h1>
             </div>
           </div>
           <div class="mhy-article-page__content">
             <div class="mhy-img-text-article ql-container ql-snow">
               <div class="data_box mhy-img-text-article__content ql-editor">
-                {{@dataConent}}
+                {{@data.content}}
               </div>
             </div>
           </div>
           <div class="mhy-article-page__footer">
-            <div class="mhy-article-page-bottom">
-              <div class="mhy-topic-label-selector">
-                {{each data.topics val}}
-                <div class="mhy-topic-label mhy-topic-label-selector__item">
-                  <a
-                    href=""
-                    class="mhy-router-link mhy-topic-label__link"
-                    target="_blank"
-                  >
-                    <span>{{val.name}}</span>
-                  </a>
-                </div>
-                {{/each}}
-              </div>
-              <!-- <div class="mhy-button mhy-article-page__report mhy-button-default"><button class="mhy-button__button">举报</button></div> -->
-            </div>
+            <div class="mhy-article-page-bottom"></div>
 
             <div class="mhy-article-page-user-data">
-              <!-- <div class="mhy-article-page-user-data__item">
-                <div class="mhy-heart-click">
-                  <svg class="mhy-symbol-icon mhy-heart-click__icon"><use xlink:href="#icon-dianzanpc"></use></svg>
-                  <span>{{data.stat.like_num}}</span>
-                </div>
-              </div>
-              <div class="mhy-article-page-user-data__item">
-                <svg class="mhy-symbol-icon"><use xlink:href="#icon-shoucang"></use></svg> <span>{{data.stat.bookmark_num}}</span>
-              </div> -->
+              <div
+                class="mhy-follow-button sm-btn android-margin"
+                id="qrcode"
+              ></div>
             </div>
           </div>
         </div>
@@ -149,7 +79,7 @@
   ></script>
   <script type="text/javascript">
     var qrcode = new QRCode(document.getElementById("qrcode"), {
-      text: "https://bbs.mihoyo.com/ys/article/{{data.post.post_id}}", // 内容可以是文字，链接，邮箱
+      text: "{{data.url}}", // 内容可以是文字，链接，邮箱
       width: 130, //设置宽度
       height: 130, // 设置高度
       correctLevel: QRCode.CorrectLevel.H, // 设置容错级别，上面有介绍
