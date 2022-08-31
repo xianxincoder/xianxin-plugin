@@ -237,6 +237,8 @@ export default class Bilibili extends base {
     dynamic.data.face = author.face;
     dynamic.data.name = author.name;
 
+    dynamic.data.created = moment().format("YYYY年MM月DD日 HH:mm:ss");
+
     dynamic.data.type = data.type;
     if (data.type == "DYNAMIC_TYPE_AV") {
       desc = data?.modules?.module_dynamic?.major?.archive || {};
