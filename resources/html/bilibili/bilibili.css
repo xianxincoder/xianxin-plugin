@@ -78,7 +78,7 @@ body {
   white-space: pre-wrap;
 }
 .ql-editor {
-  max-height: 4500px;
+  max-height: 7500px;
   overflow-x: hidden;
 }
 .ql-editor .content {
