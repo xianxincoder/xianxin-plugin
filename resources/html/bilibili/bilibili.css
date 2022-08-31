@@ -1782,7 +1782,7 @@ textarea::placeholder {
   /* margin-top: 24px; */
 }
 .mhy-article-page__footer {
-  margin-top: 20px;
+  margin-top: 28px;
 }
 .mhy-article-page__auth {
   display: -webkit-box;
@@ -1939,9 +1939,7 @@ textarea::placeholder {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+  justify-content: space-between;
 }
 .mhy-article-page-bottom .mhy-topic-label-selector {
   -webkit-box-flex: 1;
@@ -2983,11 +2981,17 @@ textarea::placeholder {
   width: 130px;
   height: 130px;
 }
-.mhy-logo {
+.bilibili-logo {
   /* width: 20px;
   height: 20px; */
+  color: rgba(72 159 209);
   position: absolute;
   right: 75px;
+}
+.bottom-bilibili-logo {
+  /* width: 20px;
+  height: 20px; */
+  color: rgba(72 159 209);
 }
 .mhy-link-card.card-mall .card-title {
   overflow: hidden;
