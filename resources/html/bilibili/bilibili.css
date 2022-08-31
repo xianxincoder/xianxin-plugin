@@ -3160,3 +3160,12 @@ textarea::placeholder {
 .mhy-img-article__link-card-container {
   margin-top: 20px;
 }
+
+.pic-item {
+  padding: 12px 0;
+}
+.pic-item img {
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 8px;
+}

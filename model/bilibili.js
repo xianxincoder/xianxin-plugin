@@ -237,7 +237,7 @@ export default class Bilibili extends base {
       desc = data?.modules?.module_dynamic?.major?.archive || {};
       dynamic.data.title = desc.title;
       dynamic.data.content = desc.desc;
-      dynamic.data.url = desc.jump_url;
+      dynamic.data.url = this.resetLinkUrl(desc.jump_url);
       dynamic.data.pubTime = author.pub_time;
       dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
         "YYYY年MM月DD日 HH:mm:ss"
@@ -274,7 +274,7 @@ export default class Bilibili extends base {
       }
       dynamic.data.title = desc.title;
       dynamic.data.content = "";
-      dynamic.data.url = desc.jump_url;
+      dynamic.data.url = this.resetLinkUrl(desc.jump_url);
       dynamic.data.pubTime = author.pub_time;
       dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
         "YYYY年MM月DD日 HH:mm:ss"

@@ -39,6 +39,24 @@
             </svg>
             <!-- <img class="mhy-logo" src="{{pluResPath}}html/mysDetail/mys.png" /> -->
           </div>
+          {{if data.type=='DYNAMIC_TYPE_LIVE_RCMD'}}
+          <!-- <div class="mhy-article-page__header">
+            <div class="mhy-article-page__title">
+              <h1>{{data.title}}</h1>
+            </div>
+          </div> -->
+          <div class="mhy-article-page__content">
+            <div class="mhy-img-text-article ql-container ql-snow">
+              <div class="data_box mhy-img-text-article__content ql-editor">
+                {{each data.pics item}}
+                <div class="pic-item">
+                  <img src="{{item}}" />
+                </div>
+                {{/each}} {{data.title}}
+              </div>
+            </div>
+          </div>
+          {{else if type=='DYNAMIC_TYPE_AV'}}
           <div class="mhy-article-page__header">
             <div class="mhy-article-page__title">
               <h1>{{data.title}}</h1>
@@ -47,10 +65,49 @@
           <div class="mhy-article-page__content">
             <div class="mhy-img-text-article ql-container ql-snow">
               <div class="data_box mhy-img-text-article__content ql-editor">
-                {{@data.content}}
+                {{each data.pics item}}
+                <div class="pic-item">
+                  <img src="{{item}}" />
+                </div>
+                {{/each}} {{@data.content}}
               </div>
             </div>
           </div>
+          {{else if type=='DYNAMIC_TYPE_DRAW'}}
+          <div class="mhy-article-page__header">
+            <div class="mhy-article-page__title">
+              <h1>{{data.title}}</h1>
+            </div>
+          </div>
+          <div class="mhy-article-page__content">
+            <div class="mhy-img-text-article ql-container ql-snow">
+              <div class="data_box mhy-img-text-article__content ql-editor">
+                {{@data.content}} {{each data.pics item}}
+                <div class="pic-item">
+                  <img src="{{item}}" />
+                </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          {{else}}
+          <div class="mhy-article-page__header">
+            <div class="mhy-article-page__title">
+              <h1>{{data.title}}</h1>
+            </div>
+          </div>
+          <div class="mhy-article-page__content">
+            <div class="mhy-img-text-article ql-container ql-snow">
+              <div class="data_box mhy-img-text-article__content ql-editor">
+                {{@data.content}} {{each data.pics item}}
+                <div class="pic-item">
+                  <img src="{{item}}" />
+                </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          {{/if}}
           <div class="mhy-article-page__footer">
             <div class="mhy-article-page-bottom">
               <div>
