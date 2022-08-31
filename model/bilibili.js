@@ -332,10 +332,7 @@ export default class Bilibili extends base {
 
     if (!puppeteer.browser) return false;
 
-    console.log(param);
-
     const savePath = puppeteer.dealTpl("bilibili", param);
-    console.log(savePath);
 
     if (!savePath) return false;
 
