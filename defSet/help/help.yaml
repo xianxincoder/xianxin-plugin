@@ -35,6 +35,12 @@
     - icon: 攻略
       title: "#推送up列表"
       desc: "查看本群添加的up推送列表"
+    - icon: 问号
+      title: "#手动推送up"
+      desc: "手动触发定时推送任务"
+    - icon: 绑定账号
+      title: "#搜索up xxx"
+      desc: "根据昵称在b站搜索up"
 - group: 群战
   list:
     - icon: 养成计算
@@ -91,9 +97,6 @@
     - icon: ledger
       title: "神秘指令"
       desc: "情绪激动时易触发"
-    - icon: 统计
-      title: "#搜索up xxx"
-      desc: "根据昵称在b站搜索up"
 - group: 其他指令
   list:
     - icon: 问号
