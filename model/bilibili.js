@@ -190,12 +190,17 @@ export default class Bilibili extends base {
         return "return";
       }
 
-      const dynamicMsg = await this.render(data);
+      if (!this[id_str]) {
+        const dynamicMsg = await this.render(data);
+        const { img, code } = dynamicMsg;
+
+        this[id_str] = {
+          img: img[0],
+        };
+      }
+
       redis.set(`${this.key}${groupId}:${id_str}`, "1", { EX: 3600 * 10 });
-
-      const { img, code } = dynamicMsg;
-
-      await this.e.group.sendMsg(img[0]);
+      await this.e.group.sendMsg(this[id_str].img);
       await common.sleep(1000);
     } else {
       const dynamicMsg = this.buildSendDynamic(

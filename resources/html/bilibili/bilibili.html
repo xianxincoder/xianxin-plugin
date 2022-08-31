@@ -51,12 +51,7 @@
               </div>
             </div>
           </div>
-          {{else if type=='DYNAMIC_TYPE_AV'}}
-          <div class="mhy-article-page__header">
-            <div class="mhy-article-page__title">
-              <h1>{{data.title}}</h1>
-            </div>
-          </div>
+          {{else if data.type=='DYNAMIC_TYPE_AV'}}
           <div class="mhy-article-page__content">
             <div class="mhy-img-text-article ql-container ql-snow">
               <div class="data_box mhy-img-text-article__content ql-editor">
@@ -65,11 +60,12 @@
                   <img src="{{item}}" />
                 </div>
                 {{/each}}
+                <div><h3>{{data.title}}</h3></div>
                 <div class="content">{{data.content}}</div>
               </div>
             </div>
           </div>
-          {{else if type=='DYNAMIC_TYPE_DRAW'}}
+          {{else if data.type=='DYNAMIC_TYPE_DRAW'}}
           <div class="mhy-article-page__header">
             <div class="mhy-article-page__title">
               <h1>{{data.title}}</h1>
