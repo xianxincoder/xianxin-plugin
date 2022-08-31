@@ -249,6 +249,7 @@ export default class Bilibili extends base {
       dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
         "YYYY年MM月DD日 HH:mm:ss"
       );
+      dynamic.data.category = "视频动态";
       dynamic.data.pics = [desc.cover];
     } else if (data.type == "DYNAMIC_TYPE_WORD") {
       desc = data?.modules?.module_dynamic?.desc || {};
@@ -260,6 +261,7 @@ export default class Bilibili extends base {
         "YYYY年MM月DD日 HH:mm:ss"
       );
       dynamic.data.pics = [];
+      dynamic.data.category = "图文动态";
     } else if (data.type == "DYNAMIC_TYPE_DRAW") {
       desc = data?.modules?.module_dynamic?.desc || {};
       pics = data?.modules?.module_dynamic?.major?.draw?.items || [];
@@ -274,6 +276,7 @@ export default class Bilibili extends base {
         "YYYY年MM月DD日 HH:mm:ss"
       );
       dynamic.data.pics = pics;
+      dynamic.data.category = "图文动态";
     } else if (data.type == "DYNAMIC_TYPE_ARTICLE") {
       desc = data?.modules?.module_dynamic?.major?.article || {};
       if (desc.covers && desc.covers.length) {
@@ -287,6 +290,7 @@ export default class Bilibili extends base {
         "YYYY年MM月DD日 HH:mm:ss"
       );
       dynamic.data.pics = pics;
+      dynamic.data.category = "文章动态";
     } else if (data.type == "DYNAMIC_TYPE_FORWARD") {
       desc = data?.modules?.module_dynamic?.desc || {};
       dynamic.data.title = "";
@@ -298,6 +302,7 @@ export default class Bilibili extends base {
       dynamic.data.url = `${BiliDrawDynamicLinkUrl}${data.id_str}`;
       dynamic.data.pics = [data.cover];
       dynamic.data.orig = this.dynamicDataHandle(dynamic.orig);
+      dynamic.data.category = "转发动态";
     } else if (data.type == "DYNAMIC_TYPE_LIVE_RCMD") {
       dynamic.data.title = data.title;
       dynamic.data.content = "";
@@ -305,6 +310,7 @@ export default class Bilibili extends base {
       dynamic.data.pubTs = "";
       dynamic.data.url = data.url;
       dynamic.data.pics = [data.cover];
+      dynamic.data.category = "直播动态";
     }
 
     return {

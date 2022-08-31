@@ -2991,6 +2991,16 @@ textarea::placeholder {
   position: absolute;
   right: 20px;
 }
+
+.logo-text {
+  position: absolute;
+  top: 66px;
+  right: 46px;
+  color: rgba(72 159 209);
+  font-size: 18px;
+  font-weight: bold;
+}
+
 .bottom-bilibili-logo {
   /* width: 20px;
   height: 20px; */
@@ -3170,5 +3180,5 @@ textarea::placeholder {
 .pic-item img {
   width: 100%;
   margin: 0 auto;
-  border-radius: 8px;
+  border-radius: 10px;
 }
