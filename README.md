@@ -24,22 +24,13 @@
 
 | 命令 | 🌰 |
 | --- | --- |
-| B站推送| 新增支持长图模式发送动态，有#添加up推送 UID、#删除up推送 UID、#up推送列表、#搜索up xxx 等指令 |
-| 群战功能 | 有#加入群战、战@xx、#战榜、#战狂榜、摆烂榜、#逆天改命、狂战@xx、#战宝 等指令 |
-| #攻略 xx | 例如#攻略 清心 搜索原神精选的玩家攻略中的所有数据 |
-| #wiki xx | 例如#wiki 陌野不识故人 搜索原神wiki中的所有数据 |
-| #cos xx | 例如#cos 刻晴 随机发送刻晴的cos图片 |
-| #cos | 查看米游社中cos榜，可以通过#cos1#cos2查看更多，#cos详情 查看具体信息 |
-| #cosdby | 查看米游社大别野中cos榜，可以通过#cosdby1#cosdby2查看更多，#cosdby详情 查看具体信息 |
-| #cosdby xx | 例如#cosdby 西施 随机发送大别野指定角色的cos图片 |
-| #同人 | 查看米游社中同人榜，可以通过#同人1#同人2查看更多，#同人详情查看具体信息 |
-| #热门话题 | 检索米游社热门话题发送到群里，可以通过#热门话题1#热门话题2查看更多 |
-| #五子棋 | 有#五子棋、落子H8、#弃子 指令 |
-| #21点 | 有#21点、#叫牌、#停牌 指令 |
-| 神秘指令 | 情绪激动时易触发 |
-| #闲心功能 | 查看闲心插件功能列表 |
-| #闲心版本 | 查看最近维护的更新版本信息 |
-| #闲心插件更新 | 拉取最新代码更新插件，更新失败时可尝试 #闲心插件强制更新 |
+| 米游社功能 | <span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#cos 角色名</span> - 指定角色随机查看cos图片<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#cos #cos1 #cos详情</span> - 查看米游社中cos榜<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#攻略 xxx</span> - 查询原神精选的玩家攻略内容<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#wiki xxx</span> - 查询原神wiki的内容<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#cosdby #cosdby1 #cosdby详情</span> - 查看米游社中大别野cos榜<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#同人 #同人1 #同人详情</span> - 查看米游社中同人榜<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#热门话题</span> - 查看米游社中热聊话题 |
+| B站功能 | <span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#订阅up推送 UID #订阅up推送 直播 UID</span> - 检测up的B站动态进行推送<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#取消up推送 UID #取消up推送 直播 UID</span> - 删除对应up的B站对应动态推送<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#推送up列表</span> - 查看本群添加的up推送列表<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#手动推送up</span> - 手动触发定时推送任务<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#搜索up xxx</span> - 根据昵称在b站搜索up |
+| 群战 | <span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#加入群战 #群战信息</span> - 初始化群战信息<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#战宝</span> - 战胜战宝获得双倍战力<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">战@群友 #战@群友</span> - @一名群友进行群战<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">狂战@群友 #狂战@群友</span> - 战狂(战斗次数最多)的专属技能<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#逆天改命</span> - 战力最低的专属技能<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#战榜</span> - 查看群战rank榜<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#战狂榜</span> - 查看战斗次数排行榜<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#摆烂榜</span> - 查看战力倒数排行榜 |
+| 五子棋 | <span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#五子棋</span> - 开局五子棋游戏<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">落子+字母+数字 落子H8</span> - 五子棋落子<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#弃子</span> - 五子棋认输 |
+| 21点 | <span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#21点</span> - 开局21点游戏<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">叫牌</span> - 21点叫牌<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">停牌</span> - 停止叫牌 |
+| 闲心小工具 | <span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#赞我</span> - QQ名片点赞<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">神秘指令</span> - 情绪激动时易触发 |
+| 其他指令 | <span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#闲心插件版本</span> - 查看最近维护的版本信息<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#闲心插件更新</span> - 进行更新闲心插件<br/><span style="color: #d3bc8e;display: inline-block;padding: 0 3px;margin: 1px 2px;">#闲心插件强制更新</span> - 进行强制更新闲心插件 |
 
 
 ## 🖥 依赖
