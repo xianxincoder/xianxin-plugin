@@ -146,6 +146,8 @@ export default class Bilibili extends base {
               title: data.live_room.title,
               url: this.resetLinkUrl(data.live_room.url),
               cover: data.live_room.cover,
+              name: data.name,
+              face: data.face,
             });
           }
           lastLiveStatusInfo[key] = data.live_room.liveStatus;
@@ -304,6 +306,8 @@ export default class Bilibili extends base {
       dynamic.data.orig = this.dynamicDataHandle(dynamic.orig);
       dynamic.data.category = "转发动态";
     } else if (data.type == "DYNAMIC_TYPE_LIVE_RCMD") {
+      dynamic.data.face = data.face;
+      dynamic.data.name = data.name;
       dynamic.data.title = data.title;
       dynamic.data.content = "";
       dynamic.data.pubTime = "";

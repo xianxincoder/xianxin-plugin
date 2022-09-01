@@ -2994,11 +2994,12 @@ textarea::placeholder {
   color: rgba(72 159 209);
   position: absolute;
   right: 20px;
+  top: 10px;
 }
 
 .logo-text {
   position: absolute;
-  top: 66px;
+  top: 56px;
   right: 46px;
   color: rgba(72 159 209);
   font-size: 18px;
