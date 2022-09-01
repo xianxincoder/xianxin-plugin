@@ -75,20 +75,15 @@ export class tools extends plugin {
 
     this.e.reply("触发探索未知的神秘空间，请稍等...");
 
-    const randomMax = 600;
+    const isDimtown = this.toolsSetData.wocUrl.indexOf("dimtown.com") !== -1;
+
+    const randomMax = isDimtown ? 400 : 600;
 
     const randomIndex = Math.floor(Math.random() * randomMax) + 1;
 
     const page = Math.ceil(randomIndex / 10);
 
-    /**
-     * 目前已知图片源
-     * 1 https://yingtall.com/wp-json/wp/v2/posts?page=
-     * 2 https://dimtown.com/wp-json/wp/v2/posts?filter[cat]=8&page=
-     */
-    const fetchData = await fetch(
-      `https://yingtall.com/wp-json/wp/v2/posts?page=${page}`
-    );
+    const fetchData = await fetch(`${this.toolsSetData.wocUrl}${page}`);
     const resJsonData = await fetchData.json();
 
     const index = randomIndex % 10;
@@ -105,7 +100,11 @@ export class tools extends plugin {
       return "return";
     }
 
-    const images = this.getImages(content.rendered);
+    let images = this.getImages(content.rendered);
+
+    if (isDimtown && images.length > 1) {
+      images.pop();
+    }
 
     const forwarder =
       this.toolsSetData.forwarder == "bot"
