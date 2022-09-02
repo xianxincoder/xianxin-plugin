@@ -1,8 +1,10 @@
 import plugin from "../../../lib/plugins/plugin.js";
 import fetch from "node-fetch";
 import { segment } from "oicq";
+import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 import common from "../../../lib/common/common.js";
 import xxCfg from "../model/xxCfg.js";
+import Tools from "../model/tools.js";
 import fs from "node:fs";
 
 /**
@@ -31,6 +33,16 @@ export class tools extends plugin {
         {
           reg: "^#*(woc|卧槽)$",
           fnc: "woc",
+          permission: "master",
+        },
+        {
+          reg: "^#*闲心发电榜$",
+          fnc: "fdrank",
+          permission: "master",
+        },
+        {
+          reg: "^#*最近发电$",
+          fnc: "lately",
           permission: "master",
         },
       ],
@@ -170,6 +182,38 @@ export class tools extends plugin {
     } else {
       this.reply("额。没有探索到，换个姿势再来一次吧～");
     }
+  }
+
+  async fdrank() {
+    const fetchData = await fetch(
+      "https://afdian.net/api/creator/get-sponsors?user_id=2248d8420da611edb68952540025c377&type=amount&page=1"
+    );
+    const resJsonData = await fetchData.json();
+
+    const data = await new Tools(this.e).getRankData(resJsonData.data.list);
+
+    let img = await puppeteer.screenshot("fdrank", {
+      ...data,
+      type: "rank",
+      limitTop: 10,
+    });
+    this.e.reply(img);
+  }
+
+  async lately() {
+    const fetchData = await fetch(
+      "https://afdian.net/api/creator/get-sponsors?user_id=2248d8420da611edb68952540025c377&type=new&page=1"
+    );
+    const resJsonData = await fetchData.json();
+
+    const data = await new Tools(this.e).getRankData(resJsonData.data.list);
+
+    let img = await puppeteer.screenshot("fdrank", {
+      ...data,
+      type: "lately",
+      limitTop: 10,
+    });
+    this.e.reply(img);
   }
 
   getImages(string) {
