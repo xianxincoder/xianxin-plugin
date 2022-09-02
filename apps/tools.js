@@ -74,33 +74,39 @@ export class tools extends plugin {
     }
 
     this.e.reply("触发探索未知的神秘空间，请稍等...");
-
+    let images = [];
     const isDimtown = this.toolsSetData.wocUrl.indexOf("dimtown.com") !== -1;
+    if (this.toolsSetData.wocUrl.indexOf("/wp-json") !== -1) {
+      const randomMax = isDimtown ? 400 : 600;
 
-    const randomMax = isDimtown ? 400 : 600;
+      const randomIndex = Math.floor(Math.random() * randomMax) + 1;
 
-    const randomIndex = Math.floor(Math.random() * randomMax) + 1;
+      const page = Math.ceil(randomIndex / 10);
 
-    const page = Math.ceil(randomIndex / 10);
+      const fetchData = await fetch(`${this.toolsSetData.wocUrl}${page}`);
+      const resJsonData = await fetchData.json();
 
-    const fetchData = await fetch(`${this.toolsSetData.wocUrl}${page}`);
-    const resJsonData = await fetchData.json();
+      const index = randomIndex % 10;
 
-    const index = randomIndex % 10;
+      if (!resJsonData.length) {
+        this.e.reply("额。没有探索到，换个姿势再来一次吧～");
+        return "return";
+      }
 
-    if (!resJsonData.length) {
-      this.e.reply("额。没有探索到，换个姿势再来一次吧～");
-      return "return";
+      const content = resJsonData[index].content;
+
+      if (!content || !content.rendered) {
+        this.e.reply("额。没有探索到，换个姿势再来一次吧～");
+        return "return";
+      }
+
+      images = this.getImages(content.rendered);
+    } else {
+      const fetchData = await fetch(`${this.toolsSetData.wocUrl}`);
+      const resJsonData = await fetchData.json();
+
+      images = this.getJsonImages(JSON.stringify(resJsonData));
     }
-
-    const content = resJsonData[index].content;
-
-    if (!content || !content.rendered) {
-      this.e.reply("额。没有探索到，换个姿势再来一次吧～");
-      return "return";
-    }
-
-    let images = this.getImages(content.rendered);
 
     if (isDimtown && images.length > 1) {
       images.pop();
@@ -166,6 +172,16 @@ export class tools extends plugin {
     let img;
     while ((img = imgRex.exec(string))) {
       images.push(img[1]);
+    }
+    return images;
+  }
+
+  getJsonImages(string) {
+    const imgRex = /https?:\/\/.*?\.(jpg|JPG|png|PNG|gif|GIF|jpeg|JPEG)/g;
+    const images = [];
+    let img;
+    while ((img = imgRex.exec(string))) {
+      images.push(img[0]);
     }
     return images;
   }
