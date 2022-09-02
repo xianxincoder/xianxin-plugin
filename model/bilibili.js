@@ -144,7 +144,7 @@ export default class Bilibili extends base {
               id_str: `${new Date().getTime()}`,
               type: "DYNAMIC_TYPE_LIVE_RCMD",
               title: data.live_room.title,
-              url: this.resetLinkUrl(data.live_room.url),
+              url: this.formatUrl(data.live_room.url),
               cover: data.live_room.cover,
               name: data.name,
               face: data.face,
@@ -176,7 +176,7 @@ export default class Bilibili extends base {
     }
   }
 
-  // 群推送失败了，再推一次，再失败就算了
+  // 推送消息失败重试
   async pushAgain(groupId, msg) {
     await common.sleep(5000);
     Bot.pickGroup(groupId)
@@ -220,7 +220,7 @@ export default class Bilibili extends base {
       });
       await common.sleep(1000);
     } else {
-      const dynamicMsg = this.buildSendDynamic(
+      const dynamicMsg = this.buildDynamic(
         upName,
         pushDynamicData,
         false,
@@ -261,7 +261,7 @@ export default class Bilibili extends base {
       desc = data?.modules?.module_dynamic?.major?.archive || {};
       dynamic.data.title = desc.title;
       dynamic.data.content = desc.desc;
-      dynamic.data.url = this.resetLinkUrl(desc.jump_url);
+      dynamic.data.url = this.formatUrl(desc.jump_url);
       dynamic.data.pubTime = author.pub_time;
       dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
         "YYYY年MM月DD日 HH:mm:ss"
@@ -301,7 +301,7 @@ export default class Bilibili extends base {
       }
       dynamic.data.title = desc.title;
       dynamic.data.content = "";
-      dynamic.data.url = this.resetLinkUrl(desc.jump_url);
+      dynamic.data.url = this.formatUrl(desc.jump_url);
       dynamic.data.pubTime = author.pub_time;
       dynamic.data.pubTs = moment(author.pub_ts * 1000).format(
         "YYYY年MM月DD日 HH:mm:ss"
@@ -431,13 +431,12 @@ export default class Bilibili extends base {
     }
   }
 
-  // 构建动态消息
-  buildSendDynamic(upName, dynamic, isForward, setData) {
+  // 生成动态消息文字内容
+  buildDynamic(upName, dynamic, isForward, setData) {
     const BiliDrawDynamicLinkUrl = "https://m.bilibili.com/dynamic/";
     let desc, msg, pics, author;
     let title = `B站【${upName}】动态推送：\n`;
 
-    // 以下对象结构参考米游社接口，接口在顶部定义了
     switch (dynamic.type) {
       case "DYNAMIC_TYPE_AV":
         desc = dynamic?.modules?.module_dynamic?.major?.archive;
@@ -445,13 +444,12 @@ export default class Bilibili extends base {
         if (!desc && !author) return;
 
         title = `B站【${upName}】视频动态推送：\n`;
-        // 视频动态仅由标题、封面、链接组成
         msg = [
           title,
           `-----------------------------\n`,
           `标题：${desc.title}\n`,
           `${desc.desc}\n`,
-          `链接：${this.resetLinkUrl(desc.jump_url)}\n`,
+          `链接：${this.formatUrl(desc.jump_url)}\n`,
           `时间：${
             author
               ? moment(author.pub_ts * 1000).format("YYYY年MM月DD日 HH:mm:ss")
@@ -486,17 +484,16 @@ export default class Bilibili extends base {
         author = dynamic?.modules?.module_author;
         if (!desc && !pics && !author) return;
 
-        const DynamicPicCountLimit = setData.pushPicCountLimit || 3;
+        const dynamicPicCountLimit = setData.pushPicCountLimit || 3;
 
-        if (pics.length > DynamicPicCountLimit)
-          pics.length = DynamicPicCountLimit; // 最多发DynamicPicCountLimit张图，不然要霸屏了
+        if (pics.length > dynamicPicCountLimit)
+          pics.length = dynamicPicCountLimit;
 
         pics = pics.map((item) => {
           return segment.image(item.src);
         });
 
         title = `B站【${upName}】图文动态推送：\n`;
-        // 图文动态由内容（经过删减避免过长）、图片、链接组成
         msg = [
           title,
           `-----------------------------\n`,
@@ -524,12 +521,11 @@ export default class Bilibili extends base {
         }
 
         title = `B站【${upName}】文章动态推送：\n`;
-        // 专栏/文章动态由标题、图片、链接组成
         msg = [
           title,
           `-----------------------------\n`,
           `标题：${desc.title}\n`,
-          `链接：${this.resetLinkUrl(desc.jump_url)}\n`,
+          `链接：${this.formatUrl(desc.jump_url)}\n`,
           `时间：${
             author
               ? moment(author.pub_ts * 1000).format("YYYY年MM月DD日 HH:mm:ss")
@@ -539,18 +535,15 @@ export default class Bilibili extends base {
         ];
 
         return msg;
-      case "DYNAMIC_TYPE_FORWARD": // 转发的动态
+      case "DYNAMIC_TYPE_FORWARD":
         desc = dynamic?.modules?.module_dynamic?.desc;
         author = dynamic?.modules?.module_author;
         if (!desc && !author) return;
         if (!dynamic.orig) return;
 
-        let orig = this.buildSendDynamic(upName, dynamic.orig, true, setData);
+        let orig = this.buildDynamic(upName, dynamic.orig, true, setData);
         if (orig && orig.length) {
-          // 掐头去尾
           orig = orig.slice(2);
-          // orig.shift();
-          // orig.pop();
         } else {
           return false;
         }
@@ -573,7 +566,6 @@ export default class Bilibili extends base {
         return msg;
       case "DYNAMIC_TYPE_LIVE_RCMD":
         title = `B站【${upName}】直播动态推送：\n`;
-        // 直播动态由标题、封面、链接组成
         msg = [
           title,
           `-----------------------------\n`,
@@ -589,26 +581,21 @@ export default class Bilibili extends base {
     }
   }
 
-  // 限制动态字数/行数，避免过长影响观感（霸屏）
+  // 限制文字模式下动态内容的字数和行数
   dynamicContentLimit(content, setData) {
     content = content.split("\n");
 
-    const DynamicContentLenLimit = setData.pushContentLenLimit || 100;
-
-    const DynamicContentLineLimit = setData.pushContentLineLimit || 5;
-
-    let lenLimit = DynamicContentLenLimit;
-    let lineLimit = DynamicContentLineLimit;
+    let lenLimit = setData.pushContentLenLimit || 100;
+    let lineLimit = setData.pushContentLineLimit || 5;
 
     if (content.length > lineLimit) content.length = lineLimit;
 
-    let contentLen = 0; // 内容总长度
-    let outLen = false; // 溢出 flag
+    let contentLen = 0;
+    let outLen = false;
     for (let i = 0; i < content.length; i++) {
-      let len = lenLimit - contentLen; // 这一段内容允许的最大长度
+      let len = lenLimit - contentLen;
 
       if (outLen) {
-        // 溢出了，后面的直接删掉
         content.splice(i--, 1);
         continue;
       }
@@ -624,9 +611,9 @@ export default class Bilibili extends base {
     return content.join("\n");
   }
 
-  // B站返回的url有时候多两斜杠，去掉
-  resetLinkUrl(url) {
-    if (url.indexOf("//") === 0) {
+  // 去掉多余斜杠
+  formatUrl(url) {
+    if (url.indexOf("//") == 0) {
       return url.substr(2);
     }
 
