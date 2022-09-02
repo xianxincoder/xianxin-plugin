@@ -112,6 +112,12 @@ export class tools extends plugin {
       images.pop();
     }
 
+    const imageCountLimit = this.toolsSetData.imageCountLimit || 10;
+
+    if (images.length > imageCountLimit) {
+      images.length = imageCountLimit;
+    }
+
     const forwarder =
       this.toolsSetData.forwarder == "bot"
         ? { nickname: Bot.nickname, user_id: Bot.uin }

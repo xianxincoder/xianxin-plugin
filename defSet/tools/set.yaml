@@ -32,7 +32,7 @@ mute: 100
 #
 # 以下慎用，封号概不负责！！！
 # 三次元涩图
-# http://www.25252.xyz/ecy.php?return=jsonpro
+# http://www.25252.xyz/3.php?return=jsonpro
 # 随机
 # http://www.25252.xyz/3.php?return=jsonpro
 # 随机看腿
@@ -43,4 +43,9 @@ mute: 100
 # http://www.25252.xyz/kt.php?return=jsonpro
 # 随机二次元涩图
 # http://www.25252.xyz/ecy.php?return=jsonpro
+# cos
+# http://ovooa.com/API/cosplay/api.php
 wocUrl: "https://yingtall.com/wp-json/wp/v2/posts?page="
+
+# 限制图片数量，默认最多发送10张
+imageCountLimit: 10
