@@ -94,6 +94,9 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 |   | 10 |
 | Victoria. | 15 |
 | 三十一. | 15 |
-| 纪元 | 5 |
+| 纪元 | 10 |
 | 零食 | 10 |
+| 落叶红尘君莫笑 | 15 |
+| 不要欺负一一 | 10 |
+
 
