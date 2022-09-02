@@ -318,7 +318,7 @@ export default class Bilibili extends base {
       );
       dynamic.data.url = `${BiliDrawDynamicLinkUrl}${data.id_str}`;
       dynamic.data.pics = [data.cover];
-      dynamic.data.orig = this.dynamicDataHandle(dynamic.orig);
+      dynamic.data.orig = this.dynamicDataHandle(data.orig);
       dynamic.data.category = "转发动态";
     } else if (data.type == "DYNAMIC_TYPE_LIVE_RCMD") {
       dynamic.data.face = data.face;
