@@ -114,10 +114,15 @@ export class tools extends plugin {
 
       images = this.getImages(content.rendered);
     } else {
-      const fetchData = await fetch(`${this.toolsSetData.wocUrl}`);
-      const resJsonData = await fetchData.json();
+      try {
+        const fetchData = await fetch(`${this.toolsSetData.wocUrl}`);
+        const resJsonData = await fetchData.json();
 
-      images = this.getJsonImages(JSON.stringify(resJsonData));
+        images = this.getJsonImages(JSON.stringify(resJsonData));
+      } catch (error) {
+        const image = await this.getBufferImage(`${this.toolsSetData.wocUrl}`);
+        images = [image];
+      }
     }
 
     if (isDimtown && images.length > 1) {
@@ -234,5 +239,25 @@ export class tools extends plugin {
       images.push(img[0]);
     }
     return images;
+  }
+
+  // 获取图片
+  async getBufferImage(url) {
+    let response = await fetch(url, {
+      method: "get",
+      responseType: "arraybuffer",
+    });
+
+    const buffer = await response.arrayBuffer();
+
+    return (
+      "base64://" +
+      btoa(
+        new Uint8Array(buffer).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ""
+        )
+      )
+    );
   }
 }
