@@ -37,23 +37,23 @@ export class mys extends plugin {
           fnc: "cos",
         },
         {
-          reg: "^#cos[a-z]*[0-9]*详情$",
+          reg: "^#*cos[a-z]*[0-9]*详情$",
           fnc: "cosDetail",
         },
         {
-          reg: "^#cos(dby)*\\s*.*$",
+          reg: "^#*cos(dby)*\\s*.*$",
           fnc: "searchCos",
         },
         {
-          reg: "^#同人[0-9]*$",
+          reg: "^#*同人[0-9]*$",
           fnc: "acgn",
         },
         {
-          reg: "^#同人[0-9]*详情$",
+          reg: "^#*同人[0-9]*详情$",
           fnc: "acgnDetail",
         },
         {
-          reg: "^#热门话题[0-9]*$",
+          reg: "^#*热门话题[0-9]*$",
           fnc: "hotchat",
         },
       ],

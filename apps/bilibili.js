@@ -29,7 +29,7 @@ export class bilibili extends plugin {
       priority: 500,
       rule: [
         {
-          reg: "^#up\\s*[0-9]*$",
+          reg: "^#*up\\s*[0-9]*$",
           fnc: "detail",
         },
         {
@@ -43,7 +43,7 @@ export class bilibili extends plugin {
           permission: "master",
         },
         {
-          reg: "^#推送(up)?列表$",
+          reg: "^#*推送(up)?列表$",
           fnc: "listPush",
           permission: "master",
         },
@@ -53,7 +53,7 @@ export class bilibili extends plugin {
           permission: "master",
         },
         {
-          reg: "^#手动推送up$",
+          reg: "^#*手动推送up$",
           fnc: "newPushTask",
           permission: "master",
         },

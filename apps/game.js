@@ -28,11 +28,11 @@ export class game extends plugin {
       priority: 500,
       rule: [
         {
-          reg: "^#(我的|加入)?群战(信息)?$",
+          reg: "^#*(我的|加入)?群战(信息)?$",
           fnc: "mypk",
         },
         {
-          reg: "^#战榜$",
+          reg: "^#*战榜$",
           fnc: "rank",
         },
         {
@@ -48,27 +48,27 @@ export class game extends plugin {
         //   fnc: "time",
         // },
         {
-          reg: "^#战狂(榜)?$",
+          reg: "^#*战狂(榜)?$",
           fnc: "timeRank",
         },
         {
-          reg: "^#摆烂榜$",
+          reg: "^#*摆烂榜$",
           fnc: "invertRank",
         },
         {
-          reg: "^#逆天改命$",
+          reg: "^#*逆天改命$",
           fnc: "chance",
         },
         {
-          reg: "^#战宝$",
+          reg: "^#*战宝$",
           fnc: "exp",
         },
         {
-          reg: "^#注销群战$",
+          reg: "^#*注销群战$",
           fnc: "logout",
         },
         {
-          reg: "^#重置群战战力$",
+          reg: "^#*重置群战战力$",
           permission: "master",
           fnc: "reset",
         },

@@ -24,11 +24,11 @@ export class update extends plugin {
       priority: 4000,
       rule: [
         {
-          reg: "^#闲心(插件)?(强制)?更新",
+          reg: "^#*闲心(插件)?(强制)?更新",
           fnc: "update",
         },
         {
-          reg: "^#闲心(插件)?版本$",
+          reg: "^#*闲心(插件)?版本$",
           fnc: "version",
         },
       ],

@@ -27,7 +27,7 @@ export class blackjack extends plugin {
       priority: 500,
       rule: [
         {
-          reg: "^#21(点)?$",
+          reg: "^#*21(点)?$",
           fnc: "startBlackjack",
         },
         {

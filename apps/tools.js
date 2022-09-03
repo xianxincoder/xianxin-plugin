@@ -29,7 +29,7 @@ export class tools extends plugin {
       priority: 5000,
       rule: [
         {
-          reg: "^#赞我$",
+          reg: "^#*赞我$",
           fnc: "thumbsUpMe",
         },
         {
