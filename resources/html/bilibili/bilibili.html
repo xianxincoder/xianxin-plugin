@@ -13,7 +13,15 @@
     <div class="container" id="container">
       <div class="mhy-article-page__main mhy-container">
         <div class="account">
-          <img src="{{data.face}}" class="mhy-account-avatar" />
+          <div
+            class="avatar"
+            style="margin-right: {{data.pendant ? '36px' : '18px'}};"
+          >
+            <img src="{{data.face}}" class="mhy-account-avatar" />
+            {{if data.pendant}}
+            <img class="pendant" alt="" src="{{data.pendant}}" />
+            {{/if}}
+          </div>
           <div class="account-info">
             <div class="mhy-account-title">{{data.name || ""}}</div>
             <p class="account-label">{{data.pubTs || ""}}</p>

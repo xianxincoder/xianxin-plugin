@@ -254,6 +254,8 @@ export default class Bilibili extends base {
     dynamic.data.face = author.face;
     dynamic.data.name = author.name;
 
+    dynamic.data.pendant = author?.pendant?.image || data?.pendant?.image;
+
     dynamic.data.created = moment().format("YYYY年MM月DD日 HH:mm:ss");
 
     dynamic.data.type = data.type;

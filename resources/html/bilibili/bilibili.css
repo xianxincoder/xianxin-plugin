@@ -1320,6 +1320,12 @@ a {
   position: relative;
 }
 
+.account .avatar {
+  width: 90px;
+  margin-right: 18px;
+  position: relative;
+}
+
 .account .mhy-account-avatar {
   width: 90px;
   height: 90px;
@@ -1327,6 +1333,14 @@ a {
   margin-right: 18px;
   border-radius: 100%;
   vertical-align: top;
+}
+
+.account .pendant {
+  width: 155px;
+  height: 155px;
+  position: absolute;
+  left: -30px;
+  top: -30px;
 }
 
 .account .mhy-authentication-mark-container {
