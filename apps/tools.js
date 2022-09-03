@@ -18,6 +18,8 @@ if (!fs.existsSync(toolsSetFile)) {
   );
 }
 
+let urlTypeCache = {};
+
 export class tools extends plugin {
   constructor() {
     super({
@@ -114,14 +116,22 @@ export class tools extends plugin {
 
       images = this.getImages(content.rendered);
     } else {
-      try {
-        const fetchData = await fetch(`${this.toolsSetData.wocUrl}`);
-        const resJsonData = await fetchData.json();
-
-        images = this.getJsonImages(JSON.stringify(resJsonData));
-      } catch (error) {
+      if (urlTypeCache[this.toolsSetData.wocUrl] == "buffer") {
         const image = await this.getBufferImage(`${this.toolsSetData.wocUrl}`);
         images = [image];
+      } else {
+        try {
+          const fetchData = await fetch(`${this.toolsSetData.wocUrl}`);
+          const resJsonData = await fetchData.json();
+
+          images = this.getJsonImages(JSON.stringify(resJsonData));
+        } catch (error) {
+          urlTypeCache[this.toolsSetData.wocUrl] = "buffer";
+          const image = await this.getBufferImage(
+            `${this.toolsSetData.wocUrl}`
+          );
+          images = [image];
+        }
       }
     }
 
