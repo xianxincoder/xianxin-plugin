@@ -611,12 +611,11 @@ export default class Bilibili extends base {
     return content.join("\n");
   }
 
-  // 去掉多余斜杠
+  // 处理斜杠开头的url
   formatUrl(url) {
     if (url.indexOf("//") == 0) {
-      return url.substr(2);
+      return `https:${url}`;
     }
-
     return url;
   }
 }
