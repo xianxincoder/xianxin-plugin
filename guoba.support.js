@@ -157,6 +157,7 @@ export function supportGuoba() {
             options: [
               { label: "图片模式", value: 0 },
               { label: "文字模式", value: 1 },
+              { label: "分片式图片模式", value: 2 },
             ],
             placeholder: "设置攻略消息模式",
           },
