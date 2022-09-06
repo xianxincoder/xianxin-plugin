@@ -8,6 +8,11 @@ body {
   transform: scale(1);
   transform-origin: 0 0;
 }
+.orig .container {
+  width: 800px !important;
+  background-color: #f5f5f5 !important;
+  border-radius: 10px !important;
+}
 .container {
   width: 900px;
   background-color: #fff;
@@ -100,6 +105,10 @@ a {
 .mhy-container {
   background-color: #fff;
   border-radius: 4px;
+}
+.orig .mhy-container {
+  background-color: #f5f5f5 !important;
+  border-radius: 10px !important;
 }
 .mhy-forum {
   padding-top: 56px;
