@@ -45,11 +45,6 @@ export class tools extends plugin {
           permission: "master",
         },
         {
-          reg: "^#*结束转发$",
-          fnc: "finshForward",
-          permission: "master",
-        },
-        {
           reg: "^#*闲心发电榜$",
           fnc: "fdrank",
           permission: "master",
@@ -219,12 +214,20 @@ export class tools extends plugin {
       return;
     }
 
-    this.setContext("doForward");
+    this.setContext("doForward", this.e.isGroup);
     /** 回复 */
-    await this.reply("请发送要转发的内容", false, { at: true });
+    await this.reply("请发送要转发的内容，如需停止请发送 #结束转发", false, {
+      at: true,
+    });
   }
 
   doForward() {
+    if (new RegExp(/^#*(结束|停止)转发$/g).test(this.e.msg)) {
+      this.reply("已停止转发");
+      this.finish("doForward", this.e.isGroup);
+      return;
+    }
+
     /** 转发内容 */
     Bot.pickGroup(Number(groupId))
       .sendMsg(this.e.message)
@@ -232,8 +235,6 @@ export class tools extends plugin {
         this.reply("发送失败，请确认发送的群号正确");
         return;
       });
-
-    this.finish("doForward");
   }
 
   async fdrank() {
