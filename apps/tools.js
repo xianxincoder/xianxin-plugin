@@ -20,6 +20,8 @@ if (!fs.existsSync(toolsSetFile)) {
 
 let urlTypeCache = {};
 
+let groupId = "";
+
 export class tools extends plugin {
   constructor() {
     super({
@@ -35,6 +37,16 @@ export class tools extends plugin {
         {
           reg: "^#*(woc|卧槽)$",
           fnc: "woc",
+          permission: "master",
+        },
+        {
+          reg: "^#*转发\\s*[0-9]{5,11}$",
+          fnc: "forward",
+          permission: "master",
+        },
+        {
+          reg: "^#*结束转发$",
+          fnc: "finshForward",
           permission: "master",
         },
         {
@@ -197,6 +209,31 @@ export class tools extends plugin {
     } else {
       this.reply("额。没有探索到，换个姿势再来一次吧～");
     }
+  }
+
+  async forward() {
+    groupId = this.e.msg.replace(/#*转发\s*/g, "") || 0;
+
+    if (!groupId) {
+      this.reply("请在命令中携带要转发的群号，例如 #转发 426961091");
+      return;
+    }
+
+    this.setContext("doForward");
+    /** 回复 */
+    await this.reply("请发送要转发的内容", false, { at: true });
+  }
+
+  doForward() {
+    /** 转发内容 */
+    Bot.pickGroup(Number(groupId))
+      .sendMsg(this.e.message)
+      .catch((err) => {
+        this.reply("发送失败，请确认发送的群号正确");
+        return;
+      });
+
+    this.finish("doForward");
   }
 
   async fdrank() {
