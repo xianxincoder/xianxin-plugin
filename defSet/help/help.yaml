@@ -99,7 +99,7 @@
       desc: "情绪激动时易触发"
     - icon: team
       title: "#转发 群号"
-      desc: "转发消息到指定群"
+      desc: "转发消息到指定群,查看群可用 #群列表"
 - group: 其他指令
   list:
     - icon: 问号

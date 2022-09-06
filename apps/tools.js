@@ -45,6 +45,11 @@ export class tools extends plugin {
           permission: "master",
         },
         {
+          reg: "^#*群列表$",
+          fnc: "groupList",
+          permission: "master",
+        },
+        {
           reg: "^#*闲心发电榜$",
           fnc: "fdrank",
           permission: "master",
@@ -209,8 +214,13 @@ export class tools extends plugin {
   async forward() {
     groupId = this.e.msg.replace(/#*转发\s*/g, "") || 0;
 
-    if (!groupId) {
-      this.reply("请在命令中携带要转发的群号，例如 #转发 426961091");
+    let list = [];
+    for (var [key, value] of Bot.gl) {
+      list.push(`${value.group_name} ${key}`);
+    }
+
+    if (!Bot.gl.get(Number(groupId))) {
+      this.reply(`未找到当前群组，您加入的群组有\n${list.join("\n")}`);
       return;
     }
 
@@ -235,6 +245,14 @@ export class tools extends plugin {
         this.reply("发送失败，请确认发送的群号正确");
         return;
       });
+  }
+
+  groupList() {
+    let list = [];
+    for (var [key, value] of Bot.gl) {
+      list.push(`${value.group_name} ${key}`);
+    }
+    this.reply(`目前加入的群组有\n${list.join("\n")}`);
   }
 
   async fdrank() {
