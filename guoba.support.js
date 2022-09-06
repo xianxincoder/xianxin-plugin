@@ -1,10 +1,10 @@
 import path from "path";
 const _path = process.cwd() + "/plugins/xianxin-plugin";
 import xxCfg from "./model/xxCfg.js";
+
 /**
  *  支持锅巴配置
  */
-
 export function supportGuoba() {
   return {
     pluginInfo: {
@@ -224,16 +224,16 @@ export function supportGuoba() {
         const setedData = { bilibili: {}, game: {}, mys: {}, tools: {} };
 
         for (let key in mergedData) {
-          if (data[`bilibili.${key}`]) {
+          if (typeof data[`bilibili.${key}`] != "undefined") {
             setedData.bilibili[key] = data[`bilibili.${key}`];
           }
-          if (data[`game.${key}`]) {
+          if (typeof data[`game.${key}`] != "undefined") {
             setedData.game[key] = data[`game.${key}`];
           }
-          if (data[`mys.${key}`]) {
+          if (typeof data[`mys.${key}`] != "undefined") {
             setedData.mys[key] = data[`mys.${key}`];
           }
-          if (data[`tools.${key}`]) {
+          if (typeof data[`tools.${key}`] != "undefined") {
             setedData.tools[key] = data[`tools.${key}`];
           }
         }
