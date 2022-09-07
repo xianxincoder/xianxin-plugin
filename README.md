@@ -67,7 +67,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 昵称 | 金额 |
 | --- | --- |
 | Fei. | 33 |
-| 林木森つ | 20 |
+| 林木森つ | 25 |
 | 星辰之梦 | 6.6 |
 | 唉嘿 | 5.2 |
 | 萍| 5 |
@@ -100,4 +100,5 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 不要欺负一一 | 10 |
 | 小源 | 28.2 |
 | AAA | 10 |
+| 乐笙 | 30 |
 

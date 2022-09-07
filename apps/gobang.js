@@ -164,7 +164,10 @@ export class gobang extends plugin {
     this.dropArray({ x, y });
 
     const data = await new Gobang(this.e).getGobangData({
-      gobangData: JSON.stringify({ state: gobangState[this.group_id] }),
+      gobangData: JSON.stringify({
+        state: gobangState[this.group_id],
+        current: { x, y },
+      }),
     });
 
     let img = await puppeteer.screenshot("gobang", {
