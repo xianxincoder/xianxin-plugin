@@ -344,3 +344,63 @@ a {
 .obc-tmpl table td>img:only-child {
   display: block;
 }
+
+.obc-tmpl .obc-tmpl__material {
+  display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.obc-tmpl .obc-tmpl__material-item {
+  line-height: 0;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.obc-tmpl .obc-tmpl__material-href {
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+.obc-tmpl .obc-tmpl__material-image {
+  background: #f0ece8;
+  width: 100%;
+  height: 50px;
+  display: block;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.obc-tmpl .obc-tmpl__material-name {
+  background: #e0dad3;
+  color: #333;
+  font-size: 10px;
+  line-height: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 3px 0;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  position: absolute;
+  bottom: -10px;
+  width: 100%;
+}
+
+.obc-tmpl .obc-tmpl__material-num {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 10px;
+  text-shadow: 0 0 2px rgb(0 0 0 / 80%);
+}
