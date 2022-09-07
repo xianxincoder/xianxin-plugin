@@ -177,16 +177,16 @@ export default class Bilibili extends base {
   }
 
   // 推送消息失败重试
-  async pushAgain(groupId, msg) {
-    await common.sleep(5000);
-    Bot.pickGroup(groupId)
-      .sendMsg(msg)
-      .catch((err) => {
-        logger.error(`群[${groupId}]第二次推送失败：${JSON.stringify(err)}`);
-      });
+  // async pushAgain(groupId, msg) {
+  //   await common.sleep(5000);
+  //   Bot.pickGroup(groupId)
+  //     .sendMsg(msg)
+  //     .catch((err) => {
+  //       logger.error(`群[${groupId}]第二次推送失败：${JSON.stringify(err)}`);
+  //     });
 
-    return;
-  }
+  //   return;
+  // }
 
   async sendDynamic(groupId, upName, pushDynamicData, setData) {
     const id_str = pushDynamicData.id_str;
@@ -215,8 +215,8 @@ export default class Bilibili extends base {
 
       redis.set(`${this.key}${groupId}:${id_str}`, "1", { EX: 3600 * 10 });
       await this.e.group.sendMsg(this[id_str].img).catch((err) => {
-        logger.error(`群[${groupId}]第一次推送失败：${JSON.stringify(err)}`);
-        this.pushAgain(Number(groupId), this[id_str].img);
+        logger.error(`群[${groupId}]推送失败：${JSON.stringify(err)}`);
+        // this.pushAgain(Number(groupId), this[id_str].img);
       });
       await common.sleep(1000);
     } else {
