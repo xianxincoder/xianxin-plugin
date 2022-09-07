@@ -67,7 +67,7 @@ export class mys extends plugin {
    * rule - 米游社热门话题
    */
   async hotchat() {
-    let index = this.e.msg.replace(/#热门话题/g, "") || 0;
+    let index = this.e.msg.replace(/#*热门话题/g, "") || 0;
     const chatData = await new Mys().getChatData();
 
     const data = chatData[index];
@@ -85,7 +85,7 @@ export class mys extends plugin {
   async acgn() {
     const isPrivate = this.e.isPrivate;
 
-    let index = this.e.msg.replace(/#同人/g, "") || 0;
+    let index = this.e.msg.replace(/#*同人/g, "") || 0;
     const acgnData = await new Mys().getAcgnData();
     const data = acgnData[index];
     if (data) {
@@ -121,7 +121,7 @@ export class mys extends plugin {
    * rule - 米游社同人详情
    */
   async acgnDetail() {
-    let index = this.e.msg.replace(/#同人/g, "").replace("详情", "") || 0;
+    let index = this.e.msg.replace(/#*同人/g, "").replace("详情", "") || 0;
     const acgnData = await new Mys().getAcgnData();
     const data = acgnData[index];
     if (data) {
@@ -138,7 +138,7 @@ export class mys extends plugin {
    */
   async cos() {
     const isPrivate = this.e.isPrivate;
-    let index = this.e.msg.replace(/#cos/g, "").replace(/dby/g, "") || 0;
+    let index = this.e.msg.replace(/#*cos/g, "").replace(/dby/g, "") || 0;
 
     let key = "ys";
     if (this.e.msg.indexOf("dby") !== -1) {
@@ -184,8 +184,10 @@ export class mys extends plugin {
    */
   async cosDetail() {
     let index =
-      this.e.msg.replace(/#cos/g, "").replace(/dby/g, "").replace("详情", "") ||
-      0;
+      this.e.msg
+        .replace(/#*cos/g, "")
+        .replace(/dby/g, "")
+        .replace("详情", "") || 0;
 
     let key = "ys";
     if (this.e.msg.indexOf("dby") !== -1) {

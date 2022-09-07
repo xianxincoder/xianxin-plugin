@@ -242,7 +242,7 @@ export class bilibili extends plugin {
   }
 
   async detail() {
-    let uid = this.e.msg.replace(/#up/g, "").trim();
+    let uid = this.e.msg.replace(/#*up/g, "").trim();
 
     const userRes = await fetch(
       `https://api.bilibili.com/x/relation/stat?vmid=${uid}`
@@ -386,4 +386,3 @@ export class bilibili extends plugin {
     return Array.from(newType);
   }
 }
-
