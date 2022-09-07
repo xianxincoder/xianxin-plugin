@@ -67,6 +67,11 @@ export class tools extends plugin {
 
     this.rule[1].permission = this.toolsSetData.permission;
     this.rule[1].reg = `^#*(${this.toolsSetData.keywords.join("|")})$`;
+
+    this.list = [];
+    for (var [key, value] of Bot.gl) {
+      this.list.push(`${value.group_name} ${key}`);
+    }
   }
 
   async thumbsUpMe() {
@@ -214,13 +219,8 @@ export class tools extends plugin {
   async forward() {
     groupId = this.e.msg.replace(/#*转发\s*/g, "") || 0;
 
-    let list = [];
-    for (var [key, value] of Bot.gl) {
-      list.push(`${value.group_name} ${key}`);
-    }
-
     if (!Bot.gl.get(Number(groupId))) {
-      this.reply(`未找到当前群组，您加入的群组有\n${list.join("\n")}`);
+      this.reply(`未找到当前群组，您加入的群组有\n${this.list.join("\n")}`);
       return;
     }
 
@@ -238,6 +238,10 @@ export class tools extends plugin {
       return;
     }
 
+    if (this.e.isGroup) {
+      return;
+    }
+
     /** 转发内容 */
     Bot.pickGroup(Number(groupId))
       .sendMsg(this.e.message)
@@ -248,11 +252,7 @@ export class tools extends plugin {
   }
 
   groupList() {
-    let list = [];
-    for (var [key, value] of Bot.gl) {
-      list.push(`${value.group_name} ${key}`);
-    }
-    this.reply(`目前加入的群组有\n${list.join("\n")}`);
+    this.reply(`目前加入的群组有\n${this.list.join("\n")}`);
   }
 
   async fdrank() {
