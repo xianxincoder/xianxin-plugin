@@ -156,7 +156,7 @@ export class blackjack extends plugin {
       return;
     }
 
-    // 获取牌点
+    // 获取纸牌
     const randomMax = Math.round(cards[this.group_id].length);
 
     let index = Math.floor(Math.random() * randomMax);
@@ -178,7 +178,7 @@ export class blackjack extends plugin {
     msg.push(segment.at(this.e.user_id, this.e.sender.card || this.e.user_id));
     msg.push(`本轮获取的纸牌：${card[0]}${card[1]}\n`);
 
-    msg.push("当前牌点情况：\n");
+    msg.push("当前纸牌情况：\n");
 
     let selfPoint = 0;
     if (state[this.e.sender.user_id] && state[this.e.sender.user_id].length) {
@@ -196,7 +196,7 @@ export class blackjack extends plugin {
       state[gameing[this.group_id].self.user_id] &&
       state[gameing[this.group_id].self.user_id].length
     ) {
-      msg.push("\n对方牌点情况：\n");
+      msg.push("\n对方纸牌情况：\n");
       let enemyPoint = 0;
       if (
         state[gameing[this.group_id].enemy.user_id] &&
@@ -220,10 +220,10 @@ export class blackjack extends plugin {
       count[this.group_id] = 0;
       blackjaceState[this.group_id] = new Array();
       let message = [];
-      if (info == "自爆") {
+      if (info == "爆掉") {
         message = [
           segment.at(this.e.user_id, this.e.sender.card || this.e.user_id),
-          ` 自爆，败北！\n`,
+          ` 爆掉，败北！\n`,
           ...msg,
         ];
       } else {
@@ -342,7 +342,7 @@ export class blackjack extends plugin {
         segment.at(this.e.user_id, this.e.sender.card || this.e.user_id)
       );
 
-      msg.push("当前牌点情况：\n");
+      msg.push("当前纸牌情况：\n");
 
       let selfPoint = 0;
       if (state[this.e.sender.user_id] && state[this.e.sender.user_id].length) {
@@ -360,7 +360,7 @@ export class blackjack extends plugin {
         state[gameing[this.group_id].self.user_id] &&
         state[gameing[this.group_id].self.user_id].length
       ) {
-        msg.push("\n对方牌点情况：\n");
+        msg.push("\n对方纸牌情况：\n");
         let enemyPoint = 0;
         if (
           state[gameing[this.group_id].enemy.user_id] &&
@@ -387,9 +387,9 @@ export class blackjack extends plugin {
       blackjaceState[this.group_id] = new Array();
 
       let message = [];
-      if (info == "自爆") {
+      if (info == "爆掉") {
         message = [
-          `${this.e.sender.card || this.e.user_id} 自爆，败北！\n`,
+          `${this.e.sender.card || this.e.user_id} 爆掉，败北！\n`,
           ...msg,
         ];
       } else {
@@ -446,7 +446,7 @@ export class blackjack extends plugin {
     }
 
     if (point > 21) {
-      return "自爆";
+      return "爆掉";
     }
 
     if (isStop) {
