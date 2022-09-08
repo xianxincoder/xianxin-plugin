@@ -45,6 +45,11 @@ export class tools extends plugin {
           permission: "master",
         },
         {
+          reg: "^#*转发(命令|帮助|菜单|help|说明|功能|指令|使用说明)$",
+          fnc: "forwardHelp",
+          permission: "master",
+        },
+        {
           reg: "^#*群列表$",
           fnc: "groupList",
           permission: "master",
@@ -62,12 +67,26 @@ export class tools extends plugin {
       ],
     });
 
+    this.forwardRules = [
+      {
+        reg: "^#*(结束|停止)转发$",
+        fuc: "stopForward",
+        text: "#结束转发",
+      },
+      {
+        reg: "^#*退群$",
+        fuc: "forwardForQuit",
+        text: "#退群",
+      },
+    ];
+
     /** 读取工具相关设置数据 */
     this.toolsSetData = xxCfg.getConfig("tools", "set");
 
     this.rule[1].permission = this.toolsSetData.permission;
     this.rule[1].reg = `^#*(${this.toolsSetData.keywords.join("|")})$`;
 
+    // 加入的群组信息
     this.list = [];
     for (var [key, value] of Bot.gl) {
       this.list.push(`${value.group_name} ${key}`);
@@ -216,6 +235,15 @@ export class tools extends plugin {
     }
   }
 
+  async forwardHelp() {
+    this.e.reply(
+      `转发提供了一些内置的小指令，不过必须要在转发模式下才能触发哦～\n${this.forwardRules
+        .slice(1)
+        .map((item) => item.text)
+        .join("\n")}`
+    );
+  }
+
   async forward() {
     groupId = this.e.msg.replace(/#*转发\s*/g, "") || 0;
 
@@ -231,14 +259,30 @@ export class tools extends plugin {
     });
   }
 
-  doForward() {
-    if (new RegExp(/^#*(结束|停止)转发$/g).test(this.e.msg)) {
-      this.reply("已停止转发");
-      this.finish("doForward", this.e.isGroup);
+  async doForward() {
+    if (this.e.isGroup) {
       return;
     }
 
-    if (this.e.isGroup) {
+    let result = { stats: true };
+
+    for (let v of this.forwardRules) {
+      if (new RegExp(v.reg).test(this.e.msg)) {
+        try {
+          if (v.fuc) {
+            let res = await eval("this." + v.fuc)(this);
+            result = res;
+          }
+        } catch (error) {
+          logger.error(error);
+        }
+      }
+    }
+
+    if (!result.stats) {
+      if (result.code === "finish") {
+        this.finish("doForward", this.e.isGroup);
+      }
       return;
     }
 
@@ -249,6 +293,16 @@ export class tools extends plugin {
         this.reply("发送失败，请确认发送的群号正确");
         return;
       });
+  }
+
+  async stopForward(e) {
+    e.reply("已停止转发");
+    return { status: false, code: "finish" };
+  }
+
+  async forwardForQuit(e) {
+    Bot.pickGroup(Number(groupId)).quit();
+    e.reply(`已退群[${groupId}]`);
   }
 
   groupList() {
