@@ -27,17 +27,17 @@ export class forward extends plugin {
       {
         reg: "^#*(结束|停止)转发$",
         fuc: "stopForward",
-        desc: "#结束转发 -- 结束转发消息状态",
+        desc: "#结束转发 - 结束转发消息状态",
       },
       {
         reg: "^#*戳\\s*.*$",
         fuc: "forwardForPoke",
-        desc: "#戳 QQ号  -- 戳一戳群组中的某位群友",
+        desc: "#戳 QQ号  - 戳某位群友",
       },
       {
         reg: "^#*退群$",
         fuc: "forwardForQuit",
-        desc: "#退群  -- 退出当前转发的群聊",
+        desc: "#退群  - 机器人退群",
       },
     ];
 
