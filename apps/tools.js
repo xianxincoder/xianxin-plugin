@@ -45,11 +45,6 @@ export class tools extends plugin {
           permission: "master",
         },
         {
-          reg: "^#*转发(命令|帮助|菜单|help|说明|功能|指令|使用说明)$",
-          fnc: "forwardHelp",
-          permission: "master",
-        },
-        {
           reg: "^#*群列表$",
           fnc: "groupList",
           permission: "master",
@@ -71,12 +66,12 @@ export class tools extends plugin {
       {
         reg: "^#*(结束|停止)转发$",
         fuc: "stopForward",
-        text: "#结束转发",
+        desc: "#结束转发 -- 结束转发消息状态",
       },
       {
         reg: "^#*退群$",
         fuc: "forwardForQuit",
-        text: "#退群",
+        desc: "#退群  -- 退出当前转发的群聊",
       },
     ];
 
@@ -235,15 +230,6 @@ export class tools extends plugin {
     }
   }
 
-  async forwardHelp() {
-    this.e.reply(
-      `转发提供了一些内置的小指令，不过必须要在转发模式下才能触发哦～\n${this.forwardRules
-        .slice(1)
-        .map((item) => item.text)
-        .join("\n")}`
-    );
-  }
-
   async forward() {
     groupId = this.e.msg.replace(/#*转发\s*/g, "") || 0;
 
@@ -254,9 +240,15 @@ export class tools extends plugin {
 
     this.setContext("doForward", this.e.isGroup);
     /** 回复 */
-    await this.reply("请发送要转发的内容，如需停止请发送 #结束转发", false, {
-      at: true,
-    });
+    await this.reply(
+      `请发送要转发的内容，其中内置指令如下\n${this.forwardRules
+        .map((item) => item.desc)
+        .join("\n")}`,
+      false,
+      {
+        at: true,
+      }
+    );
   }
 
   async doForward() {
