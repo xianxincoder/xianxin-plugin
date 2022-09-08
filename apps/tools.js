@@ -69,6 +69,11 @@ export class tools extends plugin {
         desc: "#结束转发 -- 结束转发消息状态",
       },
       {
+        reg: "^#*戳\\s*.*$",
+        fuc: "forwardForPoke",
+        desc: "#戳 QQ号  -- 戳一戳群组中的某位群友",
+      },
+      {
         reg: "^#*退群$",
         fuc: "forwardForQuit",
         desc: "#退群  -- 退出当前转发的群聊",
@@ -295,6 +300,14 @@ export class tools extends plugin {
   async forwardForQuit(e) {
     Bot.pickGroup(Number(groupId)).quit();
     e.reply(`已退群[${groupId}]`);
+  }
+
+  async forwardForPoke(that) {
+    const uid = that.e.msg.replace(/#*戳\s*/g, "") || Bot.uin;
+    const result = await Bot.pickGroup(Number(groupId)).pokeMember(uid);
+
+    that.e.reply(`已戳[${uid}]`);
+    return { status: false, code: "" };
   }
 
   groupList() {
