@@ -269,6 +269,11 @@ export class blackjack extends plugin {
     await this.getGroupId();
     if (!this.group_id) return;
 
+    if (!gameing[this.group_id] || !gameing[this.group_id].self) {
+      this.e.reply("当前没有进行中的21点小游戏，请发送 #21点 开一局吧");
+      return;
+    }
+
     if (
       count[this.group_id] == 1 &&
       gameing[this.group_id].self.user_id !== this.e.sender.user_id

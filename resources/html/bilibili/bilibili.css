@@ -27,19 +27,6 @@ body {
 .ql-editor .content {
   white-space: pre-wrap;
 }
-.mhy-img-text-article.ql-snow .ql-editor h1 {
-  font-size: 20px;
-}
-.mhy-img-text-article.ql-snow .ql-editor h2 {
-  font-size: 18px;
-}
-.mhy-img-text-article.ql-snow .ql-editor h3,
-.mhy-img-text-article.ql-snow .ql-editor h4,
-.mhy-img-text-article.ql-snow .ql-editor h5,
-.mhy-img-text-article.ql-snow .ql-editor h6 {
-  font-size: 16px;
-  font-weight: normal;
-}
 
 .ql-editor img:not(.emoticon-image, .lottery-icon) {
   display: block;
@@ -730,24 +717,6 @@ a {
 }
 .ql-snow .ql-direction.ql-active svg:first-child {
   display: none;
-}
-.ql-snow .ql-editor h1 {
-  font-size: 2em;
-}
-.ql-snow .ql-editor h2 {
-  font-size: 1.5em;
-}
-.ql-snow .ql-editor h3 {
-  font-size: 1.17em;
-}
-.ql-snow .ql-editor h4 {
-  font-size: 1em;
-}
-.ql-snow .ql-editor h5 {
-  font-size: 0.83em;
-}
-.ql-snow .ql-editor h6 {
-  font-size: 0.67em;
 }
 .ql-snow .ql-editor a {
   text-decoration: underline;
