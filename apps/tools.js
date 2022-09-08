@@ -243,7 +243,7 @@ export class tools extends plugin {
       return;
     }
 
-    this.setContext("doForward", this.e.isGroup);
+    this.setContext("doForward", this.e.isGroup, 5 * 60);
     /** 回复 */
     await this.reply(
       `请发送要转发的内容，其中内置指令如下\n${this.forwardRules
