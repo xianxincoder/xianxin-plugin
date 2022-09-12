@@ -31,8 +31,7 @@ body {
 }
 
 .num {
-  background-color: white;
-  color: black;
-  border-radius: 100%;
-  padding: 2px 12px;
+  font-weight: bold;
+  color: white;
+  padding: 3px;
 }

@@ -12,6 +12,9 @@ let scoreData = {};
 // 正在游戏的数据
 let gameing = {};
 
+// 定时器如果一段时间没有人回应那么清除进行中状态
+let seecolorTimer = {};
+
 /**
  * 给我点颜色看看小游戏处理
  */
@@ -71,8 +74,6 @@ export class seecolor extends plugin {
       seecolorData: JSON.stringify({ state: state }),
     });
 
-    console.log(data);
-
     let img = await puppeteer.screenshot("seecolor", {
       ...data,
       user_id: this.e.user_id,
@@ -84,14 +85,14 @@ export class seecolor extends plugin {
       img,
     ];
 
-    setTimeout(() => {
+    seecolorTimer[this.group_id] && clearTimeout(seecolorTimer[this.group_id]);
+    seecolorTimer[this.group_id] = setTimeout(() => {
       if (scoreData[this.group_id]) {
         let arr = [];
         for (let [key, value] of scoreData[this.group_id]) {
           arr.push(value);
         }
 
-        console.log(arr);
         arr = arr.sort((a, b) => {
           return b.score - a.score;
         });
@@ -111,7 +112,7 @@ export class seecolor extends plugin {
       gameing[this.group_id] = false;
       scoreData = {};
       seecolorState[this.group_id] = { current: 2, randomNum: 0 };
-    }, 1000 * 60 * 1);
+    }, 1000 * 30);
 
     this.e.reply(message);
   }
@@ -166,10 +167,38 @@ export class seecolor extends plugin {
       });
     }
 
-    await this.e.reply(message);
-    await common.sleep(600);
+    seecolorTimer[this.group_id] && clearTimeout(seecolorTimer[this.group_id]);
+    seecolorTimer[this.group_id] = setTimeout(() => {
+      if (scoreData[this.group_id]) {
+        let arr = [];
+        for (let [key, value] of scoreData[this.group_id]) {
+          arr.push(value);
+        }
 
-    this.next();
+        arr = arr.sort((a, b) => {
+          return b.score - a.score;
+        });
+
+        const scoreMessage = ["本局结束，得分如下"];
+
+        arr.map((item) => {
+          scoreMessage.push(`${item.userName} ${item.score}分`);
+          return item;
+        });
+
+        this.e.reply(scoreMessage.join("\n"));
+      } else {
+        this.e.reply("游戏已结束，没有玩家得分");
+      }
+
+      gameing[this.group_id] = false;
+      scoreData = {};
+      seecolorState[this.group_id] = { current: 2, randomNum: 0 };
+    }, 1000 * 30);
+
+    this.e.reply(message);
+
+    await this.next();
   }
 
   async next() {
@@ -193,6 +222,8 @@ export class seecolor extends plugin {
       user_id: this.e.user_id,
     });
 
+    await common.sleep(600);
+
     this.e.reply(img);
   }
 
@@ -200,6 +231,7 @@ export class seecolor extends plugin {
    * 初始化小游戏数据
    */
   initArray() {
+    seecolorTimer[this.group_id] && clearTimeout(seecolorTimer[this.group_id]);
     gameing[this.group_id] = true;
     scoreData = {};
     seecolorState[this.group_id] = { current: 2, randomNum: 0 };
