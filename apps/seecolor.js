@@ -18,13 +18,13 @@ let gameing = {};
 export class seecolor extends plugin {
   constructor(e) {
     super({
-      name: "给我点颜色(看看)?",
+      name: "给我点颜色看看",
       dsc: "根据色块找不同",
       event: "message.group",
       priority: 500,
       rule: [
         {
-          reg: "^#*给我点颜色看看$",
+          reg: "^#*给我点颜色(看看)?$",
           fnc: "startSeecolor",
         },
         {
