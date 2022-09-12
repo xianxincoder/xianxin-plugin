@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{pluResPath}}html/seecolor/seecolor.css"
+    />
+  </head>
+  <style></style>
+  <body>
+    <div id="box"></div>
+    <script>
+      const data = JSON.parse(`{{@ seecolorData}}`);
+      const { state } = data;
+      const { current, randomNum } = state;
+      var Create = new creat(current); //定义构造函数对象，传入一个参数（开始时的布局2x2）
+      Create.go(); //调用构造函数里面的函数属性
+      function creat(event) {
+        //定义构造函数creat
+        var obox = document.getElementById("box");
+        this.className = "creat"; //设置className
+        this._creat = null; //事先创建出一个属性_creat用于指向一个对象
+        this.go = function () {
+          //创建颜色块的方法函数
+          var colorNum1 = Math.floor(Math.random() * 253) + 1; //随机数取一个值范围是（1~254）防止白色块出现
+          var colorNum2 = Math.floor(Math.random() * 253) + 1;
+          var colorNum3 = Math.floor(Math.random() * 253) + 1;
+          this.color =
+            "rgb(" + colorNum1 + "," + colorNum2 + "," + colorNum3 + ")"; //定义rgb颜色属性
+          this.diffOpacity = 0.8 + event * 0.01; //用于改变其中一个颜色块的颜色(这里可以自定义改变透明度)
+
+          if (this.diffOpacity > 0.95) {
+            this.diffOpacity = 0.95;
+          }
+          for (var i = 0; i < event * event; i++) {
+            //创建循环循环event*2次，每当点击颜色块后event变化
+            this._creat = document.createElement("div"); //动态创建一个div赋给this._creat属性
+            this._creat.style.width = Math.floor(600 / event) - 4 + "px"; //设置div的宽，高，颜色和className
+            this._creat.style.height = Math.floor(600 / event) - 4 + "px";
+            this._creat.style.backgroundColor = this.color;
+            this._creat.className = this.className; //在样式中给div左浮动
+            obox.appendChild(this._creat); //作为孩子添加到obox中
+            this._creat.innerHTML = '<span class="num">' + (i + 1) + "</span>";
+          }
+          var odiv = document.getElementsByClassName("creat"); //获取一下创建好的div
+          odiv[randomNum].style.opacity = this.diffOpacity;
+        };
+      }
+    </script>
+  </body>
+</html>

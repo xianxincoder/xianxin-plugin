@@ -1,0 +1,38 @@
+@font-face {
+  font-family: "tttgbnumber";
+  src: url("../../../../../resources/font/tttgbnumber.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+  width: 600px;
+  color: #1e1f20;
+  transform-origin: 0 0;
+  position: relative;
+}
+#box {
+  width: 600px;
+  height: 600px;
+  margin: auto;
+}
+.creat {
+  float: left;
+  box-sizing: border-box;
+  margin: 2px;
+  border-radius: 12px;
+}
+
+.num {
+  background-color: white;
+  color: black;
+  border-radius: 100%;
+  padding: 2px 12px;
+}

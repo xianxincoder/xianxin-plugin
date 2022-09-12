@@ -89,6 +89,14 @@
     - icon: ledger
       title: "停牌"
       desc: "停止叫牌"
+- group: 给我点颜色看看
+  list:
+    - icon: abyss
+      title: "#给我点颜色看看"
+      desc: 开局小游戏
+    - icon: paimon
+      title: "块+数字"
+      desc: "块1就是第一个色块"
 - group: 闲心小工具
   list:
     - icon: 打卡

@@ -1,4 +1,11 @@
 - {
+    version: 1.1.3,
+    data:
+      [
+        添加<span class="cmd">#给我点颜色看看</span>小游戏,
+      ],
+  }
+- {
     version: 1.1.2,
     data:
       [
