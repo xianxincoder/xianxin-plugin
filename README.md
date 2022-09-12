@@ -101,4 +101,8 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 小源 | 28.2 |
 | AAA | 10 |
 | 乐笙 | 30 |
+| 爱发电用户_hQA7 | 5 |
+| 爱发电用户_BTSu | 5 |
+| 夜夜 | 5 |
+
 

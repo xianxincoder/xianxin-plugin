@@ -12,6 +12,7 @@ body {
   width: 800px !important;
   background-color: #f5f5f5 !important;
   border-radius: 10px !important;
+  position: relative;
 }
 .container {
   width: 900px;
@@ -1298,6 +1299,12 @@ a {
   position: relative;
 }
 
+.orig .account .avatar {
+  width: 90px;
+  margin-right: 18px;
+  position: relative;
+}
+
 .account .avatar {
   width: 90px;
   margin-right: 18px;
@@ -1311,6 +1318,16 @@ a {
   margin-right: 18px;
   border-radius: 100%;
   vertical-align: top;
+}
+
+.orig .account .pendant {
+  width: 155px !important;
+  max-width: 155px;
+  min-width: 155px;
+  height: 155px;
+  position: absolute;
+  left: -30px;
+  top: -30px;
 }
 
 .account .pendant {
