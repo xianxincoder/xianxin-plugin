@@ -104,5 +104,11 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 爱发电用户_hQA7 | 5 |
 | 爱发电用户_BTSu | 5 |
 | 夜夜 | 5 |
+| 瑞霖 | 28.2 |
+| 逝灰 | 5 |
+| 樱庭晴海 | 50 |
+| 尘埃未定 | 5.21 |
+| Gin | 15 |
+| 枫木 | 5 |
 
 

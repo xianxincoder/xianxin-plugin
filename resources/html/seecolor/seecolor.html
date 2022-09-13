@@ -23,12 +23,18 @@
         this.className = "creat"; //设置className
         this._creat = null; //事先创建出一个属性_creat用于指向一个对象
         this.go = function () {
+          const r = Math.floor(Math.random() * 192) + 1;
+
+          const g = Math.floor(Math.random() * (192 - r * 0.299)) + 1;
+
+          const b =
+            Math.floor(Math.random() * (192 - r * 0.299 - g * 0.587)) + 1;
+
           //创建颜色块的方法函数
-          var colorNum1 = Math.floor(Math.random() * 253) + 1; //随机数取一个值范围是（1~254）防止白色块出现
-          var colorNum2 = Math.floor(Math.random() * 253) + 1;
-          var colorNum3 = Math.floor(Math.random() * 253) + 1;
-          this.color =
-            "rgb(" + colorNum1 + "," + colorNum2 + "," + colorNum3 + ")"; //定义rgb颜色属性
+          // var colorNum1 = Math.floor(Math.random() * 253) + 1; //随机数取一个值范围是（1~254）防止白色块出现
+          // var colorNum2 = Math.floor(Math.random() * 253) + 1;
+          // var colorNum3 = Math.floor(Math.random() * 253) + 1;
+          this.color = "rgb(" + r + "," + g + "," + b + ")"; //定义rgb颜色属性
           this.diffOpacity = 0.8 + event * 0.01; //用于改变其中一个颜色块的颜色(这里可以自定义改变透明度)
 
           if (this.diffOpacity > 0.95) {
@@ -42,7 +48,12 @@
             this._creat.style.backgroundColor = this.color;
             this._creat.className = this.className; //在样式中给div左浮动
             obox.appendChild(this._creat); //作为孩子添加到obox中
-            this._creat.innerHTML = '<span class="num">' + (i + 1) + "</span>";
+            this._creat.innerHTML =
+              '<span class="num" style="font-size: ' +
+              (16 - event + 1 < 8 ? 8 : 16 - event + 1) +
+              'px">' +
+              (i + 1) +
+              "</span>";
           }
           var odiv = document.getElementsByClassName("creat"); //获取一下创建好的div
           odiv[randomNum].style.opacity = this.diffOpacity;

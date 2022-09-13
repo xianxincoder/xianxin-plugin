@@ -3,6 +3,7 @@ import { segment } from "oicq";
 import Seecolor from "../model/seecolor.js";
 import puppeteer from "../../../lib/puppeteer/puppeteer.js";
 import common from "../../../lib/common/common.js";
+import xxCfg from "../model/xxCfg.js";
 
 // 给我点颜色看看信息存放
 let seecolorState = {};
@@ -36,6 +37,7 @@ export class seecolor extends plugin {
         },
       ],
     });
+    this.gameSetData = xxCfg.getConfig("game", "set");
   }
 
   /** 群号key */
@@ -86,7 +88,7 @@ export class seecolor extends plugin {
     ];
 
     seecolorTimer[this.group_id] && clearTimeout(seecolorTimer[this.group_id]);
-    seecolorTimer[this.group_id] = setTimeout(() => {
+    seecolorTimer[this.group_id] = setTimeout(async () => {
       if (scoreData[this.group_id]) {
         let arr = [];
         for (let [key, value] of scoreData[this.group_id]) {
@@ -112,7 +114,7 @@ export class seecolor extends plugin {
       gameing[this.group_id] = false;
       scoreData = {};
       seecolorState[this.group_id] = { current: 2, randomNum: 0 };
-    }, 1000 * 30);
+    }, 1000 * (this.gameSetData.seecolorOverTime || 45));
 
     this.e.reply(message);
   }
@@ -168,7 +170,7 @@ export class seecolor extends plugin {
     }
 
     seecolorTimer[this.group_id] && clearTimeout(seecolorTimer[this.group_id]);
-    seecolorTimer[this.group_id] = setTimeout(() => {
+    seecolorTimer[this.group_id] = setTimeout(async () => {
       if (scoreData[this.group_id]) {
         let arr = [];
         for (let [key, value] of scoreData[this.group_id]) {
@@ -179,7 +181,13 @@ export class seecolor extends plugin {
           return b.score - a.score;
         });
 
-        const scoreMessage = ["本局结束，得分如下"];
+        const scoreMessage = [
+          `很遗憾${
+            this.gameSetData.seecolorOverTime || 45
+          }s内没有人答对，本局结束。\n本局答案为：块${
+            seecolorState[this.group_id].randomNum + 1
+          }，得分排名如下`,
+        ];
 
         arr.map((item) => {
           scoreMessage.push(`${item.userName} ${item.score}分`);
@@ -194,7 +202,7 @@ export class seecolor extends plugin {
       gameing[this.group_id] = false;
       scoreData = {};
       seecolorState[this.group_id] = { current: 2, randomNum: 0 };
-    }, 1000 * 30);
+    }, 1000 * (this.gameSetData.seecolorOverTime || 45));
 
     this.e.reply(message);
 

@@ -210,7 +210,7 @@ export class tools extends plugin {
     let img = await puppeteer.screenshot("fdrank", {
       ...data,
       type: "rank",
-      limitTop: 10,
+      limitTop: 20,
     });
     this.e.reply(img);
   }

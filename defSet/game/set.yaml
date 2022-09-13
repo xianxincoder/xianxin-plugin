@@ -3,3 +3,6 @@ limitTimes: 6
 
 # 展示排行榜人数
 limitTop: 10
+
+# 设置[给我点颜色看看小游戏]没有答对多长时间后结束游戏，默认45s无人答对结束游戏
+seecolorOverTime: 45
