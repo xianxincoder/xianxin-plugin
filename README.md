@@ -99,7 +99,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 三十一. | 15 |
 | 纪元 | 10 |
 | 零食 | 10 |
-| 落叶红尘君莫笑 | 43.2 |
+| 落叶红尘君莫笑 | 63.5 |
 | 不要欺负一一 | 10 |
 | 小源 | 28.2 |
 | AAA | 10 |
@@ -115,6 +115,6 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 枫木 | 5 |
 | 萝莉分布 | 6.66 | 
 | 提瓦特最伟大的占星术士 | 4 |
-| 地球生物 | 10 |
+| 地球生物 | 15 |
 | 无想无念 | 5.21 |
-
+| 箐呓 | 1.88 |
