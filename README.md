@@ -113,5 +113,8 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 尘埃未定 | 5.21 |
 | Gin | 15 |
 | 枫木 | 5 |
-
+| 萝莉分布 | 6.66 | 
+| 提瓦特最伟大的占星术士 | 4 |
+| 地球生物 | 10 |
+| 无想无念 | 5.21 |
 
