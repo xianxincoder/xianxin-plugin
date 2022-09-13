@@ -38,14 +38,12 @@ export class tools extends plugin {
           permission: "master",
         },
         {
-          reg: "^#*闲心发电榜$",
+          reg: "^#*(闲心)?发电榜$",
           fnc: "fdrank",
-          permission: "master",
         },
         {
           reg: "^#*最近发电$",
           fnc: "lately",
-          permission: "master",
         },
       ],
     });
@@ -203,9 +201,17 @@ export class tools extends plugin {
     const fetchData = await fetch(
       "https://afdian.net/api/creator/get-sponsors?user_id=2248d8420da611edb68952540025c377&type=amount&page=1"
     );
+    const fetchPageTwoData = await fetch(
+      "https://afdian.net/api/creator/get-sponsors?user_id=2248d8420da611edb68952540025c377&type=amount&page=2"
+    );
     const resJsonData = await fetchData.json();
 
-    const data = await new Tools(this.e).getRankData(resJsonData.data.list);
+    const resPageTwoJsonData = await fetchPageTwoData.json();
+
+    const data = await new Tools(this.e).getRankData([
+      ...resJsonData.data.list,
+      ...resPageTwoJsonData.data.list,
+    ]);
 
     let img = await puppeteer.screenshot("fdrank", {
       ...data,
