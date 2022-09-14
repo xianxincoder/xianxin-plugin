@@ -22,6 +22,9 @@
         {{else if type=='time'}}
         <h1 class="id_text">战狂榜</h1>
         <h1 class="day_text">群成员在战斗次数排行榜 - Top{{limitTop}}</h1>
+        {{else if type=='color'}}
+        <h1 class="id_text">色榜</h1>
+        <h1 class="day_text">排行榜 - Top{{limitTop}}</h1>
         {{else}}
         <h1 class="id_text">摆烂榜</h1>
         <h1 class="day_text">群成员在群战中战力最低排行榜 - Top{{limitTop}}</h1>
@@ -44,6 +47,15 @@
               onerror="whenError(this)"
             />
           </div>
+          {{if type=='color'}}
+          <div class="title">{{val.userName}}</div>
+
+          {{if idx==0}}
+          <div class="level">LSP</div>
+          {{/if}}
+
+          <div class="dec">积分<span class="exp">{{val.score}}</span>点</div>
+          {{else}}
           <div class="title">{{val.nick}}</div>
 
           <div class="level">{{val.level}}</div>
@@ -52,7 +64,7 @@
           <div class="dec">战斗<span class="exp">{{val.time}}</span>场</div>
           {{else}}
           <div class="dec">战力<span class="exp">{{val.exp}}</span>点</div>
-          {{/if}}
+          {{/if}} {{/if}}
         </div>
         {{/each}}
       </div>

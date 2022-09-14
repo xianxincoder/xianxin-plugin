@@ -97,6 +97,9 @@
     - icon: paimon
       title: "块+数字"
       desc: "块1就是第一个色块"
+    - icon: 树脂
+      title: "#色榜"
+      desc: "查看积分排名情况"
 - group: 闲心小工具
   list:
     - icon: 打卡
