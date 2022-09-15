@@ -105,12 +105,14 @@
     - icon: 打卡
       title: "#赞我"
       desc: QQ名片点赞
-    - icon: ledger
-      title: "神秘指令"
-      desc: "情绪激动时易触发"
     - icon: team
       title: "#转发"
       desc: "私聊bot转发小工具(主人专用)"
+- gruop: 神秘指令
+  list:
+    - icon: ledger
+      title: "神秘指令"
+      desc: "情绪激动时易触发"
 - group: 其他指令
   list:
     - icon: 问号
