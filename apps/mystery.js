@@ -244,9 +244,7 @@ export class mystery extends plugin {
     let url = this.toolsSetData.wocproUrl;
 
     if (
-      this.toolsSetData.wocproUrl.indexOf(
-        "https://xiaobai.klizi.cn/API/video/ks_yanzhi.php"
-      ) !== -1
+      url.indexOf("https://xiaobai.klizi.cn/API/video/ks_yanzhi.php") !== -1
     ) {
       const fetchData = await fetch(this.toolsSetData.wocproUrl);
       const resJsonData = await fetchData.json();
@@ -259,6 +257,47 @@ export class mystery extends plugin {
           "v20bgqpl8ho2g96xjjjmilboxw3bxvob7.mobgslb.tbcache.com/alimov2.a.kwimgs.com"
         );
       }
+    } else if (url.indexOf("api.wuxixindong.top/api/xjj.php") !== -1) {
+      const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      url = await fetchData.text();
+    } else if (url.indexOf("xiaobai.klizi.cn/API/video/spzm.php") !== -1) {
+      const randomIndex = Math.floor(Math.random() * 10000) + 1;
+      const fetchData = await fetch(
+        `${this.toolsSetData.wocproUrl}&n=${randomIndex}`
+      );
+      url = await fetchData.text();
+    } else if (url.indexOf("/api/spjh") !== -1) {
+      const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      const resTextData = await fetchData.text();
+
+      const fetch302Data = await fetch(resTextData);
+
+      url = fetch302Data.url;
+    } else if (url.indexOf("/api/nysp?key=qiqi") !== -1) {
+      const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      const resTextData = await fetchData.text();
+
+      const tempurl = resTextData.split("\n")[1];
+
+      const fetch302Data = await fetch(tempurl);
+
+      url = fetch302Data.url;
+    } else {
+      if (urlTypeCache[this.toolsSetData.wocproUrl] == "buffer") {
+        url = this.toolsSetData.wocproUrl;
+      } else {
+        try {
+          const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+          const resJsonData = await fetchData.json();
+
+          const urls = this.getJsonMp4(JSON.stringify(resJsonData));
+          if (urls && urls.length) {
+            url = urls[0];
+          }
+        } catch (error) {
+          url = this.toolsSetData.wocproUrl;
+        }
+      }
     }
 
     const filePath = await this.downloadMp4(url);
@@ -269,7 +308,7 @@ export class mystery extends plugin {
   }
 
   async wocurl() {
-    const isPro = this.e.msg.indexOf("pro") !== -1;
+    const isPro = this.e.msg.slice(0, 8).indexOf("pro") !== -1;
 
     let url = this.e.msg.replace(/#*(神秘)?(pro)?换源\s*/g, "") || "";
     if (url == "") {
@@ -383,6 +422,16 @@ export class mystery extends plugin {
       images.push(img[0]);
     }
     return images;
+  }
+
+  getJsonMp4(string) {
+    const mp4Rex = /https?:\/\/.*?\.(mp4|m3u8)/g;
+    const mp4s = [];
+    let mp4;
+    while ((mp4 = mp4Rex.exec(string))) {
+      mp4s.push(mp4[0]);
+    }
+    return mp4s;
   }
 
   // 获取图片
