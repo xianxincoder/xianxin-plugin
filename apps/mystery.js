@@ -6,6 +6,7 @@ import common from "../../../lib/common/common.js";
 import xxCfg from "../model/xxCfg.js";
 import fs from "node:fs";
 import https from "https";
+import http from "http";
 
 //项目路径
 const _path = process.cwd();
@@ -299,7 +300,9 @@ export class mystery extends plugin {
         fs.mkdirSync(`${this.path}${this.e.group_id}`);
       }
 
-      https
+      var protocol = url.indexOf("https:") !== -1 ? https : http;
+
+      protocol
         .get(url, (res) => {
           const file = fs.createWriteStream(
             `${this.path}${this.e.group_id}/temp.mp4`
