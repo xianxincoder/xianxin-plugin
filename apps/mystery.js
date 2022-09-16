@@ -274,7 +274,7 @@ export class mystery extends plugin {
     let url = this.e.msg.replace(/#*(神秘)?(pro)?换源\s*/g, "") || "";
     if (url == "") {
       url = isPro
-        ? "https://xiaobai.klizi.cn/API/video/ks_yanzhi.php?data=&type=js&lx=%E7%BE%8E%E5%A5%B3"
+        ? "http://101.33.199.104/api/xjj"
         : "https://yingtall.com/wp-json/wp/v2/posts?page=";
     }
 
