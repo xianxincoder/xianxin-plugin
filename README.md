@@ -82,7 +82,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 长楠| 15 |
 | Tears| 40 |
 | [时雨🌌星空](https://gitee.com/TimeRainStarSky) | 5 |
-| 夏-.-曙＆宙@象 | 5 |
+| 夏-.-曙＆宙@象 | 10 |
 | 枫叶霜华 | 10 |
 | 抛物线 | 38 |
 | 白熊 | 6.66 |
@@ -118,3 +118,6 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 地球生物 | 15 |
 | 无想无念 | 5.21 |
 | 箐呓 | 1.88 |
+| ccchizhao | 10 |
+| ADonut | 28.2 |
+| 拝淚 | 5 |
