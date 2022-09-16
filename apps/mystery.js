@@ -5,6 +5,7 @@ import lodash from "lodash";
 import common from "../../../lib/common/common.js";
 import xxCfg from "../model/xxCfg.js";
 import fs from "node:fs";
+import https from "https";
 
 //项目路径
 const _path = process.cwd();
@@ -37,6 +38,11 @@ export class mystery extends plugin {
           fnc: "woc",
           permission: "master",
         },
+        {
+          reg: "^#*(woc|卧槽)\\s*pro$",
+          fnc: "wocpro",
+          permission: "master",
+        },
       ],
     });
 
@@ -45,6 +51,10 @@ export class mystery extends plugin {
 
     this.rule[0].permission = this.toolsSetData.permission;
     this.rule[0].reg = `^#*(${this.toolsSetData.keywords.join("|")})$`;
+    this.rule[1].permission = this.toolsSetData.permission;
+    this.rule[1].reg = `^#*(${this.toolsSetData.keywords.join("|")})\\s*pro$`;
+
+    this.path = "./data/wocmp4/";
 
     if (this.toolsSetData.wocUrl.indexOf("http") == -1) {
       this.resourcesPath = `${_path}${this.toolsSetData.wocUrl}`;
@@ -52,6 +62,9 @@ export class mystery extends plugin {
   }
 
   async init() {
+    if (!fs.existsSync(this.path)) {
+      fs.mkdirSync(this.path);
+    }
     /** 读取工具相关设置数据 */
     this.toolsSetData = xxCfg.getConfig("tools", "set");
     if (this.toolsSetData.wocUrl.indexOf("http") == -1) {
@@ -202,6 +215,70 @@ export class mystery extends plugin {
     } else {
       this.reply("额。没有探索到，换个姿势再来一次吧～");
     }
+  }
+
+  async wocpro() {
+    const isPrivate = this.e.isPrivate;
+
+    if (!this.toolsSetData.isPrivate && isPrivate) {
+      return "return";
+    }
+
+    let key = `Yz:wocpro:${this.e.group_id}`;
+
+    if (await redis.get(key)) {
+      this.e.reply("探索中，请稍等...");
+      return;
+    }
+    // await fs.rmSync(`${this.path}${this.e.group_id}/temp.mp4`);
+    redis.set(key, "1", { EX: 60 * 10 });
+
+    this.e.reply("触发探索更深层面的未知神秘空间，请稍等...");
+
+    const fetchData = await fetch(
+      "https://xiaobai.klizi.cn/API/video/ks_yanzhi.php?data=&type=js&lx=%E7%BE%8E%E5%A5%B3"
+    );
+    const resJsonData = await fetchData.json();
+
+    let url = resJsonData.视频链接;
+
+    if (url.indexOf("alimov2.a.kwimgs.com") !== -1) {
+      url = url.replace(
+        "alimov2.a.kwimgs.com",
+        "v20bgqpl8ho2g96xjjjmilboxw3bxvob7.mobgslb.tbcache.com/alimov2.a.kwimgs.com"
+      );
+    }
+
+    const filePath = await this.downloadMp4(url);
+
+    await this.e.reply(segment.video(filePath));
+
+    redis.del(key);
+  }
+
+  async downloadMp4(url) {
+    return new Promise((resolve, reject) => {
+      if (!fs.existsSync(`${this.path}${this.e.group_id}`)) {
+        fs.mkdirSync(`${this.path}${this.e.group_id}`);
+      }
+
+      https
+        .get(url, (res) => {
+          const file = fs.createWriteStream(
+            `${this.path}${this.e.group_id}/temp.mp4`
+          );
+          // Write data into local file
+          res.pipe(file);
+          // Close the file
+          file.on("finish", () => {
+            file.close();
+            resolve(`${this.path}${this.e.group_id}/temp.mp4`);
+          });
+        })
+        .on("error", (err) => {
+          logger.error(`视频下载失败：${JSON.stringify(err)}`);
+        });
+    });
   }
 
   readdirectory(dir, type) {
