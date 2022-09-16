@@ -247,6 +247,10 @@ export class mystery extends plugin {
       url.indexOf("https://xiaobai.klizi.cn/API/video/ks_yanzhi.php") !== -1
     ) {
       const fetchData = await fetch(this.toolsSetData.wocproUrl);
+      if (!fetchData.ok) {
+        this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
+        return;
+      }
       const resJsonData = await fetchData.json();
 
       url = resJsonData.视频链接;
@@ -259,6 +263,10 @@ export class mystery extends plugin {
       }
     } else if (url.indexOf("api.wuxixindong.top/api/xjj.php") !== -1) {
       const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      if (!fetchData.ok) {
+        this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
+        return;
+      }
       url = await fetchData.text();
     } else if (url.indexOf("xiaobai.klizi.cn/API/video/spzm.php") !== -1) {
       let max = url.indexOf("美女") !== -1 ? 10000 : 2300;
@@ -267,9 +275,17 @@ export class mystery extends plugin {
       const fetchData = await fetch(
         `${this.toolsSetData.wocproUrl}&n=${randomIndex}`
       );
+      if (!fetchData.ok) {
+        this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
+        return;
+      }
       url = await fetchData.text();
     } else if (url.indexOf("/api/spjh") !== -1) {
       const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      if (!fetchData.ok) {
+        this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
+        return;
+      }
       const resTextData = await fetchData.text();
 
       const fetch302Data = await fetch(resTextData);
@@ -277,6 +293,10 @@ export class mystery extends plugin {
       url = fetch302Data.url;
     } else if (url.indexOf("/api/nysp?key=qiqi") !== -1) {
       const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      if (!fetchData.ok) {
+        this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
+        return;
+      }
       const resTextData = await fetchData.text();
 
       const tempurl = resTextData.split("\n")[1];
@@ -290,6 +310,10 @@ export class mystery extends plugin {
       } else {
         try {
           const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+          if (!fetchData.ok) {
+            this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
+            return;
+          }
           const resJsonData = await fetchData.json();
 
           const urls = this.getJsonMp4(JSON.stringify(resJsonData));
@@ -304,9 +328,13 @@ export class mystery extends plugin {
 
     const filePath = await this.downloadMp4(url);
 
-    await this.e.reply(segment.video(filePath));
+    const res = await this.e.reply(segment.video(filePath));
 
     redis.del(key);
+
+    if (!res) {
+      this.reply("不用等了，pro的力量需要ffmpeg驾驭哦");
+    }
   }
 
   async wocurl() {
