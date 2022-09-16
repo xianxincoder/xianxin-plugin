@@ -2,6 +2,7 @@
     version: 1.1.4,
     data:
       [
+        添加<span class="cmd">#神秘换源+url</span>一键换源,
         添加<span class="cmd">神秘指令pro</span>需要ffmpeg支持,
       ],
   }

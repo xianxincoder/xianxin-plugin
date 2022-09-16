@@ -43,6 +43,11 @@ export class mystery extends plugin {
           fnc: "wocpro",
           permission: "master",
         },
+        {
+          reg: "^#*(神秘)?换源\\s*.*$",
+          fnc: "wocurl",
+          permission: "master",
+        },
       ],
     });
 
@@ -254,6 +259,19 @@ export class mystery extends plugin {
     await this.e.reply(segment.video(filePath));
 
     redis.del(key);
+  }
+
+  async wocurl() {
+    const url =
+      this.e.msg.replace(/#*(神秘)?换源\s*/g, "") ||
+      "https://yingtall.com/wp-json/wp/v2/posts?page=";
+
+    xxCfg.saveSet("tools", "set", "config", {
+      ...this.toolsSetData,
+      wocUrl: url,
+    });
+
+    this.e.reply(`已更换神秘代码源地址为：${url}`);
   }
 
   async downloadMp4(url) {

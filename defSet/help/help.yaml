@@ -116,6 +116,9 @@
     - icon: wiki
       title: "神秘指令pro"
       desc: "需ffmpeg"
+    - icon: 统计
+      title: "#神秘换源+url"
+      desc: "一键更换神秘代码源"
 - group: 其他指令
   list:
     - icon: 问号
