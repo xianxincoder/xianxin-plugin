@@ -237,7 +237,7 @@ export class mystery extends plugin {
       return;
     }
     // await fs.rmSync(`${this.path}${this.e.group_id}/temp.mp4`);
-    redis.set(key, "1", { EX: 60 * 10 });
+    redis.set(key, "1", { EX: 60 });
 
     this.e.reply("触发探索更深层面的未知神秘空间，请稍等...");
 
