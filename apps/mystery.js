@@ -44,7 +44,7 @@ export class mystery extends plugin {
           permission: "master",
         },
         {
-          reg: "^#*(神秘)?换源\\s*.*$",
+          reg: "^#*(神秘)?(pro)?换源\\s*.*$",
           fnc: "wocurl",
           permission: "master",
         },
@@ -240,18 +240,24 @@ export class mystery extends plugin {
 
     this.e.reply("触发探索更深层面的未知神秘空间，请稍等...");
 
-    const fetchData = await fetch(
-      "https://xiaobai.klizi.cn/API/video/ks_yanzhi.php?data=&type=js&lx=%E7%BE%8E%E5%A5%B3"
-    );
-    const resJsonData = await fetchData.json();
+    let url = this.toolsSetData.wocproUrl;
 
-    let url = resJsonData.视频链接;
+    if (
+      this.toolsSetData.wocproUrl.indexOf(
+        "https://xiaobai.klizi.cn/API/video/ks_yanzhi.php"
+      ) !== -1
+    ) {
+      const fetchData = await fetch(this.toolsSetData.wocproUrl);
+      const resJsonData = await fetchData.json();
 
-    if (url.indexOf("alimov2.a.kwimgs.com") !== -1) {
-      url = url.replace(
-        "alimov2.a.kwimgs.com",
-        "v20bgqpl8ho2g96xjjjmilboxw3bxvob7.mobgslb.tbcache.com/alimov2.a.kwimgs.com"
-      );
+      url = resJsonData.视频链接;
+
+      if (url.indexOf("alimov2.a.kwimgs.com") !== -1) {
+        url = url.replace(
+          "alimov2.a.kwimgs.com",
+          "v20bgqpl8ho2g96xjjjmilboxw3bxvob7.mobgslb.tbcache.com/alimov2.a.kwimgs.com"
+        );
+      }
     }
 
     const filePath = await this.downloadMp4(url);
@@ -262,16 +268,29 @@ export class mystery extends plugin {
   }
 
   async wocurl() {
-    const url =
-      this.e.msg.replace(/#*(神秘)?换源\s*/g, "") ||
-      "https://yingtall.com/wp-json/wp/v2/posts?page=";
+    const isPro = this.e.msg.indexOf("pro") !== -1;
+
+    const url = this.e.msg.replace(/#*(神秘)?(pro)?换源\s*/g, "") || "";
+    if (url == "") {
+      url = isPro
+        ? "https://xiaobai.klizi.cn/API/video/ks_yanzhi.php?data=&type=js&lx=%E7%BE%8E%E5%A5%B3"
+        : "https://yingtall.com/wp-json/wp/v2/posts?page=";
+    }
+
+    let obj = {};
+
+    if (isPro) {
+      obj = { wocproUrl: url };
+    } else {
+      obj = { wocUrl: url };
+    }
 
     xxCfg.saveSet("tools", "set", "config", {
       ...this.toolsSetData,
-      wocUrl: url,
+      ...obj,
     });
 
-    this.e.reply(`已更换神秘代码源地址为：${url}`);
+    this.e.reply(`已更换神秘${isPro ? "pro" : ""}代码源地址为：${url}`);
   }
 
   async downloadMp4(url) {
