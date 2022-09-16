@@ -313,7 +313,7 @@ export class mystery extends plugin {
     let url = this.e.msg.replace(/#*(神秘)?(pro)?换源\s*/g, "") || "";
     if (url == "") {
       url = isPro
-        ? "http://api.xn--7gqa009h.top/api/nysp?key=qiqi"
+        ? "https://xiaobai.klizi.cn/API/video/spzm.php?data=&msg=美女"
         : "https://yingtall.com/wp-json/wp/v2/posts?page=";
     }
 
