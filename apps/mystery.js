@@ -270,7 +270,7 @@ export class mystery extends plugin {
   async wocurl() {
     const isPro = this.e.msg.indexOf("pro") !== -1;
 
-    const url = this.e.msg.replace(/#*(神秘)?(pro)?换源\s*/g, "") || "";
+    let url = this.e.msg.replace(/#*(神秘)?(pro)?换源\s*/g, "") || "";
     if (url == "") {
       url = isPro
         ? "https://xiaobai.klizi.cn/API/video/ks_yanzhi.php?data=&type=js&lx=%E7%BE%8E%E5%A5%B3"
