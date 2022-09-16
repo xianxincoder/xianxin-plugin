@@ -261,7 +261,9 @@ export class mystery extends plugin {
       const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
       url = await fetchData.text();
     } else if (url.indexOf("xiaobai.klizi.cn/API/video/spzm.php") !== -1) {
-      const randomIndex = Math.floor(Math.random() * 10000) + 1;
+      let max = url.indexOf("美女") !== -1 ? 10000 : 2300;
+
+      const randomIndex = Math.floor(Math.random() * max) + 1;
       const fetchData = await fetch(
         `${this.toolsSetData.wocproUrl}&n=${randomIndex}`
       );
