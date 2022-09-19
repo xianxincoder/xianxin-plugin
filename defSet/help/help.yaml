@@ -108,7 +108,7 @@
     - icon: team
       title: "#转发"
       desc: "私聊bot转发小工具(主人专用)"
-- gropp: 神秘指令
+- group: 神秘指令
   list:
     - icon: ledger
       title: "神秘指令"
