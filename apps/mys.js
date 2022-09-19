@@ -125,7 +125,7 @@ export class mys extends plugin {
     const isPrivate = this.e.isPrivate;
     let title = this.e.msg.replace(/#*同人/g, "").trim();
 
-    const randomMax = this.mysSetData.cosRandomMax || 100;
+    const randomMax = 50;
 
     const randomIndex = Math.floor(Math.random() * randomMax) + 1;
 

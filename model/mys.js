@@ -189,10 +189,10 @@ export default class Mys extends base {
     if (
       resJsonData &&
       resJsonData.retcode === 0 &&
-      resJsonData.data.list &&
-      resJsonData.data.list.length
+      resJsonData.data.posts &&
+      resJsonData.data.posts.length
     ) {
-      resJsonData.data.list.map((item) => {
+      resJsonData.data.posts.map((item) => {
         cosData.push({
           title: item.post.subject,
           url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
