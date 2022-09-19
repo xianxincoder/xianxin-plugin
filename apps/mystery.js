@@ -32,7 +32,7 @@ export class mystery extends plugin {
       name: "神秘指令",
       dsc: "处理神秘指令代码",
       event: "message",
-      priority: 1000,
+      priority: 5000,
       rule: [
         {
           reg: "^#*(woc|卧槽)$",
@@ -328,9 +328,7 @@ export class mystery extends plugin {
 
     const filePath = await this.downloadMp4(url);
 
-    const res = await this.e.reply(segment.video(filePath), false, {
-        recallMsg: this.toolsSetData.delMsg,
-      });
+    const res = await this.e.reply(segment.video(filePath));
 
     redis.del(key);
 
@@ -441,7 +439,7 @@ export class mystery extends plugin {
     const images = [];
     let img;
     while ((img = imgRex.exec(string))) {
-      images.push(img[1]);
+      images.push(encodeURI(img[1]));
     }
     return images;
   }
@@ -451,7 +449,7 @@ export class mystery extends plugin {
     const images = [];
     let img;
     while ((img = imgRex.exec(string))) {
-      images.push(img[0]);
+      images.push(encodeURI(img[0]));
     }
     return images;
   }
