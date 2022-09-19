@@ -53,6 +53,10 @@ export class mys extends plugin {
           fnc: "acgnDetail",
         },
         {
+          reg: "^#*同人\\s*.*$",
+          fnc: "searchAcgn",
+        },
+        {
           reg: "^#*热门话题[0-9]*$",
           fnc: "hotchat",
         },
@@ -114,6 +118,62 @@ export class mys extends plugin {
       }
     } else {
       this.e.reply("额。没有找到合适的同人信息～");
+    }
+  }
+
+  async searchAcgn() {
+    const isPrivate = this.e.isPrivate;
+    let title = this.e.msg.replace(/#*同人/g, "").trim();
+
+    const randomMax = this.mysSetData.cosRandomMax || 100;
+
+    const randomIndex = Math.floor(Math.random() * randomMax) + 1;
+
+    const last_id = Math.ceil(randomIndex / 20);
+
+    const keyword = encodeURIComponent(title);
+
+    const index = randomIndex % 20;
+
+    const cosData = await new Mys().getAcgnSearchData(keyword, last_id);
+
+    const data = cosData[index];
+
+    if (data) {
+      if (!data.images || !data.images.length) {
+        this.searchAcgn();
+        return;
+      }
+
+      if (!this.mysSetData.isReplyMulti) {
+        const randomImgIdx = Math.floor(Math.random() * data.images.length);
+        data.images = [data.images[randomImgIdx]];
+      }
+
+      let msgList = [];
+      for (let imageItem of data.images) {
+        if (isPrivate) {
+          await this.e.reply(segment.image(imageItem));
+          await common.sleep(600);
+        } else {
+          msgList.push({
+            message: segment.image(imageItem),
+            nickname: Bot.nickname,
+            user_id: Bot.uin,
+          });
+        }
+      }
+
+      if (isPrivate) {
+        return;
+      }
+      if (msgList.length == 1) {
+        await this.e.reply(msgList[0].message);
+      } else {
+        await this.e.reply(await Bot.makeForwardMsg(msgList));
+      }
+    } else {
+      this.reply("额。没有找到合适的同人信息～");
     }
   }
 

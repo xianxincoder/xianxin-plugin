@@ -21,6 +21,9 @@
     - icon: abyss
       title: "#同人 #同人1 #同人详情"
       desc: 查看米游社中同人榜
+    - icon: 史莱姆
+      title: "#同人 xx"
+      desc: 搜索同人内容
     - icon: team
       title: "#热门话题"
       desc: 查看米游社中热聊话题

@@ -178,6 +178,35 @@ export default class Mys extends base {
     return cosData;
   }
 
+  async getAcgnSearchData(keyword, last_id) {
+    const cosData = [];
+
+    const url = `https://bbs-api.mihoyo.com/post/wapi/searchPosts?forum_id=29&gids=2&keyword=${keyword}&last_id=${last_id}&size=20`;
+
+    const fetchData = await fetch(url);
+    const resJsonData = await fetchData.json();
+
+    if (
+      resJsonData &&
+      resJsonData.retcode === 0 &&
+      resJsonData.data.list &&
+      resJsonData.data.list.length
+    ) {
+      resJsonData.data.list.map((item) => {
+        cosData.push({
+          title: item.post.subject,
+          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
+          cover: item.cover.url,
+          images: item.post.images,
+          nickname: item.user.nickname,
+          like_num: item.stat.like_num,
+        });
+        return item;
+      });
+    }
+    return cosData;
+  }
+
   async getWikiSearchData(keyword, type) {
     const wikiData = [];
 
