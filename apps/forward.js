@@ -113,9 +113,9 @@ export class forward extends plugin {
         .sendMsg(this.e.message)
         .catch((err) => {
           this.reply(
-            `${item.groupName}(${item.groupId}) 发送失败，${JSON.stringify(
-              err
-            )}`
+            `${item.groupName}(${item.groupId}) 发送[${
+              this.e.message
+            }]失败，${JSON.stringify(err)}`
           );
           return;
         });
