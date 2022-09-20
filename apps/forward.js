@@ -112,7 +112,7 @@ export class forward extends plugin {
       Bot.pickGroup(Number(item.groupId))
         .sendMsg(this.e.message)
         .catch((err) => {
-          this.reply("发送失败，请确认发送的群号正确");
+          this.reply(`发送失败，${JSON.stringify(err)}`);
           return;
         });
       await common.sleep(600);
