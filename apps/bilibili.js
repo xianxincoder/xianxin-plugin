@@ -244,14 +244,10 @@ export class bilibili extends plugin {
   async detail() {
     let uid = this.e.msg.replace(/#*up/g, "").trim();
 
-    const userRes = await fetch(
-      `https://api.bilibili.com/x/relation/stat?vmid=${uid}`
-    );
+    const userRes = await new Bilibili(this.e).getBilibiliDetail(uid);
     const userResJsonData = await userRes.json();
 
-    const accInfoRes = await fetch(
-      `https://api.bilibili.com/x/space/acc/info?mid=${uid}&jsonp=jsonp`
-    );
+    const accInfoRes = await new Bilibili(this.e).getBilibiliUserInfo(uid);
 
     if (!accInfoRes.ok) {
       this.reply("诶嘿，出了点网络问题，等会再试试吧~");

@@ -15,6 +15,22 @@ export default class Bilibili extends base {
     this.model = "bilibili";
   }
 
+  async getBilibiliDetail(uid) {
+    let url = `https://api.bilibili.com/x/relation/stat?vmid=${uid}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        authority: "api.bilibili.com",
+        cookie:
+          "buvid3=677DD7BA-C683-36BD-A749-226C4038A15C90212infoc; i-wanna-go-back=-1; _uuid=BC24CE7C-327C-EA21-1557-E2AD56B349F290616infoc; buvid4=D00106D3-4627-6AB5-08A4-17ACD359B52091194-022030518-zz+ybRUH3EO6AQfFzHmMAg%3D%3D; buvid_fp_plain=undefined; buvid_fp=76db237e6d7aa7170c11816d2ed0a13c; b_ut=5; CURRENT_BLACKGAP=0; fingerprint3=8c6bc1805046dddcb5b845e6c6cd78c3; fingerprint=76db237e6d7aa7170c11816d2ed0a13c; blackside_state=0; rpdid=|(YlmJuJm||0J'uYRYR~lRYJ; LIVE_BUVID=AUTO6316464756111112; hit-dyn-v2=1; nostalgia_conf=-1; PVID=1; bp_video_offset_109404922=700188989168025600; CURRENT_FNVAL=80",
+        "user-agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33",
+      },
+      redirect: "follow",
+    });
+    return response;
+  }
+
   async getBilibiliUserInfo(uid) {
     let url = `https://api.bilibili.com/x/space/acc/info?mid=${uid}&jsonp=jsonp`;
     const response = await fetch(url, {
