@@ -38,7 +38,7 @@ export class glgg extends plugin {
         },
         {
           reg: "^#*(寄|g)了个榜$",
-          fnc: "colorRank",
+          fnc: "glggRank",
         },
       ],
     });
@@ -66,15 +66,20 @@ export class glgg extends plugin {
       user_id: this.e.user_id,
     });
 
-    this.e.reply(img);
+    const message = [
+      `额，目前布局元素已生成，具体玩法还是实现中。画个饼先 🥮\n`,
+      img,
+    ];
+
+    this.e.reply(message);
   }
 
   async click() {
-    this.e.reply("画饼待填");
+    this.e.reply("这个🥮又大又圆，看起来就好吃～");
   }
 
   async glggRank() {
-    this.e.reply("画饼待填");
+    this.e.reply("这个🥮又大又圆，看起来就好吃～");
   }
 
   initData(current) {
