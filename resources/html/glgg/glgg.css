@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body {
+  width: 500px;
+  transform-origin: 0 0;
+}
+
+#app {
+  width: 500px;
+  height: 600px;
+  background-image: url(../../img/bg.jpeg);
+  background-size: 100%;
+  position: relative;
+}
+
+.imgGlobal {
+  position: absolute;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.imgFilter {
+  filter: brightness(30%);
+}
+
+#storageBox {
+  height: 50px;
+  width: 350px;
+  position: absolute;
+  border-radius: 5px;
+  bottom: 40px;
+  left: 75px;
+  background-color: #ffffff47;
+  box-shadow: 0 0 1px 0 #ccc, 2px 2px 4px 0 rgba(50, 50, 50, 0.8);
+}
