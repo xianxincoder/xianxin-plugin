@@ -121,3 +121,4 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | ccchizhao | 10 |
 | ADonut | 28.2 |
 | 拝淚 | 5 |
+| 敷灬衍丷 | 10 |
