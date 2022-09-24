@@ -20,11 +20,21 @@ export default class Bilibili extends base {
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        authority: "api.bilibili.com",
+        "cache-control": "no-cache",
         cookie:
-          "buvid3=677DD7BA-C683-36BD-A749-226C4038A15C90212infoc; i-wanna-go-back=-1; _uuid=BC24CE7C-327C-EA21-1557-E2AD56B349F290616infoc; buvid4=D00106D3-4627-6AB5-08A4-17ACD359B52091194-022030518-zz+ybRUH3EO6AQfFzHmMAg%3D%3D; buvid_fp_plain=undefined; buvid_fp=76db237e6d7aa7170c11816d2ed0a13c; b_ut=5; CURRENT_BLACKGAP=0; fingerprint3=8c6bc1805046dddcb5b845e6c6cd78c3; fingerprint=76db237e6d7aa7170c11816d2ed0a13c; blackside_state=0; rpdid=|(YlmJuJm||0J'uYRYR~lRYJ; LIVE_BUVID=AUTO6316464756111112; hit-dyn-v2=1; nostalgia_conf=-1; PVID=1; bp_video_offset_109404922=700188989168025600; CURRENT_FNVAL=80",
+          "buvid3=D6BB712B-9324-E822-1B0D-76D38C9D2D7673738infoc; _uuid=610109D55B-FC7A-7C8E-3739-6213FACA10F5D74761infoc; buvid_fp=7602a1b4fd6e8d9fe4ac71e76a6248fa; buvid4=3893075A-7E31-36CC-E1F9-C4DAB82A0B2C75205-022022308-ptQYXgw9NYlxk/deuErG2g%3D%3D; rpdid=|(u)mR|lu)|R0J'uYRll~l)~~; PVID=1; CURRENT_BLACKGAP=0; blackside_state=0; LIVE_BUVID=AUTO7716578748491830; CURRENT_FNVAL=4048; b_nut=100; sid=6a5i9iex; b_lsid=5C44F8B9_1836D74627C; bsource=search_baidu",
+        pragma: "no-cache",
+        "sec-ch-ua":
+          '"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"macOS"',
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": 1,
         "user-agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33",
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.50",
       },
       redirect: "follow",
     });
@@ -36,11 +46,21 @@ export default class Bilibili extends base {
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        authority: "api.bilibili.com",
+        "cache-control": "no-cache",
         cookie:
-          "buvid3=677DD7BA-C683-36BD-A749-226C4038A15C90212infoc; i-wanna-go-back=-1; _uuid=BC24CE7C-327C-EA21-1557-E2AD56B349F290616infoc; buvid4=D00106D3-4627-6AB5-08A4-17ACD359B52091194-022030518-zz+ybRUH3EO6AQfFzHmMAg%3D%3D; buvid_fp_plain=undefined; buvid_fp=76db237e6d7aa7170c11816d2ed0a13c; b_ut=5; CURRENT_BLACKGAP=0; fingerprint3=8c6bc1805046dddcb5b845e6c6cd78c3; fingerprint=76db237e6d7aa7170c11816d2ed0a13c; blackside_state=0; rpdid=|(YlmJuJm||0J'uYRYR~lRYJ; LIVE_BUVID=AUTO6316464756111112; hit-dyn-v2=1; nostalgia_conf=-1; PVID=1; bp_video_offset_109404922=700188989168025600; CURRENT_FNVAL=80",
+          "buvid3=D6BB712B-9324-E822-1B0D-76D38C9D2D7673738infoc; _uuid=610109D55B-FC7A-7C8E-3739-6213FACA10F5D74761infoc; buvid_fp=7602a1b4fd6e8d9fe4ac71e76a6248fa; buvid4=3893075A-7E31-36CC-E1F9-C4DAB82A0B2C75205-022022308-ptQYXgw9NYlxk/deuErG2g%3D%3D; rpdid=|(u)mR|lu)|R0J'uYRll~l)~~; PVID=1; CURRENT_BLACKGAP=0; blackside_state=0; LIVE_BUVID=AUTO7716578748491830; CURRENT_FNVAL=4048; b_nut=100; sid=6a5i9iex; b_lsid=5C44F8B9_1836D74627C; bsource=search_baidu",
+        pragma: "no-cache",
+        "sec-ch-ua":
+          '"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"macOS"',
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": 1,
         "user-agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33",
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.50",
       },
       redirect: "follow",
     });
@@ -52,11 +72,21 @@ export default class Bilibili extends base {
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        authority: "api.bilibili.com",
+        "cache-control": "no-cache",
         cookie:
-          "buvid3=677DD7BA-C683-36BD-A749-226C4038A15C90212infoc; i-wanna-go-back=-1; _uuid=BC24CE7C-327C-EA21-1557-E2AD56B349F290616infoc; buvid4=D00106D3-4627-6AB5-08A4-17ACD359B52091194-022030518-zz+ybRUH3EO6AQfFzHmMAg%3D%3D; buvid_fp_plain=undefined; buvid_fp=76db237e6d7aa7170c11816d2ed0a13c; b_ut=5; CURRENT_BLACKGAP=0; fingerprint3=8c6bc1805046dddcb5b845e6c6cd78c3; fingerprint=76db237e6d7aa7170c11816d2ed0a13c; blackside_state=0; rpdid=|(YlmJuJm||0J'uYRYR~lRYJ; LIVE_BUVID=AUTO6316464756111112; hit-dyn-v2=1; nostalgia_conf=-1; PVID=1; bp_video_offset_109404922=700188989168025600; CURRENT_FNVAL=80",
+          "buvid3=D6BB712B-9324-E822-1B0D-76D38C9D2D7673738infoc; _uuid=610109D55B-FC7A-7C8E-3739-6213FACA10F5D74761infoc; buvid_fp=7602a1b4fd6e8d9fe4ac71e76a6248fa; buvid4=3893075A-7E31-36CC-E1F9-C4DAB82A0B2C75205-022022308-ptQYXgw9NYlxk/deuErG2g%3D%3D; rpdid=|(u)mR|lu)|R0J'uYRll~l)~~; PVID=1; CURRENT_BLACKGAP=0; blackside_state=0; LIVE_BUVID=AUTO7716578748491830; CURRENT_FNVAL=4048; b_nut=100; sid=6a5i9iex; b_lsid=5C44F8B9_1836D74627C; bsource=search_baidu",
+        pragma: "no-cache",
+        "sec-ch-ua":
+          '"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"macOS"',
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": 1,
         "user-agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33",
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.50",
       },
       redirect: "follow",
     });
@@ -71,7 +101,19 @@ export default class Bilibili extends base {
         authority: "api.bilibili.com",
         cookie:
           "_uuid=04A91AF9-817E-5568-C260-F738C6992B3E65500infoc; buvid3=89F4F8FC-EC89-F339-53E0-BEB8917E839A65849infoc; buvid4=2D3B9929-A59A-751A-A267-64B84561875568042-022072912-ptQYXgw9NYmp0JTqr/FVmw%3D%3D; PVID=1; CURRENT_FNVAL=4048; nostalgia_conf=-1; i-wanna-go-back=-1; b_ut=7; innersign=0; b_lsid=D95BBB69_182DE35FC2B; fingerprint=8d0ef00128271df9bb681430277b95d0; buvid_fp_plain=undefined; buvid_fp=8d0ef00128271df9bb681430277b95d0",
-        "User-Agent": "apifox/1.0.0 (https://www.apifox.cn)",
+        "cache-control": "no-cache",
+        pragma: "no-cache",
+        "sec-ch-ua":
+          '"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"macOS"',
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": 1,
+        "user-agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.50",
       },
       redirect: "follow",
     });
