@@ -2,6 +2,7 @@
     version: 1.1.4,
     data:
       [
+        修复B站直播没有推送问题,
         支持更多的pro源,
         处理添加b站推送无法添加问题,
         添加<span class="cmd">#神秘换源+url</span>一键换源,

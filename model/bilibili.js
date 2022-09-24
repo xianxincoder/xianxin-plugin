@@ -134,9 +134,7 @@ export default class Bilibili extends base {
     this.key = "Yz:xianxin:bilibili:upPush:";
 
     for (let [key, value] of uidMap) {
-      const accInfoRes = await fetch(
-        `https://api.bilibili.com/x/space/acc/info?mid=${key}&jsonp=jsonp`
-      );
+      const accInfoRes = await this.getBilibiliUserInfo(key);
 
       const tempDynamicList = dynamicList[key] || [];
 
