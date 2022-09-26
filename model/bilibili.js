@@ -276,7 +276,7 @@ export default class Bilibili extends base {
       const data = this.dynamicDataHandle(pushDynamicData);
       // 包含关键字不推送
       let banWords = eval(`/${setData.banWords.join("|")}/g`);
-      if (new RegExp(banWords).test(`${data.title}${data.content}`)) {
+      if (new RegExp(banWords).test(`${data.data.title}${data.data.content}`)) {
         return "return";
       }
 
