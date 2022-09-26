@@ -44,6 +44,9 @@
     - icon: 绑定账号
       title: "#搜索up xxx"
       desc: "根据昵称在b站搜索up"
+    - icon: ledger
+      title: "#up UID"
+      desc: "查看up信息"
 - group: 群战
   list:
     - icon: 养成计算
@@ -70,6 +73,9 @@
     - icon: role
       title: "#摆烂榜"
       desc: 查看战力倒数排行榜
+    - icon: 原石
+      title: "#注销群战"
+      desc: 注销个人群战数据
 - group: 五子棋
   list:
     - icon: 打卡
