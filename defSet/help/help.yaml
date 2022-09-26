@@ -111,6 +111,9 @@
     - icon: team
       title: "#转发"
       desc: "私聊bot转发小工具(主人专用)"
+    - icon: 绑定账号
+      title: "(戳|撤|禁|踢)"
+      desc: ""
 - group: 神秘指令
   list:
     - icon: ledger
