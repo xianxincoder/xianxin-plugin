@@ -51,3 +51,6 @@ wocproUrl: "https://xiaobai.klizi.cn/API/video/spzm.php?data=&msg=美女"
 
 # 限制图片数量，默认最多发送10张
 imageCountLimit: 10
+
+# (戳|撤|禁|踢)权限 master:主人 owner:群主 admin:管理员
+shortcutsPermission: "master"
