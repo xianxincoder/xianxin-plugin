@@ -119,7 +119,7 @@ export class forward extends plugin {
           );
           return;
         });
-      await common.sleep(600);
+      await common.sleep(1200);
       return item;
     });
   }
