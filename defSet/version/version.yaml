@@ -2,6 +2,8 @@
     version: 1.1.5,
     data:
       [
+        添加<span class="cmd">#官威删除+内容</span>删除已添加的群管理项,
+        添加<span class="cmd">#官威列表</span>查看已添加的群管理项列表,
         添加回复消息触发的群管理指令<span class="cmd">戳|撤|禁|踢</span>,
       ],
   }
