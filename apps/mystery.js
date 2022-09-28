@@ -202,7 +202,7 @@ export class mystery extends plugin {
       });
       if (!res) {
         if (!res) {
-          if (this.e.group.is_admin) {
+          if (this.e.group && this.e.group.is_admin) {
             if (
               Number(Math.random().toFixed(2)) * 100 <
               this.toolsSetData.mute

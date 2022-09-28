@@ -58,6 +58,8 @@ export class tools extends plugin {
   async accept() {
     if (!this.e.message) return false;
 
+    if (!this.e.isGroup) return false;
+
     await this.getGroupId();
 
     if (!this.group_id) return false;
