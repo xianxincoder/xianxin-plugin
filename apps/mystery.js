@@ -264,6 +264,8 @@ export class mystery extends plugin {
       let res = await this.e.reply([videolist_[num]], false, {
         recallMsg: this.toolsSetData.delMsg,
       });
+
+      redis.del(key);
       if (!res) {
         this.e.reply("视频发送失败，可能被风控");
         return;
