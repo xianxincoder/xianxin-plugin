@@ -47,6 +47,11 @@ export class mystery extends plugin {
           permission: "master",
         },
         {
+          reg: "^#*小视频\\s*[\u4e00-\u9fa5a-zA-Z]*\\s*[0-9]*$",
+          fnc: "searchpro",
+          permission: "master",
+        },
+        {
           reg: "^#*(神秘)?(pro)?换源\\s*.*$",
           fnc: "wocurl",
           permission: "master",
@@ -61,6 +66,7 @@ export class mystery extends plugin {
     this.rule[0].reg = `^#*(${this.toolsSetData.keywords.join("|")})$`;
     this.rule[1].permission = this.toolsSetData.permission;
     this.rule[1].reg = `^#*(${this.toolsSetData.keywords.join("|")})\\s*pro$`;
+    this.rule[2].permission = this.toolsSetData.permission;
 
     this.path = "./data/wocmp4/";
 
@@ -353,6 +359,58 @@ export class mystery extends plugin {
         }
       }
     }
+
+    const filePath = await this.downloadMp4(url);
+
+    const res = await this.e.reply(segment.video(filePath), false, {
+      recallMsg: this.toolsSetData.delMsg,
+    });
+
+    redis.del(key);
+
+    if (!res) {
+      this.reply("不用等了，pro的力量需要ffmpeg驾驭哦");
+    }
+  }
+
+  async searchpro() {
+    let index =
+      this.e.msg.replace(/#*小视频\s*[\u4e00-\u9fa5a-zA-Z]*\s*/g, "").trim() ||
+      1;
+
+    let keyword =
+      this.e.msg
+        .replace(/#*小视频\s*/g, "")
+        .replace(index, "")
+        .trim() || "热舞";
+
+    const isPrivate = this.e.isPrivate;
+
+    if (!this.toolsSetData.isPrivate && isPrivate) {
+      return "return";
+    }
+
+    let key = `Yz:wocpro:${this.e.group_id}`;
+
+    if (await redis.get(key)) {
+      this.e.reply("探索中，请稍等...");
+      return;
+    }
+
+    redis.set(key, "1", { EX: 60 });
+
+    this.e.reply("触发探索更深层面的未知神秘空间，请稍等...");
+
+    let url = `https://xiaobai.klizi.cn/API/video/spzm.php?data=&msg=${keyword}&n=${index}`;
+
+    console.log(url);
+
+    const fetchData = await fetch(url);
+    if (!fetchData.ok) {
+      this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
+      return;
+    }
+    url = await fetchData.text();
 
     const filePath = await this.downloadMp4(url);
 
