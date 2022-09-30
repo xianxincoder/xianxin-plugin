@@ -11,7 +11,7 @@ import http from "http";
 //项目路径
 const _path = process.cwd();
 
-let usedvideo_ = [];
+let randomvideo_ = [];
 
 /**
  * 初始化工具设置文件
@@ -27,6 +27,8 @@ if (!fs.existsSync(toolsSetFile)) {
 let fileArr = new Set();
 
 let urlTypeCache = {};
+
+let urlCache = {};
 
 export class mystery extends plugin {
   constructor() {
@@ -253,21 +255,17 @@ export class mystery extends plugin {
 
     // 借助渔火佬代码支持wocplus的源视频播放
     if (url.indexOf("gitee.com") !== -1) {
-      let raw = await fetch(url);
-      const videolist_ = await raw.json();
+      if (urlCache != url || !randomvideo_.length) {
+        let raw = await fetch(url);
+        const videolist_ = await raw.json();
+        randomvideo_ = videolist_.sort(function () {
+          return Math.random() < 0.5 ? -1 : 1;
+        });
+      }
 
-      // 生成随机数，发送视频
-      let num = Number;
-      do {
-        num = Math.round(Math.random() * (videolist_.length - 1));
-      } while (usedvideo_.includes(num));
-      usedvideo_.push(num);
+      urlCache = url;
 
-      console.log("本次随机到第", num + 1, "/", videolist_.length, "个视频");
-      if (usedvideo_.length > 15 || usedvideo_.length >= videolist_.length)
-        usedvideo_ = usedvideo_.slice(1);
-      console.log("近期使用过的视频，下次不会再随机到:", usedvideo_);
-      let res = await this.e.reply([videolist_[num]], false, {
+      let res = await this.e.reply([randomvideo_.splice(0, 1)[0]], false, {
         recallMsg: this.toolsSetData.delMsg,
       });
 
