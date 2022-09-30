@@ -236,11 +236,11 @@ export class mystery extends plugin {
   async wocpro() {
     const isPrivate = this.e.isPrivate;
 
-    if (!this.toolsSetData.isPrivate && isPrivate) {
+    if (!this.toolsSetData.isPrivate && isPrivate && !this.e.isMaster) {
       return "return";
     }
 
-    let key = `Yz:wocpro:${this.e.group_id}`;
+    let key = `Yz:wocpro:${this.e.group_id || this.e.user_id}`;
 
     if (await redis.get(key)) {
       this.e.reply("探索中，请稍等...");
@@ -384,11 +384,11 @@ export class mystery extends plugin {
 
     const isPrivate = this.e.isPrivate;
 
-    if (!this.toolsSetData.isPrivate && isPrivate) {
+    if (!this.toolsSetData.isPrivate && isPrivate && !this.e.isMaster) {
       return "return";
     }
 
-    let key = `Yz:wocpro:${this.e.group_id}`;
+    let key = `Yz:wocpro:${this.e.group_id || this.e.user_id}`;
 
     if (await redis.get(key)) {
       this.e.reply("探索中，请稍等...");
@@ -451,8 +451,8 @@ export class mystery extends plugin {
 
   async downloadMp4(url) {
     return new Promise((resolve, reject) => {
-      if (!fs.existsSync(`${this.path}${this.e.group_id}`)) {
-        fs.mkdirSync(`${this.path}${this.e.group_id}`);
+      if (!fs.existsSync(`${this.path}${this.e.group_id || this.e.user_id}`)) {
+        fs.mkdirSync(`${this.path}${this.e.group_id || this.e.user_id}`);
       }
 
       var protocol = url.indexOf("https:") !== -1 ? https : http;
@@ -460,14 +460,16 @@ export class mystery extends plugin {
       protocol
         .get(url, (res) => {
           const file = fs.createWriteStream(
-            `${this.path}${this.e.group_id}/temp.mp4`
+            `${this.path}${this.e.group_id || this.e.user_id}/temp.mp4`
           );
           // Write data into local file
           res.pipe(file);
           // Close the file
           file.on("finish", () => {
             file.close();
-            resolve(`${this.path}${this.e.group_id}/temp.mp4`);
+            resolve(
+              `${this.path}${this.e.group_id || this.e.user_id}/temp.mp4`
+            );
           });
         })
         .on("error", (err) => {
