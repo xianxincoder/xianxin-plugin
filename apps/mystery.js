@@ -336,6 +336,12 @@ export class mystery extends plugin {
       const fetch302Data = await fetch(tempurl);
 
       url = fetch302Data.url;
+    } else if (url.indexOf("v.api.aa1.cn/api/api-dy-girl") !== -1) {
+      const fetch302Data = await fetch(url);
+
+      const urls = this.getJsonMp4(fetch302Data.url);
+
+      url = urls[0] + "11包%20api.aa1.cn%20%20免费视频API.mp4";
     } else {
       if (urlTypeCache[this.toolsSetData.wocproUrl] == "buffer") {
         url = this.toolsSetData.wocproUrl;
