@@ -27,11 +27,11 @@ export class tools extends plugin {
           fnc: "shortcuts",
         },
         {
-          reg: "^#*官威删除(.*)$",
+          reg: "^#*快管删除(.*)$",
           fnc: "shortcutsdel",
         },
         {
-          reg: "^#*官威列表$",
+          reg: "^#*快管列表$",
           fnc: "shortcutslist",
         },
         {
@@ -145,7 +145,7 @@ export class tools extends plugin {
 
     this.initTextArr();
 
-    let keyWord = this.getKeyWord(this.e).replace(/#|\n|＃|官威删除/g, "");
+    let keyWord = this.getKeyWord(this.e).replace(/#|\n|＃|快管删除/g, "");
 
     let temp = textArr[this.group_id].get(keyWord);
     if (textArr[this.group_id].has(keyWord)) {
@@ -155,7 +155,7 @@ export class tools extends plugin {
     let retMsg = [{ type: "text", text: "删除成功：" }];
     for (let msg of this.e.message) {
       if (msg.type == "text") {
-        msg.text = msg.text.replace(/#|＃|官威删除/g, "");
+        msg.text = msg.text.replace(/#|＃|快管删除/g, "");
 
         if (!msg.text) continue;
       }
@@ -186,7 +186,7 @@ export class tools extends plugin {
 
     this.initTextArr();
 
-    let search = this.e.msg.replace(/#|＃|官威/g, "");
+    let search = this.e.msg.replace(/#|＃|快管/g, "");
 
     if (search.includes("列表")) {
       page = search.replace(/列表/g, "") || 1;
@@ -197,7 +197,7 @@ export class tools extends plugin {
     let list = textArr[this.group_id];
 
     if (lodash.isEmpty(list)) {
-      await this.e.reply("暂无官威数据");
+      await this.e.reply("暂无快管数据");
       return;
     }
 
@@ -206,7 +206,7 @@ export class tools extends plugin {
       if (type == "list") {
         arr.push({ key: k, val: v, num: arr.length + 1 });
       } else if (k.includes(search)) {
-        /** 搜索官威 */
+        /** 搜索快管 */
         arr.push({ key: k, val: v, num: arr.length + 1 });
       }
     }
@@ -245,12 +245,12 @@ export class tools extends plugin {
 
     let end = "";
     if (type == "list" && count > 100) {
-      end = `更多内容请翻页查看\n如：#官威列表${Number(page) + 1}`;
+      end = `更多内容请翻页查看\n如：#快管列表${Number(page) + 1}`;
     }
 
-    let title = `官威列表，第${page}页，共${count}条`;
+    let title = `快管列表，第${page}页，共${count}条`;
     if (type == "search") {
-      title = `官威${search}，${count}条`;
+      title = `快管${search}，${count}条`;
     }
 
     let forwardMsg = await this.makeForwardMsg(Bot.uin, title, msg, end);
