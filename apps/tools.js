@@ -303,14 +303,14 @@ export class tools extends plugin {
 
     if (
       this.toolsSetData.shortcutsPermission == "owner" &&
-      !(this.e.member.is_owner || this.e.isMaster)
+      (this.e.member.is_owner || this.e.isMaster)
     ) {
       return true;
     }
 
     if (
       this.toolsSetData.shortcutsPermission == "admin" &&
-      !(this.e.member.is_owner || this.e.isMaster || this.e.member.is_admin)
+      (this.e.member.is_owner || this.e.isMaster || this.e.member.is_admin)
     ) {
       return true;
     }
