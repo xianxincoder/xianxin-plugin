@@ -22,7 +22,7 @@ export default class Bilibili extends base {
       headers: {
         "cache-control": "no-cache",
         cookie:
-          "buvid3=D6BB712B-9324-E822-1B0D-76D38C9D2D7673738infoc; _uuid=610109D55B-FC7A-7C8E-3739-6213FACA10F5D74761infoc; buvid_fp=7602a1b4fd6e8d9fe4ac71e76a6248fa; buvid4=3893075A-7E31-36CC-E1F9-C4DAB82A0B2C75205-022022308-ptQYXgw9NYlxk/deuErG2g%3D%3D; rpdid=|(u)mR|lu)|R0J'uYRll~l)~~; PVID=1; CURRENT_BLACKGAP=0; blackside_state=0; LIVE_BUVID=AUTO7716578748491830; CURRENT_FNVAL=4048; b_nut=100; sid=6a5i9iex; b_lsid=5C44F8B9_1836D74627C; bsource=search_baidu",
+          "buvid3=677DD7BA-C683-36BD-A749-226C4038A15C90212infoc; i-wanna-go-back=-1; _uuid=BC24CE7C-327C-EA21-1557-E2AD56B349F290616infoc; buvid4=D00106D3-4627-6AB5-08A4-17ACD359B52091194-022030518-zz+ybRUH3EO6AQfFzHmMAg%3D%3D; buvid_fp_plain=undefined; b_ut=5; CURRENT_BLACKGAP=0; fingerprint3=8c6bc1805046dddcb5b845e6c6cd78c3; blackside_state=0; rpdid=|(YlmJuJm||0J'uYRYR~lRYJ; LIVE_BUVID=AUTO6316464756111112; hit-dyn-v2=1; nostalgia_conf=-1; PVID=1; b_nut=100; fingerprint=b29b926764456b8a66beafee5d73ea1d; buvid_fp=b29b926764456b8a66beafee5d73ea1d; CURRENT_FNVAL=16",
         pragma: "no-cache",
         "sec-ch-ua":
           '"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
@@ -48,7 +48,7 @@ export default class Bilibili extends base {
       headers: {
         "cache-control": "no-cache",
         cookie:
-          "buvid3=D6BB712B-9324-E822-1B0D-76D38C9D2D7673738infoc; _uuid=610109D55B-FC7A-7C8E-3739-6213FACA10F5D74761infoc; buvid_fp=7602a1b4fd6e8d9fe4ac71e76a6248fa; buvid4=3893075A-7E31-36CC-E1F9-C4DAB82A0B2C75205-022022308-ptQYXgw9NYlxk/deuErG2g%3D%3D; rpdid=|(u)mR|lu)|R0J'uYRll~l)~~; PVID=1; CURRENT_BLACKGAP=0; blackside_state=0; LIVE_BUVID=AUTO7716578748491830; CURRENT_FNVAL=4048; b_nut=100; sid=6a5i9iex; b_lsid=5C44F8B9_1836D74627C; bsource=search_baidu",
+          "buvid3=677DD7BA-C683-36BD-A749-226C4038A15C90212infoc; i-wanna-go-back=-1; _uuid=BC24CE7C-327C-EA21-1557-E2AD56B349F290616infoc; buvid4=D00106D3-4627-6AB5-08A4-17ACD359B52091194-022030518-zz+ybRUH3EO6AQfFzHmMAg%3D%3D; buvid_fp_plain=undefined; b_ut=5; CURRENT_BLACKGAP=0; fingerprint3=8c6bc1805046dddcb5b845e6c6cd78c3; blackside_state=0; rpdid=|(YlmJuJm||0J'uYRYR~lRYJ; LIVE_BUVID=AUTO6316464756111112; hit-dyn-v2=1; nostalgia_conf=-1; PVID=1; b_nut=100; fingerprint=b29b926764456b8a66beafee5d73ea1d; buvid_fp=b29b926764456b8a66beafee5d73ea1d; CURRENT_FNVAL=16",
         pragma: "no-cache",
         "sec-ch-ua":
           '"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
@@ -74,7 +74,7 @@ export default class Bilibili extends base {
       headers: {
         "cache-control": "no-cache",
         cookie:
-          "buvid3=D6BB712B-9324-E822-1B0D-76D38C9D2D7673738infoc; _uuid=610109D55B-FC7A-7C8E-3739-6213FACA10F5D74761infoc; buvid_fp=7602a1b4fd6e8d9fe4ac71e76a6248fa; buvid4=3893075A-7E31-36CC-E1F9-C4DAB82A0B2C75205-022022308-ptQYXgw9NYlxk/deuErG2g%3D%3D; rpdid=|(u)mR|lu)|R0J'uYRll~l)~~; PVID=1; CURRENT_BLACKGAP=0; blackside_state=0; LIVE_BUVID=AUTO7716578748491830; CURRENT_FNVAL=4048; b_nut=100; sid=6a5i9iex; b_lsid=5C44F8B9_1836D74627C; bsource=search_baidu",
+          "buvid3=677DD7BA-C683-36BD-A749-226C4038A15C90212infoc; i-wanna-go-back=-1; _uuid=BC24CE7C-327C-EA21-1557-E2AD56B349F290616infoc; buvid4=D00106D3-4627-6AB5-08A4-17ACD359B52091194-022030518-zz+ybRUH3EO6AQfFzHmMAg%3D%3D; buvid_fp_plain=undefined; b_ut=5; CURRENT_BLACKGAP=0; fingerprint3=8c6bc1805046dddcb5b845e6c6cd78c3; blackside_state=0; rpdid=|(YlmJuJm||0J'uYRYR~lRYJ; LIVE_BUVID=AUTO6316464756111112; hit-dyn-v2=1; nostalgia_conf=-1; PVID=1; b_nut=100; fingerprint=b29b926764456b8a66beafee5d73ea1d; buvid_fp=b29b926764456b8a66beafee5d73ea1d; CURRENT_FNVAL=16",
         pragma: "no-cache",
         "sec-ch-ua":
           '"Microsoft Edge";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
