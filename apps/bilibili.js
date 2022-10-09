@@ -116,7 +116,9 @@ export class bilibili extends plugin {
       return;
     }
 
-    const res = await new Bilibili(this.e).getBilibiliUserInfo(uid);
+    // const res = await new Bilibili(this.e).getBilibiliUserInfo(uid);
+
+    const res = await new Bilibili(this.e).getBilibiliDynamicInfo(uid);
 
     if (!res.ok) {
       this.e.reply("诶嘿，出了点网络问题，等会再试试吧~");
@@ -132,13 +134,22 @@ export class bilibili extends plugin {
       return;
     }
 
+    const dynamics = resJson?.data?.items || [];
+
+    let name = uid;
+
+    if (dynamics.length) {
+      let dynamic = dynamics[0];
+      name = dynamic?.modules?.module_author?.name || uid;
+    }
+
     data[this.e.group_id].push({
       uid,
-      name: resJson?.data.name,
+      name: name,
       type: this.typeHandle(
         {
           uid,
-          name: resJson?.data.name,
+          name,
         },
         this.e.msg,
         "add"
@@ -149,7 +160,7 @@ export class bilibili extends plugin {
 
     xxCfg.saveSet("bilibili", "push", "config", data);
 
-    this.e.reply(`添加b站推送成功~\n${resJson?.data.name}：${uid}`);
+    this.e.reply(`添加b站推送成功~\n${name}：${uid}`);
   }
 
   /** 删除b站推送 */

@@ -176,7 +176,7 @@ export default class Bilibili extends base {
     this.key = "Yz:xianxin:bilibili:upPush:";
 
     for (let [key, value] of uidMap) {
-      const accInfoRes = await this.getBilibiliUserInfo(key);
+      // const accInfoRes = await this.getBilibiliUserInfo(key);
 
       const tempDynamicList = dynamicList[key] || [];
 
@@ -190,9 +190,9 @@ export default class Bilibili extends base {
           continue;
         }
         /** 不放入直播的动态，直接走新接口 */
-        if (dynamicItem.type == "DYNAMIC_TYPE_LIVE_RCMD") {
-          continue;
-        }
+        // if (dynamicItem.type == "DYNAMIC_TYPE_LIVE_RCMD") {
+        //   continue;
+        // }
         /** 如果关闭了转发动态不推送, 那么直接在这里不放入待推送数据里 */
         if (
           dynamicItem.type == "DYNAMIC_TYPE_FORWARD" &&
@@ -207,34 +207,34 @@ export default class Bilibili extends base {
 
       const { groupIds, upName, type } = pushMapInfo;
 
-      if (accInfoRes.ok) {
-        const accInfoResJsonData = await accInfoRes.json();
+      // if (accInfoRes.ok) {
+      //   const accInfoResJsonData = await accInfoRes.json();
 
-        const data = accInfoResJsonData?.data || null;
-        if (data && data.live_room) {
-          if (
-            `${lastLiveStatusInfo[key] || 0}${data.live_room.liveStatus}` ==
-            "01"
-          ) {
-            willPushDynamicList.push({
-              id_str: `${new Date().getTime()}`,
-              type: "DYNAMIC_TYPE_LIVE_RCMD",
-              title: data.live_room.title,
-              url: this.formatUrl(data.live_room.url),
-              cover: data.live_room.cover,
-              name: data.name,
-              face: data.face,
-            });
-          }
-          lastLiveStatusInfo[key] = data.live_room.liveStatus;
+      //   const data = accInfoResJsonData?.data || null;
+      //   if (data && data.live_room) {
+      //     if (
+      //       `${lastLiveStatusInfo[key] || 0}${data.live_room.liveStatus}` ==
+      //       "01"
+      //     ) {
+      //       willPushDynamicList.push({
+      //         id_str: `${new Date().getTime()}`,
+      //         type: "DYNAMIC_TYPE_LIVE_RCMD",
+      //         title: data.live_room.title,
+      //         url: this.formatUrl(data.live_room.url),
+      //         cover: data.live_room.cover,
+      //         name: data.name,
+      //         face: data.face,
+      //       });
+      //     }
+      //     lastLiveStatusInfo[key] = data.live_room.liveStatus;
 
-          await redis.set(
-            "xianxin:bililive:lastlivestatus",
-            JSON.stringify(lastLiveStatusInfo),
-            { EX: 60 * 60 }
-          );
-        }
-      }
+      //     await redis.set(
+      //       "xianxin:bililive:lastlivestatus",
+      //       JSON.stringify(lastLiveStatusInfo),
+      //       { EX: 60 * 60 }
+      //     );
+      //   }
+      // }
 
       for (let pushDynamicData of willPushDynamicList) {
         if (groupIds && groupIds.length) {
@@ -399,14 +399,17 @@ export default class Bilibili extends base {
       dynamic.data.orig = this.dynamicDataHandle(data.orig);
       dynamic.data.category = "转发动态";
     } else if (data.type == "DYNAMIC_TYPE_LIVE_RCMD") {
-      dynamic.data.face = data.face;
-      dynamic.data.name = data.name;
-      dynamic.data.title = data.title;
+      desc = data?.modules?.module_dynamic?.major?.live_rcmd?.content;
+      if (!desc) return;
+      desc = JSON.parse(desc);
+      desc = desc?.live_play_info;
+      if (!desc) return;
+      dynamic.data.title = desc.title;
       dynamic.data.content = "";
       dynamic.data.pubTime = "";
       dynamic.data.pubTs = "";
-      dynamic.data.url = data.url;
-      dynamic.data.pics = [data.cover];
+      dynamic.data.url = desc.link;
+      dynamic.data.pics = [desc.cover];
       dynamic.data.category = "直播动态";
     }
 
@@ -643,13 +646,18 @@ export default class Bilibili extends base {
 
         return msg;
       case "DYNAMIC_TYPE_LIVE_RCMD":
+        desc = dynamic?.modules?.module_dynamic?.major?.live_rcmd?.content;
+        if (!desc) return;
+        desc = JSON.parse(desc);
+        desc = desc?.live_play_info;
+        if (!desc) return;
         title = `B站【${upName}】直播动态推送：\n`;
         msg = [
           title,
           `-----------------------------\n`,
-          `标题：${dynamic.title}\n`,
-          `链接：${dynamic.url}\n`,
-          segment.image(dynamic.cover),
+          `标题：${desc.title}\n`,
+          `链接：${desc.link}\n`,
+          segment.image(desc.cover),
         ];
 
         return msg;
