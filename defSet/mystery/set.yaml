@@ -1,0 +1,59 @@
+# 是否支持私聊 1支持 0不支持
+isPrivate: 0
+
+# 权限 master:主人 owner:群主 admin:管理员 all:所有人
+permission: "all"
+
+# 转发的消息中 谁发的消息 bot:机器人 replyer:触发该命令的人
+forwarder: "replyer"
+
+# 触发指令cd，避免触发太快，单位秒， 0:无cd
+cd: 3
+
+# 自动撤回消息时间，单位秒， 0:不撤回
+delMsg: 0
+
+# 神秘代码触发词
+keywords:
+  - woc
+  - 卧槽
+
+# 如果机器人为管理员，触发神秘代码吞噬时多少概率会被禁锢 0-100 0为不禁锢 100为必禁锢
+mute: 100
+
+# 自助换图片源，理论上支持市面上的图片接口，接口请自行查找，封号概不负责！！
+# 默认cos图片源
+# https://yingtall.com/wp-json/wp/v2/posts?page=
+# cos
+# https://imgapi.cn/cos.php?return=jsonpro
+# 支持本地图片源，以云崽根目录为起始位置，例如 Yunzai-Bot/data/images，配置的值应该为 /data/images
+wocUrl: "https://yingtall.com/wp-json/wp/v2/posts?page="
+
+# 自助换视频源，已知并支持的源如下
+# 默认plus源
+# https://gitee.com/xianxincoder/data/raw/master/wocplus.json
+
+# 高清短视频
+# https://xiaobai.klizi.cn/API/video/spzm.php?data=&msg=美女
+
+# 快手颜值视频
+# https://xiaobai.klizi.cn/API/video/ks_yanzhi.php?data=&type=js&lx=%E7%BE%8E%E5%A5%B3
+
+# 扭腰视频
+# http://api.xn--7gqa009h.top/api/nysp?key=qiqi
+
+# 视频集合，自行替换type的值，值有 白姨./韩冰./旭某./蛋花卷./茹嘉耶./绿小林子./罗老师./糯米./王玉萌./一个球./林怡婕./一口甜./旺仔小乔./
+# http://api.xn--7gqa009h.top/api/spjh?type=白姨.&key=qiqi
+
+# 抖音小姐姐视频
+# https://v.api.aa1.cn/api/api-dy-girl/index.php?aa1=ajdu987hrjfw
+
+# 小姐姐视频(不稳定)
+# http://101.33.199.104/api/xjj
+
+# 小姐姐
+# https://api.wuxixindong.top/api/xjj.php
+wocproUrl: "https://gitee.com/xianxincoder/data/raw/master/wocplus.json"
+
+# 限制图片数量，默认最多发送10张
+imageCountLimit: 10

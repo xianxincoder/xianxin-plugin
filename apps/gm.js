@@ -80,7 +80,7 @@ export class gm extends plugin {
 
   /** 群号key */
   get grpKey() {
-    return `Yz:xxtools_group_id:${this.e.user_id}`;
+    return `Yz:xxgm_group_id:${this.e.user_id}`;
   }
 
   async shortcuts() {

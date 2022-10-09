@@ -77,7 +77,7 @@ export function supportGuoba() {
           },
         },
         {
-          field: "tools.permission",
+          field: "mystery.permission",
           label: "woc权限",
           bottomHelpMessage: "设置woc权限",
           component: "Select",
@@ -92,7 +92,7 @@ export function supportGuoba() {
           },
         },
         {
-          field: "tools.forwarder",
+          field: "mystery.forwarder",
           label: "转发谁的消息",
           bottomHelpMessage: "转发的消息中 谁发的消息",
           component: "Select",
@@ -105,7 +105,7 @@ export function supportGuoba() {
           },
         },
         {
-          field: "tools.delMsg",
+          field: "mystery.delMsg",
           label: "woc撤回时间",
           bottomHelpMessage: "自动撤回消息时间，单位秒， 0:不撤回",
           component: "InputNumber",
@@ -116,7 +116,7 @@ export function supportGuoba() {
           },
         },
         {
-          field: "tools.wocUrl",
+          field: "mystery.wocUrl",
           label: "woc源地址",
           bottomHelpMessage: "自助换图片源，理论上支持市面上的图片接口",
           component: "Input",
@@ -125,7 +125,7 @@ export function supportGuoba() {
           },
         },
         {
-          field: "tools.imageCountLimit",
+          field: "mystery.imageCountLimit",
           label: "woc图片数限制",
           bottomHelpMessage: "限制图片数量",
           component: "InputNumber",
@@ -196,15 +196,15 @@ export function supportGuoba() {
         const mysSetData = {
           mys: xxCfg.getConfig("mys", "set"),
         };
-        const toolsSetData = {
-          tools: xxCfg.getConfig("tools", "set"),
+        const mysterySetData = {
+          mystery: xxCfg.getConfig("mystery", "set"),
         };
 
         return {
           ...bilibiliSetData,
           ...gameSetData,
           ...mysSetData,
-          ...toolsSetData,
+          ...mysterySetData,
         };
       },
       // 设置配置的方法（前端点确定后调用的方法）
@@ -212,16 +212,16 @@ export function supportGuoba() {
         const bilibiliSetData = xxCfg.getConfig("bilibili", "set");
         const gameSetData = xxCfg.getConfig("game", "set");
         const mysSetData = xxCfg.getConfig("mys", "set");
-        const toolsSetData = xxCfg.getConfig("tools", "set");
+        const mysterySetData = xxCfg.getConfig("mystery", "set");
 
         const mergedData = {
           ...bilibiliSetData,
           ...gameSetData,
           ...mysSetData,
-          ...toolsSetData,
+          ...mysterySetData,
         };
 
-        const setedData = { bilibili: {}, game: {}, mys: {}, tools: {} };
+        const setedData = { bilibili: {}, game: {}, mys: {}, mystery: {} };
 
         for (let key in mergedData) {
           if (typeof data[`bilibili.${key}`] != "undefined") {
@@ -233,8 +233,8 @@ export function supportGuoba() {
           if (typeof data[`mys.${key}`] != "undefined") {
             setedData.mys[key] = data[`mys.${key}`];
           }
-          if (typeof data[`tools.${key}`] != "undefined") {
-            setedData.tools[key] = data[`tools.${key}`];
+          if (typeof data[`mystery.${key}`] != "undefined") {
+            setedData.mystery[key] = data[`mystery.${key}`];
           }
         }
 
@@ -252,9 +252,9 @@ export function supportGuoba() {
           ...mysSetData,
           ...setedData.mys,
         });
-        xxCfg.saveSet("tools", "set", "config", {
-          ...toolsSetData,
-          ...setedData.tools,
+        xxCfg.saveSet("mystery", "set", "config", {
+          ...mysterySetData,
+          ...setedData.mystery,
         });
         return Result.ok({}, "保存成功~");
       },

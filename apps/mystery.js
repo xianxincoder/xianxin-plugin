@@ -17,14 +17,17 @@ let randomvideo_ = [];
  * 初始化工具设置文件
  */
 let toolsSetFile = "./plugins/xianxin-plugin/config/tools.set.yaml";
-if (!fs.existsSync(toolsSetFile)) {
-  fs.copyFileSync(
-    "./plugins/xianxin-plugin/defSet/tools/set.yaml",
-    toolsSetFile
-  );
+let mysterySetFile = "./plugins/xianxin-plugin/config/mystery.set.yaml";
+if (!fs.existsSync(mysterySetFile)) {
+  if (fs.existsSync(toolsSetFile)) {
+    fs.copyFileSync(toolsSetFile, mysterySetFile);
+  } else {
+    fs.copyFileSync(
+      "./plugins/xianxin-plugin/defSet/mystery/set.yaml",
+      mysterySetFile
+    );
+  }
 }
-
-let fileArr = new Set();
 
 let urlTypeCache = {};
 
@@ -62,76 +65,60 @@ export class mystery extends plugin {
     });
 
     /** 读取工具相关设置数据 */
-    this.toolsSetData = xxCfg.getConfig("tools", "set");
+    this.mysterySetData = xxCfg.getConfig("mystery", "set");
 
-    this.rule[0].permission = this.toolsSetData.permission;
-    this.rule[0].reg = `^#*(${this.toolsSetData.keywords.join("|")})$`;
-    this.rule[1].permission = this.toolsSetData.permission;
-    this.rule[1].reg = `^#*(${this.toolsSetData.keywords.join("|")})\\s*pro$`;
-    this.rule[2].permission = this.toolsSetData.permission;
+    this.rule[0].permission = this.mysterySetData.permission;
+    this.rule[0].reg = `^#*(${this.mysterySetData.keywords.join("|")})$`;
+    this.rule[1].permission = this.mysterySetData.permission;
+    this.rule[1].reg = `^#*(${this.mysterySetData.keywords.join("|")})\\s*pro$`;
+    this.rule[2].permission = this.mysterySetData.permission;
 
     this.path = "./data/wocmp4/";
-
-    if (this.toolsSetData.wocUrl.indexOf("http") == -1) {
-      this.resourcesPath = `${_path}${this.toolsSetData.wocUrl}`;
-    }
   }
 
   async init() {
     if (!fs.existsSync(this.path)) {
       fs.mkdirSync(this.path);
     }
-    /** 读取工具相关设置数据 */
-    this.toolsSetData = xxCfg.getConfig("tools", "set");
-    if (this.toolsSetData.wocUrl.indexOf("http") == -1) {
-      this.resourcesPath = `${_path}${this.toolsSetData.wocUrl}`;
-      this.readdirectory(this.resourcesPath, "img");
-      this.watchFile(this.resourcesPath, "img");
-    }
   }
 
   async woc() {
     const isPrivate = this.e.isPrivate;
 
-    if (!this.toolsSetData.isPrivate && isPrivate) {
+    if (!this.mysterySetData.isPrivate && isPrivate) {
       return "return";
     }
 
-    // if (this.toolsSetData.permission == "master" && !this.e.isMaster) {
+    // if (this.mysterySetData.permission == "master" && !this.e.isMaster) {
     //   return "return";
     // }
 
-    // if (this.toolsSetData.permission == "admin" && !this.e.member.is_admin) {
+    // if (this.mysterySetData.permission == "admin" && !this.e.member.is_admin) {
     //   return "return";
     // }
-    // if (this.toolsSetData.permission == "owner" && !this.e.member.is_owner) {
+    // if (this.mysterySetData.permission == "owner" && !this.e.member.is_owner) {
     //   return "return";
     // }
 
-    if (this.toolsSetData.cd != 0) {
+    if (this.mysterySetData.cd != 0) {
       /** cd */
       let key = `Yz:woc:${this.e.group_id}`;
       if (await redis.get(key)) return;
-      redis.set(key, "1", { EX: Number(this.toolsSetData.cd) });
+      redis.set(key, "1", { EX: Number(this.mysterySetData.cd) });
     }
 
     this.e.reply("触发探索未知的神秘空间，请稍等...");
     let images = [];
-    const isDimtown = this.toolsSetData.wocUrl.indexOf("dimtown.com") !== -1;
+    const isDimtown = this.mysterySetData.wocUrl.indexOf("dimtown.com") !== -1;
 
-    if (this.resourcesPath && fileArr.size) {
-      images = lodash.sampleSize(
-        Array.from(fileArr),
-        this.toolsSetData.imageCountLimit || 10
-      );
-    } else if (this.toolsSetData.wocUrl.indexOf("/wp-json") !== -1) {
+    if (this.mysterySetData.wocUrl.indexOf("/wp-json") !== -1) {
       const randomMax = isDimtown ? 400 : 600;
 
       const randomIndex = Math.floor(Math.random() * randomMax) + 1;
 
       const page = Math.ceil(randomIndex / 10);
 
-      const fetchData = await fetch(`${this.toolsSetData.wocUrl}${page}`);
+      const fetchData = await fetch(`${this.mysterySetData.wocUrl}${page}`);
       const resJsonData = await fetchData.json();
 
       const index = randomIndex % 10;
@@ -150,19 +137,21 @@ export class mystery extends plugin {
 
       images = this.getImages(content.rendered);
     } else {
-      if (urlTypeCache[this.toolsSetData.wocUrl] == "buffer") {
-        const image = await this.getBufferImage(`${this.toolsSetData.wocUrl}`);
+      if (urlTypeCache[this.mysterySetData.wocUrl] == "buffer") {
+        const image = await this.getBufferImage(
+          `${this.mysterySetData.wocUrl}`
+        );
         images = [image];
       } else {
         try {
-          const fetchData = await fetch(`${this.toolsSetData.wocUrl}`);
+          const fetchData = await fetch(`${this.mysterySetData.wocUrl}`);
           const resJsonData = await fetchData.json();
 
           images = this.getJsonImages(JSON.stringify(resJsonData));
         } catch (error) {
-          urlTypeCache[this.toolsSetData.wocUrl] = "buffer";
+          urlTypeCache[this.mysterySetData.wocUrl] = "buffer";
           const image = await this.getBufferImage(
-            `${this.toolsSetData.wocUrl}`
+            `${this.mysterySetData.wocUrl}`
           );
           images = [image];
         }
@@ -173,14 +162,14 @@ export class mystery extends plugin {
       images.pop();
     }
 
-    const imageCountLimit = this.toolsSetData.imageCountLimit || 10;
+    const imageCountLimit = this.mysterySetData.imageCountLimit || 10;
 
     if (images.length > imageCountLimit) {
       images.length = imageCountLimit;
     }
 
     const forwarder =
-      this.toolsSetData.forwarder == "bot"
+      this.mysterySetData.forwarder == "bot"
         ? { nickname: Bot.nickname, user_id: Bot.uin }
         : {
             nickname: this.e.sender.card || this.e.user_id,
@@ -192,7 +181,7 @@ export class mystery extends plugin {
       for (let imageItem of images) {
         if (isPrivate) {
           await this.e.reply(segment.image(imageItem), false, {
-            recallMsg: this.toolsSetData.delMsg,
+            recallMsg: this.mysterySetData.delMsg,
           });
           await common.sleep(600);
         } else {
@@ -206,14 +195,14 @@ export class mystery extends plugin {
         return;
       }
       const res = await this.e.reply(await Bot.makeForwardMsg(msgList), false, {
-        recallMsg: this.toolsSetData.delMsg,
+        recallMsg: this.mysterySetData.delMsg,
       });
       if (!res) {
         if (!res) {
           if (this.e.group && this.e.group.is_admin) {
             if (
               Number(Math.random().toFixed(2)) * 100 <
-              this.toolsSetData.mute
+              this.mysterySetData.mute
             ) {
               let duration = Math.floor(Math.random() * 600) + 1;
               this.e.group.muteMember(this.e.sender.user_id, duration);
@@ -236,7 +225,7 @@ export class mystery extends plugin {
   async wocpro() {
     const isPrivate = this.e.isPrivate;
 
-    if (!this.toolsSetData.isPrivate && isPrivate && !this.e.isMaster) {
+    if (!this.mysterySetData.isPrivate && isPrivate && !this.e.isMaster) {
       return "return";
     }
 
@@ -251,7 +240,7 @@ export class mystery extends plugin {
 
     this.e.reply("触发探索更深层面的未知神秘空间，请稍等...");
 
-    let url = this.toolsSetData.wocproUrl;
+    let url = this.mysterySetData.wocproUrl;
 
     // 借助渔火佬代码支持wocplus的源视频播放
     if (url.indexOf("gitee.com") !== -1) {
@@ -266,7 +255,7 @@ export class mystery extends plugin {
       urlCache = url;
 
       let res = await this.e.reply([randomvideo_.splice(0, 1)[0]], false, {
-        recallMsg: this.toolsSetData.delMsg,
+        recallMsg: this.mysterySetData.delMsg,
       });
 
       redis.del(key);
@@ -278,7 +267,7 @@ export class mystery extends plugin {
     } else if (
       url.indexOf("https://xiaobai.klizi.cn/API/video/ks_yanzhi.php") !== -1
     ) {
-      const fetchData = await fetch(this.toolsSetData.wocproUrl);
+      const fetchData = await fetch(this.mysterySetData.wocproUrl);
       if (!fetchData.ok) {
         this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
         return;
@@ -294,7 +283,7 @@ export class mystery extends plugin {
         );
       }
     } else if (url.indexOf("api.wuxixindong.top/api/xjj.php") !== -1) {
-      const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      const fetchData = await fetch(`${this.mysterySetData.wocproUrl}`);
       if (!fetchData.ok) {
         this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
         return;
@@ -305,7 +294,7 @@ export class mystery extends plugin {
 
       const randomIndex = Math.floor(Math.random() * max) + 1;
       const fetchData = await fetch(
-        `${this.toolsSetData.wocproUrl}&n=${randomIndex}`
+        `${this.mysterySetData.wocproUrl}&n=${randomIndex}`
       );
       if (!fetchData.ok) {
         this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
@@ -313,7 +302,7 @@ export class mystery extends plugin {
       }
       url = await fetchData.text();
     } else if (url.indexOf("/api/spjh") !== -1) {
-      const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      const fetchData = await fetch(`${this.mysterySetData.wocproUrl}`);
       if (!fetchData.ok) {
         this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
         return;
@@ -324,7 +313,7 @@ export class mystery extends plugin {
 
       url = fetch302Data.url;
     } else if (url.indexOf("/api/nysp?key=qiqi") !== -1) {
-      const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+      const fetchData = await fetch(`${this.mysterySetData.wocproUrl}`);
       if (!fetchData.ok) {
         this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
         return;
@@ -343,11 +332,11 @@ export class mystery extends plugin {
 
       url = urls[0] + "11包%20api.aa1.cn%20%20免费视频API.mp4";
     } else {
-      if (urlTypeCache[this.toolsSetData.wocproUrl] == "buffer") {
-        url = this.toolsSetData.wocproUrl;
+      if (urlTypeCache[this.mysterySetData.wocproUrl] == "buffer") {
+        url = this.mysterySetData.wocproUrl;
       } else {
         try {
-          const fetchData = await fetch(`${this.toolsSetData.wocproUrl}`);
+          const fetchData = await fetch(`${this.mysterySetData.wocproUrl}`);
           if (!fetchData.ok) {
             this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
             return;
@@ -359,7 +348,7 @@ export class mystery extends plugin {
             url = urls[0];
           }
         } catch (error) {
-          url = this.toolsSetData.wocproUrl;
+          url = this.mysterySetData.wocproUrl;
         }
       }
     }
@@ -367,7 +356,7 @@ export class mystery extends plugin {
     const filePath = await this.downloadMp4(url);
 
     const res = await this.e.reply(segment.video(filePath), false, {
-      recallMsg: this.toolsSetData.delMsg,
+      recallMsg: this.mysterySetData.delMsg,
     });
 
     redis.del(key);
@@ -390,7 +379,7 @@ export class mystery extends plugin {
 
     const isPrivate = this.e.isPrivate;
 
-    if (!this.toolsSetData.isPrivate && isPrivate && !this.e.isMaster) {
+    if (!this.mysterySetData.isPrivate && isPrivate && !this.e.isMaster) {
       return "return";
     }
 
@@ -407,8 +396,6 @@ export class mystery extends plugin {
 
     let url = `https://xiaobai.klizi.cn/API/video/spzm.php?data=&msg=${keyword}&n=${index}`;
 
-    console.log(url);
-
     const fetchData = await fetch(url);
     if (!fetchData.ok) {
       this.e.reply("诶嘿，网络或者源接口出了点问题，等会再试试吧~");
@@ -419,7 +406,7 @@ export class mystery extends plugin {
     const filePath = await this.downloadMp4(url);
 
     const res = await this.e.reply(segment.video(filePath), false, {
-      recallMsg: this.toolsSetData.delMsg,
+      recallMsg: this.mysterySetData.delMsg,
     });
 
     redis.del(key);
@@ -447,8 +434,8 @@ export class mystery extends plugin {
       obj = { wocUrl: url };
     }
 
-    xxCfg.saveSet("tools", "set", "config", {
-      ...this.toolsSetData,
+    xxCfg.saveSet("mystery", "set", "config", {
+      ...this.mysterySetData,
       ...obj,
     });
 
@@ -481,50 +468,6 @@ export class mystery extends plugin {
         .on("error", (err) => {
           logger.error(`视频下载失败：${JSON.stringify(err)}`);
         });
-    });
-  }
-
-  readdirectory(dir, type) {
-    let files = fs.readdirSync(dir, { withFileTypes: true });
-    for (let val of files) {
-      let filepath = dir + `/` + val.name;
-      if (!val.isFile()) {
-        this.readdirectory(filepath, type);
-        continue;
-      }
-      let re;
-
-      if (type == "img") {
-        re = new RegExp(`.(jpg|jpeg|png|gif|bmp)$`, "i");
-      }
-      if (!re.test(val.name)) {
-        continue;
-      }
-      fileArr.add(filepath);
-    }
-  }
-
-  watchFile(dir, type) {
-    let fsTimeout = {};
-    let recursive = false;
-    fs.watch(dir, { recursive: recursive }, async (eventType, filename) => {
-      if (fsTimeout[type]) return;
-
-      let re;
-      if (type == "img") {
-        Bot.logger.mark("更新神秘空间图片");
-        re = new RegExp(`.(jpg|jpeg|png|gif|bmp)$`, "i");
-        fileArr.clear();
-      }
-
-      if (!re.test(filename)) return;
-
-      fsTimeout[type] = true;
-
-      setTimeout(async () => {
-        this.readdirectory(dir, type);
-        fsTimeout[type] = null;
-      }, 5000);
     });
   }
 
