@@ -109,7 +109,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 逝灰 | 5 |
 | 樱庭晴海 | 50 |
 | 尘埃未定 | 5.21 |
-| Gin | 15 |
+| Gin | 30 |
 | 枫木 | 5 |
 | 萝莉分布 | 6.66 | 
 | 提瓦特最伟大的占星术士 | 4 |

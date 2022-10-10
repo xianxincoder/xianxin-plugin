@@ -109,6 +109,20 @@
     - icon: 树脂
       title: "#色榜"
       desc: "查看积分排名情况"
+- group: 神秘指令
+  list:
+    - icon: ledger
+      title: "神秘指令"
+      desc: "情绪激动时易触发"
+    - icon: wiki
+      title: "神秘指令pro"
+      desc: "需ffmpeg"
+    - icon: 养成计算
+      title: "#小视频+关键词+数字"
+      desc: "根据关键词指定查看视频"
+    - icon: 统计
+      title: "#神秘换源+url"
+      desc: "一键更换神秘代码源"
 - group: 快捷群管
   list:
     - icon: 绑定账号
