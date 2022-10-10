@@ -120,6 +120,10 @@ export class gm extends plugin {
       if (this.e.msg == "戳") {
         this.e.group.pokeMember(this.e.source.user_id);
       }
+
+      this.e.reply(
+        "已完成操作并添加到快管列表，可以通过 #快管列表 查看已经添加的记录"
+      );
     }
   }
 
@@ -133,6 +137,12 @@ export class gm extends plugin {
     let keyWord = this.getKeyWord(this.e).replace(/#|\n|＃|快管删除/g, "");
 
     let temp = textArr[this.group_id].get(keyWord);
+
+    if (!temp) {
+      await this.e.reply("未找到要删除的快管记录");
+      return;
+    }
+
     if (textArr[this.group_id].has(keyWord)) {
       textArr[this.group_id].delete(keyWord);
     }
@@ -220,7 +230,15 @@ export class gm extends plugin {
       //   keyWord.push("\n");
       //   keyWord.forEach((v) => msg.push(v));
       // } else
-      if (keyWord.type) {
+      if (keyWord.type == "image") {
+        msg.push(
+          `\n${arr[i].num}、`,
+          keyWord,
+          `\n执行操作：[${arr[i].val}]`,
+          `\n删除代码：#快管删除${arr[i].key}`,
+          "\n\n"
+        );
+      } else if (keyWord.type) {
         msg.push(`\n${arr[i].num}、`, keyWord, `[${arr[i].val}]`, "\n\n");
       } else {
         msg.push(`${arr[i].num}、${keyWord}[${arr[i].val}]\n`);
