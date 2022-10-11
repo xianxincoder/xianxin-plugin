@@ -258,7 +258,9 @@ export class bilibili extends plugin {
     const userRes = await new Bilibili(this.e).getBilibiliDetail(uid);
     const userResJsonData = await userRes.json();
 
-    const accInfoRes = await new Bilibili(this.e).getBilibiliUserInfo(uid);
+    const accInfoRes = await new Bilibili(this.e).getBilibiliUserInfoDetail(
+      uid
+    );
 
     if (!accInfoRes.ok) {
       this.reply("诶嘿，出了点网络问题，等会再试试吧~");
@@ -274,24 +276,22 @@ export class bilibili extends plugin {
       return true;
     }
     const message = [
-      `昵称：${data.name}`,
-      `\n性别：${data.sex}`,
-      `\n等级：${data.level}`,
+      `昵称：${data.card.name}`,
+      `\n性别：${data.card.sex}`,
+      `\n等级：${data.card.level}`,
       `\n粉丝人数：${userResJsonData.data.follower}`,
     ];
 
-    if (data.live_room) {
+    if (data.live) {
       message.push(
         `\n\n直播信息`,
-        `\n直播标题：${accInfoResJsonData.data.live_room.title}`,
-        `\n直播状态：${
-          accInfoResJsonData.data.live_room.liveStatus ? "直播中" : "未开播"
-        }`,
-        `\n直播链接：${accInfoResJsonData.data.live_room.url}`
+        `\n直播标题：${data.live.title}`,
+        `\n直播状态：${data.live.liveStatus ? "直播中" : "未开播"}`,
+        `\n直播链接：${data.live.url}`
       );
-      if (data.live_room.watched_show) {
-        message.push(`\n观看人数：${data.live_room.watched_show.num}人`);
-      }
+      // if (data.live_room.watched_show) {
+      //   message.push(`\n观看人数：${data.live_room.watched_show.num}人`);
+      // }
     }
 
     this.reply(message);

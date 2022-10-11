@@ -67,6 +67,14 @@ export default class Bilibili extends base {
     return response;
   }
 
+  async getBilibiliUserInfoDetail(uid) {
+    let url = `https://api.obfs.dev/api/bilibili/v3/user_info?uid=${uid}`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
+    return response;
+  }
+
   async getBilibiliDynamicInfo(uid) {
     let url = `https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/space?host_mid=${uid}`;
     const response = await fetch(url, {
