@@ -255,9 +255,6 @@ export class bilibili extends plugin {
   async detail() {
     let uid = this.e.msg.replace(/#*up/g, "").trim();
 
-    const userRes = await new Bilibili(this.e).getBilibiliDetail(uid);
-    const userResJsonData = await userRes.json();
-
     const accInfoRes = await new Bilibili(this.e).getBilibiliUserInfoDetail(
       uid
     );
@@ -278,8 +275,8 @@ export class bilibili extends plugin {
     const message = [
       `昵称：${data.card.name}`,
       `\n性别：${data.card.sex}`,
-      `\n等级：${data.card.level}`,
-      `\n粉丝人数：${userResJsonData.data.follower}`,
+      `\n等级：${data.card.level_info.current_level}`,
+      `\n粉丝人数：${data.card.fans}`,
     ];
 
     if (data.live) {
