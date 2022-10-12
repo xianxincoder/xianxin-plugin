@@ -71,6 +71,13 @@ export class qa extends plugin {
         answerPrefix: "我答",
         startText: "开始游戏",
       },
+      {
+        title: "成语接龙",
+        type: "api",
+        apiUrl: "https://xiaoapi.cn/API/cyjl.php",
+        answerPrefix: "我接",
+        startText: "开始成语接龙",
+      },
     ];
   }
 
