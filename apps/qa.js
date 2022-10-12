@@ -47,21 +47,29 @@ export class qa extends plugin {
         title: "猜王者角色",
         type: "api",
         apiUrl: "https://xiaoapi.cn/API/game_cyx.php",
+        answerPrefix: "我答",
+        startText: "开始游戏",
       },
       {
         title: "填古诗词",
         type: "api",
         apiUrl: "http://api.xn--7gqa009h.top/api/tgs",
+        answerPrefix: "我答",
+        startText: "开始游戏",
       },
       {
         title: "知识答题",
         type: "select",
         apiUrl: "https://xiaoapi.cn/API/game_dati.php",
+        answerPrefix: "我答",
+        startText: "开始游戏",
       },
       {
         title: "挑战古诗词",
         type: "api",
         apiUrl: "https://xiaoapi.cn/API/game_gs.php",
+        answerPrefix: "我答",
+        startText: "开始游戏",
       },
     ];
   }
@@ -117,9 +125,9 @@ export class qa extends plugin {
     }
 
     const response = await fetch(
-      `${this.qaList[qaForSelectIndex[user_id] - 1].apiUrl}?msg=我答${
-        this.e.msg
-      }&id=${user_id}`
+      `${this.qaList[qaForSelectIndex[user_id] - 1].apiUrl}?msg=${
+        this.qaList[qaForSelectIndex[user_id] - 1].answerPrefix
+      }${this.e.msg}&id=${user_id}`
     );
 
     let msg = [];
@@ -158,7 +166,9 @@ export class qa extends plugin {
     qaForSelectIndex[user_id] = qaIndex;
 
     const response = await fetch(
-      `${that.qaList[qaIndex - 1].apiUrl}?msg=开始游戏&id=${user_id}`
+      `${that.qaList[qaIndex - 1].apiUrl}?msg=${
+        that.qaList[qaIndex - 1].startText
+      }&id=${user_id}`
     );
     let msg = [];
 
@@ -209,9 +219,9 @@ export class qa extends plugin {
     const user_id = that.e.group_id || that.e.sender.user_id;
 
     const response = await fetch(
-      `${
-        that.qaList[qaForSelectIndex[user_id] - 1].apiUrl
-      }?msg=开始游戏&id=${user_id}`
+      `${that.qaList[qaForSelectIndex[user_id] - 1].apiUrl}?msg=${
+        that.qaList[qaForSelectIndex[user_id] - 1].startText
+      }&id=${user_id}`
     );
 
     let msg = [];
@@ -219,7 +229,6 @@ export class qa extends plugin {
     if (that.qaList[qaIndex - 1].type == "select") {
       const question = await response.json();
       msg = [question.data.msg, "\n", question.data.option];
-      msg = [question.msg, "\n", question.option];
     } else {
       const question = await response.text();
       msg = [question];
