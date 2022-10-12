@@ -109,11 +109,6 @@
     - icon: 树脂
       title: "#色榜"
       desc: "查看积分排名情况"
-- group: QA问答
-  list:
-    - icon: 原石
-      title: "#qa问答"
-      desc: 进入QA问答模式
 - group: 神秘指令
   list:
     - icon: ledger
