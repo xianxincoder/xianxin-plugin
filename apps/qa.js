@@ -58,11 +58,16 @@ export class qa extends plugin {
         type: "select",
         apiUrl: "https://xiaoapi.cn/API/game_dati.php",
       },
+      {
+        title: "挑战古诗词",
+        type: "api",
+        apiUrl: "https://xiaoapi.cn/API/game_gs.php",
+      },
     ];
   }
 
   async qa() {
-    this.setContext("doQA", this.e.isGroup, 10 * 60);
+    this.setContext("doQA", this.e.isGroup, 30 * 60);
     await this.reply(
       `已进入QA问答状态，请按照序号选择QA问答，例如：#选1\n${this.qaList
         .map((item, index) => `${index + 1}. ${item.title}`)
