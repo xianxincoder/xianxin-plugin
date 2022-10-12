@@ -78,6 +78,20 @@ export class qa extends plugin {
         answerPrefix: "我接",
         startText: "开始成语接龙",
       },
+      {
+        title: "看图猜成语",
+        type: "api",
+        apiUrl: "https://xiaoapi.cn/API/game_ktccy.php",
+        answerPrefix: "我猜",
+        startText: "开始游戏",
+      },
+      {
+        title: "听歌猜歌名",
+        type: "api",
+        apiUrl: "https://xiaoapi.cn/API/caige.php",
+        answerPrefix: "我猜",
+        startText: "开始游戏",
+      },
     ];
   }
 
@@ -139,7 +153,30 @@ export class qa extends plugin {
 
     let msg = [];
 
-    if (this.qaList[qaForSelectIndex[user_id] - 1].type == "select") {
+    if (
+      this.qaList[qaForSelectIndex[user_id] - 1].apiUrl.indexOf(
+        "game_ktccy"
+      ) !== -1
+    ) {
+      const question = await response.json();
+      msg = [question.data.msg];
+      if (question.data.pic) {
+        msg = [question.data.msg, "\n", segment.image(question.data.pic)];
+      }
+    } else if (
+      this.qaList[qaForSelectIndex[user_id] - 1].apiUrl.indexOf("caige") !== -1
+    ) {
+      const question = await response.json();
+      msg = [question.data.msg];
+
+      await this.reply(msg);
+
+      if (question.data.mp3) {
+        await this.reply(segment.record(question.data.mp3));
+      }
+
+      return;
+    } else if (this.qaList[qaForSelectIndex[user_id] - 1].type == "select") {
       const question = await response.json();
       msg = [question.data.msg, "\n", question.data.option];
     } else {
@@ -179,7 +216,24 @@ export class qa extends plugin {
     );
     let msg = [];
 
-    if (that.qaList[qaIndex - 1].type == "select") {
+    if (that.qaList[qaIndex - 1].apiUrl.indexOf("game_ktccy") !== -1) {
+      const question = await response.json();
+      msg = [question.data.msg];
+      if (question.data.pic) {
+        msg = [question.data.msg, "\n", segment.image(question.data.pic)];
+      }
+    } else if (that.qaList[qaIndex - 1].apiUrl.indexOf("caige") !== -1) {
+      const question = await response.json();
+      msg = [question.data.msg];
+
+      await that.reply(msg);
+
+      if (question.data.mp3) {
+        await that.reply(segment.record(question.data.mp3));
+      }
+
+      return { status: false };
+    } else if (that.qaList[qaIndex - 1].type == "select") {
       const question = await response.json();
       msg = [question.data.msg, "\n", question.data.option];
     } else {
@@ -205,20 +259,39 @@ export class qa extends plugin {
       }?msg=提示&id=${user_id}`
     );
 
-    const tip = await response.text();
+    let msg = [];
 
-    if (tip.indexOf("这是TA的头像") !== -1) {
-      const avatars = that.getJsonImages(tip);
-      if (avatars && avatars.length) {
-        await that.reply([tip, "\n", segment.image(avatars[0])]);
-      } else {
-        that.qaForTip(that);
+    if (
+      that.qaList[qaForSelectIndex[user_id] - 1].apiUrl.indexOf(
+        "game_ktccy"
+      ) !== -1
+    ) {
+      const tip = await response.json();
+      msg = [tip.data.msg];
+      if (tip.data.pic) {
+        msg = [tip.data.msg, "\n", segment.image(tip.data.pic)];
       }
+    } else if (
+      that.qaList[qaForSelectIndex[user_id] - 1].apiUrl.indexOf("caige") !== -1
+    ) {
+      const tip = await response.json();
+      msg = [tip.data.msg];
+    } else {
+      const tip = await response.text();
+      if (tip.indexOf("这是TA的头像") !== -1) {
+        const avatars = that.getJsonImages(tip);
+        if (avatars && avatars.length) {
+          await that.reply([tip, "\n", segment.image(avatars[0])]);
+        } else {
+          that.qaForTip(that);
+        }
 
-      return { status: false };
+        return { status: false };
+      }
+      msg = [tip];
     }
 
-    await that.reply(tip);
+    await that.reply(msg);
     return { status: false };
   }
 
@@ -233,7 +306,30 @@ export class qa extends plugin {
 
     let msg = [];
 
-    if (that.qaList[qaIndex - 1].type == "select") {
+    if (
+      that.qaList[qaForSelectIndex[user_id] - 1].apiUrl.indexOf(
+        "game_ktccy"
+      ) !== -1
+    ) {
+      const question = await response.json();
+      msg = [question.data.msg];
+      if (question.data.pic) {
+        msg = [question.data.msg, "\n", segment.image(question.data.pic)];
+      }
+    } else if (
+      that.qaList[qaForSelectIndex[user_id] - 1].apiUrl.indexOf("caige") !== -1
+    ) {
+      const question = await response.json();
+      msg = [question.data.msg];
+
+      await that.reply(msg);
+
+      if (question.data.mp3) {
+        await that.reply(segment.record(question.data.mp3));
+      }
+
+      return { status: false };
+    } else if (that.qaList[qaForSelectIndex[user_id] - 1].type == "select") {
       const question = await response.json();
       msg = [question.data.msg, "\n", question.data.option];
     } else {
