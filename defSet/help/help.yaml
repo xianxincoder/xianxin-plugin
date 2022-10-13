@@ -142,6 +142,9 @@
     - icon: team
       title: "#转发"
       desc: "私聊bot转发小工具(主人专用)"
+    - icon: abyss
+      title: "#潜水 #潜水 10"
+      desc: "查看群里潜水群友"
 - group: 其他指令
   list:
     - icon: 问号

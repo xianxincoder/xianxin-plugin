@@ -2,6 +2,14 @@
     version: 1.1.5,
     data:
       [
+        添加<span class="cmd">#潜水</span>查看潜水群友,
+        提供<span class="cmd">#潜水 10</span>查看潜水10天的群友,
+      ],
+  }
+- {
+    version: 1.1.5,
+    data:
+      [
         添加<span class="cmd">#小视频+关键词+数字</span>查看指定小视频,
         神秘代码pro支持plus视频源,
         添加<span class="cmd">#快管删除+内容</span>删除已添加的群管理项,
