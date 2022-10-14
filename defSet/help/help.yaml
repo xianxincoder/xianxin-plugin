@@ -145,6 +145,9 @@
     - icon: abyss
       title: "#潜水 #潜水 10"
       desc: "查看群里潜水群友"
+    - icon: role
+      title: "#大地图 xx"
+      desc: "快速查看大地图"
 - group: 其他指令
   list:
     - icon: 问号

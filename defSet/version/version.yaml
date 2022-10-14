@@ -2,6 +2,7 @@
     version: 1.1.5,
     data:
       [
+        添加<span class="cmd">#大地图 xx</span>快速查看题瓦特大地图,
         添加<span class="cmd">#潜水</span>查看潜水群友,
         提供<span class="cmd">#潜水 10</span>查看潜水10天的群友,
       ],
