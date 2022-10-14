@@ -1,546 +1,155 @@
+import plugin from "../../../lib/plugins/plugin.js";
+import common from "../../../lib/common/common.js";
+import fetch from "node-fetch";
 import moment from "moment";
 import lodash from "lodash";
-import base from "./base.js";
-import { segment } from "oicq";
-import fetch from "node-fetch";
-import puppeteer from "../../../lib/puppeteer/puppeteer.js";
-import common from "../../../lib/common/common.js";
 
-const _path = process.cwd();
-
-let emoticon;
-
-export default class Mys extends base {
-  constructor(e) {
-    super(e);
-    this.model = "mysDetail";
+export class tools extends plugin {
+  constructor() {
+    super({
+      name: "闲心小工具",
+      dsc: "处理一些杂项小工具",
+      event: "message",
+      priority: 5000,
+      rule: [
+        {
+          reg: "^#*赞我$",
+          fnc: "thumbsUpMe",
+        },
+        {
+          reg: "^#*潜水\\s*[0-9]*$",
+          fnc: "lurk",
+          permission: "master",
+        },
+        {
+          reg: "^#*大地图\\s*.*$",
+          fnc: "map",
+        },
+      ],
+    });
   }
 
-  conditionHanle(data) {
-    const checkDate =
-      moment().subtract(1, "days").format("MM-DD") ===
-      moment(data.post.created_at * 1000).format("MM-DD");
-
-    const checkTitle = /^(.*吗.*|.*呢.*|.*吧.*|.*？.*)$/.test(
-      data.post.subject
-    );
-
-    return checkDate && checkTitle;
+  /**
+   * rule - #赞我
+   * @returns
+   */
+  async thumbsUpMe() {
+    Bot.pickFriend(this.e.user_id).thumbUp(10);
+    this.e.reply("已给你点赞");
   }
 
-  async chatDataHandle() {
-    const chatData = []; // 如果过滤后没有数据，那么用全部数据兜底
-    const filterChatData = []; // 符合条件的数据
-    const data = await fetch(
-      `https://bbs-api.mihoyo.com/post/wapi/getForumPostList?forum_id=26&gids=2&is_good=false&is_hot=true&page_size=20&sort_type=2&last_id=1`
-    );
+  async lurk() {
+    let days = this.e.msg.replace(/#*潜水\s*/g, "").trim() || 0;
 
-    const data1 = await fetch(
-      `https://bbs-api.mihoyo.com/post/wapi/getForumPostList?forum_id=26&gids=2&is_good=false&is_hot=true&page_size=20&sort_type=2&last_id=2`
-    );
-    const data2 = await fetch(
-      `https://bbs-api.mihoyo.com/post/wapi/getForumPostList?forum_id=26&gids=2&is_good=false&is_hot=true&page_size=20&sort_type=2&last_id=3`
-    );
+    let gl = await this.e.group.getMemberMap();
 
-    const dataResJsonData = await data.json();
-    const data1ResJsonData = await data1.json();
-    const data2ResJsonData = await data2.json();
+    let msg = [];
 
-    if (
-      dataResJsonData &&
-      dataResJsonData.retcode === 0 &&
-      dataResJsonData.data.list &&
-      dataResJsonData.data.list.length
-    ) {
-      const mergeData = [
-        ...dataResJsonData.data.list,
-        ...data1ResJsonData.data.list,
-        ...data2ResJsonData.data.list,
-      ];
-      mergeData.map((item) => {
-        chatData.push({
-          title: item.post.subject,
-          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
-          like: item.stat.like_num,
-          reply: item.stat.reply_num,
-        });
-        // 获取昨天的聊天话题
-        if (this.conditionHanle(item)) {
-          filterChatData.push({
-            title: item.post.subject,
-            url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
-            like: item.stat.like_num,
-            reply: item.stat.reply_num,
-          });
+    for (let [k, v] of gl) {
+      if (days == 0) {
+        if (v.last_sent_time == v.join_time) {
+          //计算相差多少天
+          let diffDay = moment().diff(moment.unix(v.join_time), "day");
+          msg.push(
+            `${v.nickname}(${v.user_id}) 入群${diffDay}天，一直在潜水。`
+          );
         }
-        return item;
-      });
+      } else {
+        //计算相差多少天
+        let diffDay = moment().diff(moment.unix(v.last_sent_time), "day");
+        if (diffDay >= days) {
+          msg.push(
+            `${v.nickname}(${v.user_id}) 已潜水${diffDay}天了，该出来冒个泡啦！`
+          );
+        }
+      }
     }
 
-    return filterChatData.length ? filterChatData : chatData;
-  }
+    let total = msg.length;
 
-  async getChatData() {
-    const data = await this.chatDataHandle();
-    const sortData = data.sort(function (a, b) {
-      return b.reply - a.reply;
-    });
-    return sortData;
-  }
+    const msgArr = lodash.chunk(msg, 10);
 
-  async getAcgnData() {
-    const cosData = [];
-    const fetchData = await fetch(
-      `https://bbs-api.mihoyo.com/post/wapi/getImagePostList?forum_id=29&gids=2&page_size=20&type=1`
-    );
-    const resJsonData = await fetchData.json();
-
-    if (
-      resJsonData &&
-      resJsonData.retcode === 0 &&
-      resJsonData.data.list &&
-      resJsonData.data.list.length
-    ) {
-      resJsonData.data.list.map((item) => {
-        cosData.push({
-          title: item.post.subject,
-          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
-          cover: item.cover.url,
-          images: item.post.images,
-          nickname: item.user.nickname,
-          like_num: item.stat.like_num,
-        });
-        return item;
-      });
-    }
-    return cosData;
-  }
-
-  async getCosData(key) {
-    const urlMap = {
-      ys: `https://bbs-api.mihoyo.com/post/wapi/getImagePostList?forum_id=49&gids=2&page_size=20&type=1`,
-      dby: `https://bbs-api.mihoyo.com/post/wapi/getImagePostList?forum_id=47&gids=2&page_size=20&type=1`,
-    };
-    const cosData = [];
-    const fetchData = await fetch(urlMap[key]);
-    const resJsonData = await fetchData.json();
-
-    if (
-      resJsonData &&
-      resJsonData.retcode === 0 &&
-      resJsonData.data.list &&
-      resJsonData.data.list.length
-    ) {
-      resJsonData.data.list.map((item) => {
-        cosData.push({
-          title: item.post.subject,
-          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
-          cover: item.cover.url,
-          images: item.post.images,
-          nickname: item.user.nickname,
-          like_num: item.stat.like_num,
-        });
-        return item;
-      });
-    }
-    return cosData;
-  }
-
-  async getCosSearchData(keyword, last_id, key) {
-    const cosData = [];
-
-    const urlMap = {
-      ys: `https://bbs-api.mihoyo.com/post/wapi/searchPosts?forum_id=49&gids=2&keyword=${keyword}&last_id=${last_id}&size=20`,
-      dby: `https://bbs-api.mihoyo.com/post/wapi/searchPosts?forum_id=47&gids=5&keyword=${keyword}&last_id=${last_id}&size=20`,
-    };
-
-    const fetchData = await fetch(urlMap[key]);
-    const resJsonData = await fetchData.json();
-
-    if (
-      resJsonData &&
-      resJsonData.retcode === 0 &&
-      resJsonData.data.posts &&
-      resJsonData.data.posts.length
-    ) {
-      resJsonData.data.posts.map((item) => {
-        cosData.push({
-          title: item.post.subject,
-          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
-          cover: item.cover && item.cover.url,
-          images: item.post.images,
-          nickname: item.user.nickname,
-          like_num: item.stat.like_num,
-        });
-        return item;
-      });
-    }
-    return cosData;
-  }
-
-  async getAcgnSearchData(keyword, last_id) {
-    const cosData = [];
-
-    const url = `https://bbs-api.mihoyo.com/post/wapi/searchPosts?forum_id=29&gids=2&keyword=${keyword}&last_id=${last_id}&size=20`;
-
-    const fetchData = await fetch(url);
-    const resJsonData = await fetchData.json();
-
-    if (
-      resJsonData &&
-      resJsonData.retcode === 0 &&
-      resJsonData.data.posts &&
-      resJsonData.data.posts.length
-    ) {
-      resJsonData.data.posts.map((item) => {
-        cosData.push({
-          title: item.post.subject,
-          url: `https://bbs.mihoyo.com/ys/article/${item.post.post_id}`,
-          cover: item.cover.url,
-          images: item.post.images,
-          nickname: item.user.nickname,
-          like_num: item.stat.like_num,
-        });
-        return item;
-      });
-    }
-    return cosData;
-  }
-
-  async getWikiSearchData(keyword, type) {
-    const wikiData = [];
-
-    const urlMap = {
-      wiki: `https://api-takumi.mihoyo.com/common/blackboard/ys_obc/v1/search/content?app_sn=ys_obc&keyword=${keyword}&page=1`,
-      strategy: `https://api-takumi.mihoyo.com/common/blackboard/ys_strategy/v1/search/content?app_sn=ys_strategy&keyword=${keyword}&page=1`,
-    };
-
-    const fetchData = await fetch(urlMap[type]);
-
-    const resJsonData = await fetchData.json();
-
-    if (
-      resJsonData &&
-      resJsonData.retcode === 0 &&
-      resJsonData.data.list &&
-      resJsonData.data.list.length
-    ) {
-      resJsonData.data.list.map((item) => {
-        wikiData.push({
-          title: item.title,
-          href: item.bbs_url,
-          tags: item.channels.map((channel) => channel.name),
-          id: item.id,
-        });
-        return item;
-      });
-    }
-
-    return wikiData;
-  }
-
-  async getWikiPage(data, isSplit) {
-    const id = data.id;
-
-    const param = await this.wikiDetail(id);
-
-    const renderInfo = await this.render(param, isSplit, true);
-
-    return renderInfo;
-  }
-
-  async wikiDetail(id) {
-    const res = await this.postData("wiki", {
-      content_id: id,
+    const groupmsg = msgArr.map((item) => {
+      return item.join("\n");
     });
 
-    this.model = "wikiDetail";
-    const data = res;
-
-    const content = this.GetTagByClassUsingRegex(
-      "div",
-      "wiki-map-card",
-      data.data.content.contents[0].text
+    msg = await common.makeForwardMsg(
+      this.e,
+      groupmsg,
+      days
+        ? `潜水超过${days}天的群友共${total}个`
+        : `入群从未发言的群友共${total}个`
     );
 
-    return {
-      ...this.screenData,
-      saveId: id,
-      dataConent: content,
-      data,
-    };
+    await this.e.reply(msg);
   }
 
-  GetTagByClassUsingRegex(tag, cls, html) {
-    // tag:标签名，cls：类名，html：要处理的字符串
-    var reg = new RegExp(
-      "<" +
-        tag +
-        "[^>]*class[\\s]?=[\\s]?['\"]" +
-        cls +
-        "[^'\"]*['\"][\\s\\S]*?</" +
-        tag +
-        ">",
-      "g"
-    );
-    return html.replace(reg, "");
-  }
+  async map() {
+    let keyword = this.e.msg.replace(/#*大地图\s*/g, "").trim() || "传送点";
 
-  async strategySearch(data, isSplit) {
-    const url = data.href;
-
-    const matchArr = url.match(/[^\/]*$/);
-    const postId = matchArr[0];
-
-    if (!/^\d+$/.test(postId)) {
-      return { img: [], code: "limit" };
-    }
-
-    const param = await this.newsDetail(postId);
-
-    const renderInfo = await this.render(param, isSplit, false);
-
-    return renderInfo;
-  }
-
-  async newsDetail(postId) {
-    const res = await this.postData("getPostFull", {
-      gids: 2,
-      read: 1,
-      post_id: postId,
-    });
-    this.model = "mysDetail";
-    const data = await this.detalData(res.data.post);
-
-    return {
-      ...this.screenData,
-      saveId: postId,
-      dataConent: data.post.content,
-      data,
-    };
-  }
-
-  postApi(type, data) {
-    let host = "https://bbs-api.mihoyo.com/";
-    let param = [];
-    lodash.forEach(data, (v, i) => param.push(`${i}=${v}`));
-    param = param.join("&");
-    switch (type) {
-      // 帖子详情
-      case "getPostFull":
-        host += "post/wapi/getPostFull?";
-        break;
-      case "emoticon":
-        host = "https://bbs-api-static.mihoyo.com/misc/api/emoticon_set?";
-        break;
-      case "wiki":
-        host =
-          "https://api-static.mihoyo.com/common/blackboard/ys_obc/v1/content/info?app_sn=ys_obc&";
-        break;
-    }
-    return host + param;
-  }
-
-  async postData(type, data) {
-    const url = this.postApi(type, data);
     const headers = {
       Referer: "https://bbs.mihoyo.com/",
       "User-Agent":
         "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
     };
-    let response;
-    try {
-      response = await fetch(url, { method: "get", headers });
-    } catch (error) {
-      logger.error(error.toString());
-      return false;
-    }
 
-    if (!response.ok) {
-      logger.error(
-        `[米游社接口错误][${type}] ${response.status} ${response.statusText}`
-      );
-      return false;
-    }
-    const res = await response.json();
-    return res;
-  }
-
-  async detalData(data) {
-    let json;
-    try {
-      json = JSON.parse(data.post.content);
-    } catch (error) {}
-
-    if (typeof json == "object") {
-      if (json.imgs && json.imgs.length > 0) {
-        for (const val of json.imgs) {
-          data.post.content = ` <div class="ql-image-box"><img src="${val}?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,png"></div>`;
-        }
-      }
-    } else {
-      for (const img of data.post.images) {
-        data.post.content = data.post.content.replace(
-          img,
-          img +
-            "?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,jpg"
-        );
-      }
-
-      if (!emoticon) {
-        emoticon = await this.mysEmoticon();
-      }
-
-      data.post.content = data.post.content.replace(
-        /_\([^)]*\)/g,
-        function (t, e) {
-          t = t.replace(/_\(|\)/g, "");
-          if (emoticon.has(t)) {
-            return `<img class="emoticon-image" src="${emoticon.get(t)}"/>`;
-          } else {
-            return "";
-          }
-        }
-      );
-
-      const arrEntities = { lt: "<", gt: ">", nbsp: " ", amp: "&", quot: '"' };
-      data.post.content = data.post.content.replace(
-        /&(lt|gt|nbsp|amp|quot);/gi,
-        function (all, t) {
-          return arrEntities[t];
-        }
-      );
-    }
-
-    data.post.created_time = new Date(
-      data.post.created_at * 1000
-    ).toLocaleString();
-
-    for (const i in data.stat) {
-      data.stat[i] =
-        data.stat[i] > 10000
-          ? (data.stat[i] / 10000).toFixed(2) + "万"
-          : data.stat[i];
-    }
-
-    return data;
-  }
-
-  async mysEmoticon() {
-    const emp = new Map();
-
-    const res = await this.postData("emoticon", { gids: 2 });
-
-    if (res.retcode != 0) {
-      return emp;
-    }
-
-    for (const val of res.data.list) {
-      if (!val.icon) continue;
-      for (const list of val.list) {
-        if (!list.icon) continue;
-        emp.set(list.name, list.icon);
-      }
-    }
-
-    return emp;
-  }
-
-  /**
-   * 处理米游社详情页图片生成
-   * @param {object} param
-   * @param {boolean} isSplit 是否为分片截图
-   * @returns {img: string[], code: string}
-   */
-  async render(param, isSplit, isWiki) {
-    const pageHeight = 8000;
-
-    await puppeteer.browserInit();
-
-    if (!puppeteer.browser) return false;
-
-    const savePath = puppeteer.dealTpl(
-      isWiki ? "wikiDetail" : "mysDetail",
-      param
+    const fetchData = await fetch(
+      `https://waf-api-takumi.mihoyo.com/common/map_user/ys_obc/v1/map/label/tree?map_id=2&app_sn=ys_obc&lang=zh-cn`,
+      { method: "get", headers }
     );
 
-    if (!savePath) return false;
+    const resJsonData = await fetchData.json();
 
-    const page = await puppeteer.browser.newPage();
+    if (resJsonData.retcode != 0 && resJsonData.data.tree) {
+      this.e.reply("接口异常，请稍后重试");
+      return;
+    }
 
-    try {
-      await page.goto(`file://${_path}${lodash.trim(savePath, ".")}`, {
-        timeout: 120000,
-      });
-      const body = (await page.$("#container")) || (await page.$("body"));
-      const boundingBox = await body.boundingBox();
+    const list = resJsonData.data.tree;
 
-      const num = isSplit
-        ? Math.round(boundingBox.height / pageHeight) || 1
-        : 1;
+    let id = 0;
+    let fuzzId = 0;
 
-      if (num > 1) {
-        await page.setViewport({
-          width: Math.round(boundingBox.width),
-          height: pageHeight + 100,
+    let fuzzName = "";
+
+    list.map((item) => {
+      if (id != 0) {
+        return item;
+      }
+      if (item.name == keyword) {
+        id = item.id;
+      }
+      if (item.name.indexOf(keyword) !== -1) {
+        fuzzId = item.id;
+        fuzzName = item.name;
+      }
+      if (item.children && item.children.length && id == 0) {
+        item.children.map((subItem) => {
+          if (id != 0) {
+            return subItem;
+          }
+          if (subItem.name == keyword) {
+            id = subItem.id;
+          }
+          if (subItem.name.indexOf(keyword) !== -1) {
+            fuzzId = subItem.id;
+            fuzzName = subItem.name;
+          }
         });
       }
+    });
 
-      const img = [];
-      let code = "success";
-      for (let i = 1; i <= num; i++) {
-        const randData = {
-          type: "jpeg",
-          quality: 90,
-        };
-
-        if (i != 1 && i == num) {
-          await page.setViewport({
-            width: Math.round(boundingBox.width),
-            height: parseInt(boundingBox.height) - pageHeight * (num - 1),
-          });
-        }
-
-        if (i != 1 && i <= num) {
-          await page.evaluate(() => window.scrollBy(0, 8000));
-        }
-
-        let buff;
-        if (num == 1) {
-          buff = await body.screenshot(randData);
-        } else {
-          buff = await page.screenshot(randData);
-        }
-
-        if (num > 2) await common.sleep(200);
-
-        puppeteer.renderNum++;
-        /** 计算图片大小 */
-        const kb = (buff.length / 1024).toFixed(2) + "kb";
-        if ((buff.length / 1024).toFixed(2) > 3500) {
-          code = "limit";
-        }
-
-        logger.mark(
-          `[图片生成][${this.model}][${puppeteer.renderNum}次] ${kb}`
-        );
-
-        img.push(segment.image(buff));
-      }
-      page.close().catch((err) => logger.error(err));
-
-      if (num > 1) {
-        logger.mark(`[图片生成][${this.model}] 处理完成`);
-      }
-      return { img: img, code: code };
-    } catch (error) {
-      logger.error(`图片生成失败:${this.model}:${error}`);
-      /** 关闭浏览器 */
-      if (puppeteer.browser) {
-        await puppeteer.browser.close().catch((err) => logger.error(err));
-      }
-      puppeteer.browser = false;
-      return { img: [], code: "limit" };
+    if (id == 0 && fuzzId == 0) {
+      this.e.reply(`未找到${keyword}，可以换一个词试试`);
+      return;
     }
+
+    this.e.reply(
+      `${
+        fuzzName || keyword
+      }大地图分布链接：\nhttps://webstatic.mihoyo.com/ys/app/interactive-map/index.html?lang=zh-cn#/map/2?zoom=-1.00&default_shown=${
+        id || fuzzId
+      }&hidden-ui=true`
+    );
   }
 }
