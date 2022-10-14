@@ -69,7 +69,7 @@ export class gm extends plugin {
         this.e.group.recallMsg(this.e.seq);
         await common.sleep(600);
         this.e.group.kickMember(this.e.sender.user_id);
-        await this.addOutGroupBlack();
+        await this.addOutGroupBlack(this.e.sender.user_id);
       } else if (msg == "撤") {
         this.e.group.recallMsg(this.e.seq, this.e.rand);
       }
@@ -114,7 +114,7 @@ export class gm extends plugin {
           this.e.group.recallMsg(this.e.source.seq);
           await common.sleep(600);
           this.e.group.kickMember(this.e.source.user_id);
-          await this.addOutGroupBlack();
+          await this.addOutGroupBlack(this.e.source.user_id);
         } else if (this.e.msg == "撤") {
           this.e.group.recallMsg(this.e.source.seq, this.e.source.rand);
         }
@@ -372,7 +372,7 @@ export class gm extends plugin {
     return msg;
   }
 
-  async addOutGroupBlack() {
+  async addOutGroupBlack(user_id) {
     let blackkey = `Yz:newblackcomers:${this.e.group_id}`;
 
     let blackcomers = await redis.get(blackkey);
@@ -381,7 +381,7 @@ export class gm extends plugin {
 
     let blackcomersSet = new Set(blacks);
 
-    blackcomersSet.add(this.e.user_id);
+    blackcomersSet.add(user_id);
 
     await redis.set(
       blackkey,
