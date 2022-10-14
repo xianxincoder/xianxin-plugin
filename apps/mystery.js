@@ -29,6 +29,10 @@ if (!fs.existsSync(mysterySetFile)) {
   }
 }
 
+if (fs.existsSync(mysterySetFile) && fs.existsSync(toolsSetFile)) {
+  fs.unlink(toolsSetFile, () => {});
+}
+
 let urlTypeCache = {};
 
 let urlCache = {};
