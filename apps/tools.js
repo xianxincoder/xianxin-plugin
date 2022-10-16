@@ -93,7 +93,7 @@ export class tools extends plugin {
         const element = users[index];
         await common.sleep(600);
         this.e.group.kickMember(element);
-        await this.addOutGroupBlack(element);
+        // await this.addOutGroupBlack(element);
       }
     }
   }
