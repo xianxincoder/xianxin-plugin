@@ -17,7 +17,7 @@ export class tools extends plugin {
           fnc: "thumbsUpMe",
         },
         {
-          reg: "^#*潜水\\s*[0-9]*$",
+          reg: "^#*潜水\\s*(踢)?\\s*[0-9]*$",
           fnc: "lurk",
           permission: "master",
         },
@@ -39,11 +39,14 @@ export class tools extends plugin {
   }
 
   async lurk() {
-    let days = this.e.msg.replace(/#*潜水\s*/g, "").trim() || 0;
+    let days = this.e.msg.replace(/#*潜水\s*(踢)?\s*/g, "").trim() || 0;
+
+    const isKickMember = this.e.msg.indexOf("踢") !== -1;
 
     let gl = await this.e.group.getMemberMap();
 
     let msg = [];
+    let users = [];
 
     for (let [k, v] of gl) {
       if (days == 0) {
@@ -53,6 +56,7 @@ export class tools extends plugin {
           msg.push(
             `${v.nickname}(${v.user_id}) 入群${diffDay}天，一直在潜水。`
           );
+          users.push(v.user_id);
         }
       } else {
         //计算相差多少天
@@ -61,6 +65,7 @@ export class tools extends plugin {
           msg.push(
             `${v.nickname}(${v.user_id}) 已潜水${diffDay}天了，该出来冒个泡啦！`
           );
+          users.push(v.user_id);
         }
       }
     }
@@ -82,6 +87,15 @@ export class tools extends plugin {
     );
 
     await this.e.reply(msg);
+
+    if (isKickMember && users.length && this.e.group.is_admin) {
+      for (let index = 0; index < users.length; index++) {
+        const element = users[index];
+        await common.sleep(600);
+        this.e.group.kickMember(element);
+        await this.addOutGroupBlack(element);
+      }
+    }
   }
 
   async map() {
@@ -150,6 +164,23 @@ export class tools extends plugin {
       }大地图分布链接：\nhttps://webstatic.mihoyo.com/ys/app/interactive-map/index.html?lang=zh-cn#/map/2?zoom=-1.00&default_shown=${
         id || fuzzId
       }&hidden-ui=true`
+    );
+  }
+
+  async addOutGroupBlack(user_id) {
+    let blackkey = `Yz:newblackcomers:${this.e.group_id}`;
+
+    let blackcomers = await redis.get(blackkey);
+
+    const { blacks = [] } = blackcomers ? JSON.parse(blackcomers) : {};
+
+    let blackcomersSet = new Set(blacks);
+
+    blackcomersSet.add(user_id);
+
+    await redis.set(
+      blackkey,
+      JSON.stringify({ blacks: Array.from(blackcomersSet) })
     );
   }
 }
