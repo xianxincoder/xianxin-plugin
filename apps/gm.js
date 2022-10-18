@@ -21,7 +21,7 @@ export class gm extends plugin {
       priority: 5000,
       rule: [
         {
-          reg: "^(戳|撤|禁|踢)+$",
+          reg: "^(戳|撤|禁|踢)+\\s*[0-9]*$",
           fnc: "shortcuts",
         },
         {
@@ -59,23 +59,43 @@ export class gm extends plugin {
     let keyword = this.getKeyWord(this.e);
 
     let msg = textArr[this.group_id].get(keyword) || "";
+
+    const time = msg.replace(/(戳|撤|禁|踢)+\s*/g, "") || 0;
     if (lodash.isEmpty(msg)) return false;
 
     if (this.e.group.is_admin) {
-      if (msg == "禁") {
+      if (msg && msg.indexOf("禁") !== -1) {
         let duration = Math.floor(Math.random() * 600) + 1;
+        if (time) {
+          duration = time * 60;
+        }
         this.e.group.muteMember(this.e.sender.user_id, duration);
-      } else if (msg == "踢") {
-        this.e.group.recallMsg(this.e.seq);
-        await common.sleep(600);
-        this.e.group.kickMember(this.e.sender.user_id);
-        await this.addOutGroupBlack(this.e.sender.user_id);
-      } else if (msg == "撤") {
-        this.e.group.recallMsg(this.e.seq, this.e.rand);
+      } else if (msg && msg.indexOf("踢") !== -1) {
+        setTimeout(async () => {
+          this.e.group.recallMsg(this.e.seq);
+          await common.sleep(600);
+          this.e.group.kickMember(this.e.sender.user_id);
+          await this.addOutGroupBlack(this.e.sender.user_id);
+        }, time * 1000);
+      } else if (msg && msg.indexOf("撤") !== -1) {
+        setTimeout(
+          () => this.e.group.recallMsg(this.e.seq, this.e.rand),
+          time * 1000
+        );
+      }
+    } else {
+      if (msg.indexOf("撤") !== -1 && this.e.sender.user_id == Bot.uin) {
+        setTimeout(
+          () => this.e.group.recallMsg(this.e.seq, this.e.rand),
+          time * 1000
+        );
       }
     }
-    if (msg == "戳") {
-      this.e.group.pokeMember(this.e.sender.user_id);
+    if (msg.indexOf("戳") !== -1) {
+      setTimeout(
+        () => this.e.group.pokeMember(this.e.sender.user_id),
+        time * 1000
+      );
     }
   }
 
@@ -96,34 +116,62 @@ export class gm extends plugin {
     if (this.e.source) {
       let msg = (await this.e.group.getChatHistory(this.e.source.seq, 1)).pop();
 
+      const time = this.e.msg.replace(/(戳|撤|禁|踢)+\s*/g, "") || 0;
+
       if (this.e.group.is_admin) {
         if (this.e.msg.indexOf("禁") !== -1) {
           this.e.group.recallMsg(this.e.source.seq);
           await common.sleep(600);
           let duration = Math.floor(Math.random() * 600) + 1;
+          if (time) {
+            duration = time;
+          }
           this.e.group.muteMember(this.e.source.user_id, duration);
         } else if (this.e.msg.indexOf("踢") !== -1) {
-          this.e.group.recallMsg(this.e.source.seq);
-          await common.sleep(600);
-          this.e.group.kickMember(this.e.source.user_id);
-          await this.addOutGroupBlack(this.e.source.user_id);
+          setTimeout(async () => {
+            this.e.group.recallMsg(this.e.source.seq);
+            await common.sleep(600);
+            this.e.group.kickMember(this.e.source.user_id);
+            await this.addOutGroupBlack(this.e.source.user_id);
+          }, time * 1000);
         } else if (this.e.msg.indexOf("撤") !== -1) {
-          this.e.group.recallMsg(this.e.source.seq, this.e.source.rand);
+          setTimeout(
+            () => this.e.group.recallMsg(this.e.source.seq, this.e.source.rand),
+            time * 1000
+          );
+        }
+      } else {
+        if (
+          this.e.msg.indexOf("撤") !== -1 &&
+          this.e.source.user_id == Bot.uin
+        ) {
+          setTimeout(
+            () => this.e.group.recallMsg(this.e.source.seq, this.e.source.rand),
+            time * 1000
+          );
         }
       }
+
       if (this.e.msg.indexOf("戳") !== -1) {
-        this.e.group.pokeMember(this.e.source.user_id);
+        setTimeout(
+          () => this.e.group.pokeMember(this.e.source.user_id),
+          time * 1000
+        );
       }
 
       const isSave =
-        this.e.msg.length > 1 && new Set(this.e.msg.split("")).size == 1;
+        this.e.msg.length > 1 &&
+        new Set(this.e.msg.replace(/\s*[0-9]*/g, "").split("")).size == 1;
 
       if (isSave) {
         const keyword = this.getKeyWord(msg);
 
         if (!textArr[this.group_id]) textArr[this.group_id] = new Map();
 
-        textArr[this.group_id].set(keyword, this.e.msg.split("")[0]);
+        textArr[this.group_id].set(
+          keyword,
+          this.e.msg.split("")[0] + this.e.msg.replace(/(戳|撤|禁|踢)+/g, "")
+        );
 
         this.saveJson();
 
