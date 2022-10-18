@@ -160,7 +160,7 @@ export class gm extends plugin {
       }
 
       const isSave =
-        this.e.msg.length > 1 &&
+        this.e.msg.replace(/\s*[0-9]*/g, "").length > 1 &&
         new Set(this.e.msg.replace(/\s*[0-9]*/g, "").split("")).size == 1;
 
       if (isSave) {
