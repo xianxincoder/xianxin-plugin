@@ -62,19 +62,19 @@ export class gm extends plugin {
     if (lodash.isEmpty(msg)) return false;
 
     if (this.e.group.is_admin) {
-      if (msg == "禁") {
+      if (msg.indexOf("禁") !== -1) {
         let duration = Math.floor(Math.random() * 600) + 1;
         this.e.group.muteMember(this.e.sender.user_id, duration);
-      } else if (msg == "踢") {
+      } else if (msg.indexOf("踢") !== -1) {
         this.e.group.recallMsg(this.e.seq);
         await common.sleep(600);
         this.e.group.kickMember(this.e.sender.user_id);
         await this.addOutGroupBlack(this.e.sender.user_id);
-      } else if (msg == "撤") {
+      } else if (msg.indexOf("撤") !== -1) {
         this.e.group.recallMsg(this.e.seq, this.e.rand);
       }
     }
-    if (msg == "戳") {
+    if (msg.indexOf("戳") !== -1) {
       this.e.group.pokeMember(this.e.sender.user_id);
     }
   }
@@ -123,7 +123,7 @@ export class gm extends plugin {
 
         if (!textArr[this.group_id]) textArr[this.group_id] = new Map();
 
-        textArr[this.group_id].set(keyword, this.e.msg);
+        textArr[this.group_id].set(keyword, this.e.msg.split("")[0]);
 
         this.saveJson();
 
