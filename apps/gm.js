@@ -62,19 +62,19 @@ export class gm extends plugin {
     if (lodash.isEmpty(msg)) return false;
 
     if (this.e.group.is_admin) {
-      if (msg.indexOf("禁") !== -1) {
+      if (msg == "禁") {
         let duration = Math.floor(Math.random() * 600) + 1;
         this.e.group.muteMember(this.e.sender.user_id, duration);
-      } else if (msg.indexOf("踢") !== -1) {
+      } else if (msg == "踢") {
         this.e.group.recallMsg(this.e.seq);
         await common.sleep(600);
         this.e.group.kickMember(this.e.sender.user_id);
         await this.addOutGroupBlack(this.e.sender.user_id);
-      } else if (msg.indexOf("撤") !== -1) {
+      } else if (msg == "撤") {
         this.e.group.recallMsg(this.e.seq, this.e.rand);
       }
     }
-    if (msg.indexOf("戳") !== -1) {
+    if (msg == "戳") {
       this.e.group.pokeMember(this.e.sender.user_id);
     }
   }
