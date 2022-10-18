@@ -21,7 +21,7 @@ export class gm extends plugin {
       priority: 5000,
       rule: [
         {
-          reg: "^(戳|撤|禁|踢)$",
+          reg: "^(戳|撤|禁|踢)+$",
           fnc: "shortcuts",
         },
         {
@@ -96,36 +96,41 @@ export class gm extends plugin {
     if (this.e.source) {
       let msg = (await this.e.group.getChatHistory(this.e.source.seq, 1)).pop();
 
-      const keyword = this.getKeyWord(msg);
-
-      if (!textArr[this.group_id]) textArr[this.group_id] = new Map();
-
-      textArr[this.group_id].set(keyword, this.e.msg);
-
-      this.saveJson();
-
       if (this.e.group.is_admin) {
-        if (this.e.msg == "禁") {
+        if (this.e.msg.indexOf("禁") !== -1) {
           this.e.group.recallMsg(this.e.source.seq);
           await common.sleep(600);
           let duration = Math.floor(Math.random() * 600) + 1;
           this.e.group.muteMember(this.e.source.user_id, duration);
-        } else if (this.e.msg == "踢") {
+        } else if (this.e.msg.indexOf("踢") !== -1) {
           this.e.group.recallMsg(this.e.source.seq);
           await common.sleep(600);
           this.e.group.kickMember(this.e.source.user_id);
           await this.addOutGroupBlack(this.e.source.user_id);
-        } else if (this.e.msg == "撤") {
+        } else if (this.e.msg.indexOf("撤") !== -1) {
           this.e.group.recallMsg(this.e.source.seq, this.e.source.rand);
         }
       }
-      if (this.e.msg == "戳") {
+      if (this.e.msg.indexOf("戳") !== -1) {
         this.e.group.pokeMember(this.e.source.user_id);
       }
 
-      this.e.reply(
-        "已完成操作并添加到快管列表，可以通过 #快管列表 查看已经添加的记录"
-      );
+      const isSave =
+        this.e.msg.length > 1 && new Set(this.e.msg.split("")).size == 1;
+
+      if (isSave) {
+        const keyword = this.getKeyWord(msg);
+
+        if (!textArr[this.group_id]) textArr[this.group_id] = new Map();
+
+        textArr[this.group_id].set(keyword, this.e.msg);
+
+        this.saveJson();
+
+        this.e.reply(
+          "已完成操作并添加到快管列表，可以通过 #快管列表 查看已经添加的记录"
+        );
+      }
     }
   }
 

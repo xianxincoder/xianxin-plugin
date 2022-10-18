@@ -2,6 +2,7 @@
     version: 1.1.5,
     data:
       [
+        优化<span class="cmd">(戳|撤|禁|踢)</span>单个字为执行一次，两个重复的字为持久执行,
         添加<span class="cmd">#大地图 xx</span>快速查看题瓦特大地图,
         添加<span class="cmd">#潜水</span>查看潜水群友,
         提供<span class="cmd">#潜水 10</span>查看潜水10天的群友,
