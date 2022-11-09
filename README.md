@@ -82,7 +82,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | [时雨🌌星空](https://gitee.com/TimeRainStarSky) | 5 |
 | 夏-.-曙＆宙@象 | 10 |
 | 枫叶霜华 | 10 |
-| 抛物线 | 38 |
+| 抛物线 | 43 |
 | 白熊 | 6.66 |
 | 肆拾壹号糖水铺 | 5 |
 | 啊这. | 6.66 |
@@ -120,3 +120,13 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | ADonut | 28.2 |
 | 拝淚 | 5 |
 | 敷灬衍丷 | 10 |
+| 米妖 | 5 |
+| Aliceikkk | 5 |
+| 傑 | 28.2 |
+| 猫尾特调 | 5 |
+| 内鬼 | 5 |
+| •ᴥ• | 5 |
+| 爱发电用户_FKAD | 5 |
+| 巳雨 | 5 |
+
+
