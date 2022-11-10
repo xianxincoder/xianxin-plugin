@@ -148,6 +148,10 @@
     - icon: role
       title: "#大地图 xx"
       desc: "快速查看大地图"
+    - icon: wiki
+      title: "#清理缓存文件"
+      desc: "快速清理缓存文件"
+      
 - group: 其他指令
   list:
     - icon: 问号

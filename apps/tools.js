@@ -3,6 +3,22 @@ import common from "../../../lib/common/common.js";
 import fetch from "node-fetch";
 import moment from "moment";
 import lodash from "lodash";
+import fs from "node:fs";
+
+const _path = process.cwd();
+
+const cacheDirs = [
+  {
+    name: "data/",
+    path: `${_path}/data/`,
+    clearReg: /^[a-z0-9]{32}$/,
+  },
+  {
+    name: "data/image/",
+    path: `${_path}/data/image/`,
+    clearReg: /^[a-z0-9]{32}$/,
+  },
+];
 
 export class tools extends plugin {
   constructor() {
@@ -24,6 +40,11 @@ export class tools extends plugin {
         {
           reg: "^#*大地图\\s*.*$",
           fnc: "map",
+        },
+        {
+          reg: "^#*清理缓存文件$",
+          fnc: "clearCache",
+          permission: "master",
         },
       ],
     });
@@ -165,6 +186,26 @@ export class tools extends plugin {
         id || fuzzId
       }&hidden-ui=true`
     );
+  }
+
+  async clearCache() {
+    let dataCount = 0;
+
+    cacheDirs.forEach(async (dirItem, dirIndex) => {
+      const cachefiles = fs.readdirSync(dirItem.path);
+      await this.e.reply(`开始清理${dirItem.name}缓存文件...`);
+
+      await cachefiles.forEach(async (file) => {
+        if (new RegExp(dirItem.clearReg).test(file)) {
+          fs.unlinkSync(dirItem.path + file);
+          dataCount++;
+        }
+      });
+
+      if (dirIndex == cacheDirs.length - 1) {
+        await this.e.reply(`清理完成，共清理缓存文件：${dataCount}个`);
+      }
+    });
   }
 
   async addOutGroupBlack(user_id) {
