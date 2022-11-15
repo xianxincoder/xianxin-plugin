@@ -43,10 +43,10 @@ export class mystery extends plugin {
       name: "神秘指令",
       dsc: "处理神秘指令代码",
       event: "message",
-      priority: 5000,
+      priority: 4000,
       rule: [
         {
-          reg: "^#*(woc|卧槽)$",
+          reg: "^#*(woc|卧槽)\\s*[0-9]*$",
           fnc: "woc",
           permission: "master",
         },
@@ -72,7 +72,9 @@ export class mystery extends plugin {
     this.mysterySetData = xxCfg.getConfig("mystery", "set");
 
     this.rule[0].permission = this.mysterySetData.permission;
-    this.rule[0].reg = `^#*(${this.mysterySetData.keywords.join("|")})$`;
+    this.rule[0].reg = `^#*(${this.mysterySetData.keywords.join(
+      "|"
+    )})\\s*[0-9]*$`;
     this.rule[1].permission = this.mysterySetData.permission;
     this.rule[1].reg = `^#*(${this.mysterySetData.keywords.join("|")})\\s*pro$`;
     this.rule[2].permission = this.mysterySetData.permission;
@@ -116,16 +118,18 @@ export class mystery extends plugin {
     const isDimtown = this.mysterySetData.wocUrl.indexOf("dimtown.com") !== -1;
 
     if (this.mysterySetData.wocUrl.indexOf("/wp-json") !== -1) {
+      const idx = this.e.msg.replace(/#*(woc|卧槽)\s*/g, "") || 0;
+
       const randomMax = isDimtown ? 400 : 600;
 
       const randomIndex = Math.floor(Math.random() * randomMax) + 1;
 
-      const page = Math.ceil(randomIndex / 10);
+      const page = Math.ceil((idx || randomIndex) / 10);
 
       const fetchData = await fetch(`${this.mysterySetData.wocUrl}${page}`);
       const resJsonData = await fetchData.json();
 
-      const index = randomIndex % 10;
+      const index = idx ? idx % 10 : randomIndex % 10;
 
       if (!resJsonData.length) {
         this.e.reply("额。没有探索到，换个姿势再来一次吧～");

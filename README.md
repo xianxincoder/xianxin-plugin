@@ -123,10 +123,11 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 米妖 | 5 |
 | Aliceikkk | 5 |
 | 傑 | 28.2 |
-| 猫尾特调 | 5 |
+| 猫尾特调 | 10 |
 | 内鬼 | 5 |
 | •ᴥ• | 5 |
 | 爱发电用户_FKAD | 5 |
 | 巳雨 | 5 |
-
-
+| 会飞的芒果猫 | 9.91 |
+| 111222333 | 5 |
+ 
