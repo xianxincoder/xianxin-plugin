@@ -118,7 +118,11 @@ export class mystery extends plugin {
     const isDimtown = this.mysterySetData.wocUrl.indexOf("dimtown.com") !== -1;
 
     if (this.mysterySetData.wocUrl.indexOf("/wp-json") !== -1) {
-      const idx = this.e.msg.replace(/#*(woc|卧槽)\s*/g, "") || 0;
+      const idx =
+        this.e.msg.replace(
+          new RegExp(`#*(${this.mysterySetData.keywords.join("|")})\s*`),
+          ""
+        ) || 0;
 
       const randomMax = isDimtown ? 400 : 600;
 
