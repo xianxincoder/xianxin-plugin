@@ -97,7 +97,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 三十一. | 15 |
 | 纪元 | 10 |
 | 零食 | 10 |
-| 落叶红尘君莫笑 | 63.5 |
+| 落叶红尘君莫笑 | 73.5 |
 | 不要欺负一一 | 10 |
 | 小源 | 28.2 |
 | AAA | 10 |
@@ -130,4 +130,7 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 巳雨 | 5 |
 | 会飞的芒果猫 | 9.91 |
 | 111222333 | 5 |
+| 绝对不熬夜 | 65 |
+| 希娜小姐 | 5 |
+| 没有抱枕不开心 | 28.2 |
  
