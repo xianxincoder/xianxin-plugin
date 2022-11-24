@@ -65,7 +65,7 @@ export class mystery extends plugin {
           fnc: "searchsp",
         },
         {
-          reg: "^#*(开|开启|关|关闭)sp$",
+          reg: "^#*(开|开启|关|关闭)sp\\s*[0-9]*$",
           fnc: "ctrlsp",
           permission: "master",
         },
@@ -440,10 +440,17 @@ export class mystery extends plugin {
   async ctrlsp() {
     let key = `Yz:lspstatus:${this.e.group_id || this.e.user_id}`;
 
+    let qq = this.e.msg.replace(/#*(开|开启|关|关闭)sp\s*/g, "");
+
+    if (qq) {
+      key = `Yz:lspstatus:${qq}`;
+    }
+
     if (this.e.msg.indexOf("开") !== -1) {
       redis.set(key, "1");
       this.e.reply(
-        "已开启sp功能\n#sp  -- 随机p站图\n#sp 2  -- 随机2张p站图\n#sp 雷神 2  -- 雷神相关2张p站图\n#lsp 雷神 2  -- 雷神相关2张p站r18图"
+        qq +
+          "已开启sp功能\n#sp  -- 随机p站图\n#sp 2  -- 随机2张p站图\n#sp 雷神 2  -- 雷神相关2张p站图\n#lsp 雷神 2  -- 雷神相关2张p站r18图"
       );
     } else {
       redis.del(key);
@@ -456,7 +463,11 @@ export class mystery extends plugin {
 
     const isPrivate = this.e.isPrivate;
 
-    if (!this.mysterySetData.isPrivate && isPrivate) {
+    if (
+      !this.mysterySetData.isPrivate &&
+      isPrivate &&
+      !(await redis.get(key))
+    ) {
       return "return";
     }
 
