@@ -517,6 +517,10 @@ export class mystery extends plugin {
         }
       }
 
+      if (isPrivate) {
+        return;
+      }
+
       const res = await this.e.reply(await Bot.makeForwardMsg(msgList), false, {
         recallMsg: this.mysterySetData.delMsg,
       });
