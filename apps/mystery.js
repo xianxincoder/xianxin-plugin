@@ -61,6 +61,15 @@ export class mystery extends plugin {
           permission: "master",
         },
         {
+          reg: "^#*(l)?sp\\s*[\u4e00-\u9fa5a-zA-Z]*\\s*[0-9]*$",
+          fnc: "searchsp",
+        },
+        {
+          reg: "^#*(开|开启|关|关闭)sp$",
+          fnc: "ctrlsp",
+          permission: "master",
+        },
+        {
           reg: "^#*(神秘)?(pro)?换源\\s*.*$",
           fnc: "wocurl",
           permission: "master",
@@ -428,13 +437,121 @@ export class mystery extends plugin {
     }
   }
 
+  async ctrlsp() {
+    let key = `Yz:lspstatus:${this.e.group_id || this.e.user_id}`;
+
+    if (this.e.msg.indexOf("开") !== -1) {
+      redis.set(key, "1");
+      this.e.reply(
+        "已开启sp功能\n#sp  -- 随机p站图\n#sp 2  -- 随机2张p站图\n#sp 雷神 2  -- 雷神相关2张p站图\n#lsp 雷神 2  -- 雷神相关2张p站r18图"
+      );
+    } else {
+      redis.del(key);
+      this.e.reply("sp功能已关闭");
+    }
+  }
+
+  async searchsp() {
+    let key = `Yz:lspstatus:${this.e.group_id || this.e.user_id}`;
+
+    const isPrivate = this.e.isPrivate;
+
+    if (!this.mysterySetData.isPrivate && isPrivate) {
+      return "return";
+    }
+
+    if (this.mysterySetData.cd != 0) {
+      /** cd */
+      let key = `Yz:sp:${this.e.group_id}`;
+      if (await redis.get(key)) return;
+      redis.set(key, "1", { EX: Number(this.mysterySetData.cd) });
+    }
+
+    if (!(await redis.get(key))) {
+      this.e.reply("未开启sp功能，请发送 #开sp 进行开启");
+      return;
+    }
+
+    let num =
+      this.e.msg.replace(/#*(l)?sp\s*[\u4e00-\u9fa5a-zA-Z]*\s*/g, "").trim() ||
+      1;
+
+    let keyword =
+      this.e.msg
+        .replace(/#*(l)?sp\s*/g, "")
+        .replace(num, "")
+        .trim() || "黑丝|白丝";
+
+    this.e.reply("触发探索未知的神秘空间，请稍等...");
+
+    const fetchData = await fetch(
+      `https://api.lolicon.app/setu/v2?tag=${keyword}&proxy=sex.nyan.xyz&num=${num}&r18=${
+        this.e.msg.indexOf("lsp") !== -1 ? 1 : 0
+      }`
+    );
+    const resJsonData = await fetchData.json();
+
+    let images = this.getJsonImages(JSON.stringify(resJsonData));
+
+    const forwarder =
+      this.mysterySetData.forwarder == "bot"
+        ? { nickname: Bot.nickname, user_id: Bot.uin }
+        : {
+            nickname: this.e.sender.card || this.e.user_id,
+            user_id: this.e.user_id,
+          };
+
+    if (images && images.length) {
+      let msgList = [];
+      for (let imageItem of images) {
+        if (isPrivate) {
+          await this.e.reply(segment.image(imageItem), false, {
+            recallMsg: this.mysterySetData.delMsg,
+          });
+          await common.sleep(600);
+        } else {
+          msgList.push({
+            message: segment.image(imageItem),
+            ...forwarder,
+          });
+        }
+      }
+
+      const res = await this.e.reply(await Bot.makeForwardMsg(msgList), false, {
+        recallMsg: this.mysterySetData.delMsg,
+      });
+      if (!res) {
+        if (!res) {
+          if (this.e.group && this.e.group.is_admin) {
+            if (
+              Number(Math.random().toFixed(2)) * 100 <
+              this.mysterySetData.mute
+            ) {
+              let duration = Math.floor(Math.random() * 600) + 1;
+              this.e.group.muteMember(this.e.sender.user_id, duration);
+              await this.e.reply(
+                `不用等了，你想要的已经被神秘的力量吞噬了～ 并随手将你禁锢${duration}秒`
+              );
+            } else {
+              this.reply("不用等了，你想要的已经被神秘的力量吞噬了～");
+            }
+          } else {
+            this.reply("不用等了，你想要的已经被神秘的力量吞噬了～");
+          }
+        }
+      }
+    } else {
+      this.reply("额。没有探索到，换个姿势再来一次吧～");
+    }
+  }
+
   async wocurl() {
     const isPro = this.e.msg.slice(0, 8).indexOf("pro") !== -1;
 
     let url = this.e.msg.replace(/#*(神秘)?(pro)?换源\s*/g, "") || "";
     if (url == "") {
       url = isPro
-        ? "https://xiaobai.klizi.cn/API/video/spzm.php?data=&msg=美女"
+        ? "https://gitee.com/xianxincoder/data/raw/master/wocplus.json"
         : "https://yingtall.com/wp-json/wp/v2/posts?page=";
     }
 
