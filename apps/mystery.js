@@ -126,6 +126,8 @@ export class mystery extends plugin {
     let images = [];
     const isDimtown = this.mysterySetData.wocUrl.indexOf("dimtown.com") !== -1;
 
+    const isCcy = this.mysterySetData.wocUrl.indexOf("ccy.moe") !== -1;
+
     if (this.mysterySetData.wocUrl.indexOf("/wp-json") !== -1) {
       const idx =
         this.e.msg.replace(
@@ -133,7 +135,7 @@ export class mystery extends plugin {
           ""
         ) || 0;
 
-      const randomMax = isDimtown ? 400 : 600;
+      const randomMax = isDimtown ? 400 : 500;
 
       const randomIndex = Math.floor(Math.random() * randomMax) + 1;
 
@@ -186,7 +188,7 @@ export class mystery extends plugin {
     const imageCountLimit = this.mysterySetData.imageCountLimit || 10;
 
     if (images.length > imageCountLimit) {
-      images.length = imageCountLimit;
+      images = lodash.sampleSize(images, imageCountLimit);
     }
 
     const forwarder =
@@ -200,14 +202,19 @@ export class mystery extends plugin {
     if (images && images.length) {
       let msgList = [];
       for (let imageItem of images) {
+        const temp = isCcy
+          ? segment.image(imageItem, false, 10000, {
+              referer: "https://www.ccy.moe/",
+            })
+          : segment.image(imageItem);
         if (isPrivate) {
-          await this.e.reply(segment.image(imageItem), false, {
+          await this.e.reply(temp, false, {
             recallMsg: this.mysterySetData.delMsg,
           });
           await common.sleep(600);
         } else {
           msgList.push({
-            message: segment.image(imageItem),
+            message: temp,
             ...forwarder,
           });
         }
