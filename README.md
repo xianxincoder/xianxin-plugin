@@ -133,4 +133,8 @@ git clone https://gitee.com/xianxincoder/xianxin-plugin.git ./plugins/xianxin-pl
 | 绝对不熬夜 | 65 |
 | 希娜小姐 | 5 |
 | 没有抱枕不开心 | 28.2 |
+| 夜岚星茕 | 10 |
+| 漾人心 | 5.21 |
+| Starry | 10 |
+
  

@@ -119,7 +119,7 @@ export class forward extends plugin {
           );
           return;
         });
-      await common.sleep(1200);
+      await common.sleep(random(1500, 6000));
       return item;
     });
   }
@@ -196,5 +196,9 @@ export class forward extends plugin {
 
   groupList() {
     this.reply(`目前加入的群组有\n${this.list.join("\n")}`);
+  }
+
+  random(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
   }
 }
