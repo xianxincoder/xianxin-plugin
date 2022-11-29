@@ -6,6 +6,8 @@ import lodash from "lodash";
 import fs from "node:fs";
 import xxCfg from "../model/xxCfg.js";
 
+import { Restart } from "../../other/restart.js";
+
 const _path = process.cwd();
 
 const cacheDirs = [
@@ -269,6 +271,15 @@ export class tools extends plugin {
         this.saveJson(pkArr, validGroupList[index]);
       }
     }
+    await this.e.reply("已清理完成，正在启动重启操作以使数据生效");
+    setTimeout(() => this.restart(), 2000);
+  }
+
+  /**
+   * 云崽重启操作
+   */
+  restart() {
+    new Restart(this.e).restart();
   }
 
   async addOutGroupBlack(user_id) {
