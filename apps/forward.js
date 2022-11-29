@@ -195,7 +195,6 @@ export class forward extends plugin {
   }
 
   groupList() {
-    console.log(Bot.gl);
     this.reply(
       `目前加入的群组有\n${this.list
         .map(

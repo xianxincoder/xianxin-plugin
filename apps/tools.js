@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 import moment from "moment";
 import lodash from "lodash";
 import fs from "node:fs";
+import xxCfg from "../model/xxCfg.js";
 
 const _path = process.cwd();
 
@@ -46,8 +47,16 @@ export class tools extends plugin {
           fnc: "clearCache",
           permission: "master",
         },
+        {
+          reg: "^#*清理无效数据$",
+          fnc: "clearInvalidData",
+          permission: "master",
+        },
       ],
     });
+
+    this.bilibiliPushData = xxCfg.getConfig("bilibili", "push");
+    this.pkJsonPath = "./data/pkJson/";
   }
 
   /**
@@ -208,6 +217,60 @@ export class tools extends plugin {
     });
   }
 
+  async clearInvalidData() {
+    /** 有效群数据 */
+    const validGroupList = Array.from(Bot.gl.keys());
+
+    /** 群有效用户数据 */
+    const gfl = {};
+    let pkArr = {};
+
+    for (let index = 0; index < validGroupList.length; index++) {
+      let gflMap = await Bot.pickGroup(
+        Number(validGroupList[index])
+      ).getMemberMap();
+      gfl[validGroupList[index]] = Array.from(gflMap.keys());
+
+      let path = `${this.pkJsonPath}${validGroupList[index]}.json`;
+      if (fs.existsSync(path)) {
+        pkArr[validGroupList[index]] = new Map();
+        let pkMapJson = JSON.parse(fs.readFileSync(path, "utf8"));
+        for (let key in pkMapJson) {
+          pkArr[validGroupList[index]].set(String(key), pkMapJson[key]);
+        }
+      }
+    }
+
+    if (validGroupList.length) {
+      await this.e.reply("清理无效b站推送群");
+      let data = this.bilibiliPushData || {};
+      let upKeys = Object.keys(data);
+
+      for (let index = 0; index < upKeys.length; index++) {
+        if (!validGroupList.includes(Number(upKeys[index]))) {
+          console.log(data[upKeys[index]]);
+          delete data[upKeys[index]];
+        }
+      }
+
+      xxCfg.saveSet("bilibili", "push", "config", data);
+
+      await this.e.reply("清理群战中无效成员信息");
+
+      for (let index = 0; index < validGroupList.length; index++) {
+        const pkUserIds = Array.from(pkArr[validGroupList[index]].keys());
+        for (let pkindex = 0; pkindex < pkUserIds.length; pkindex++) {
+          if (
+            !gfl[validGroupList[index]].includes(Number(pkUserIds[pkindex]))
+          ) {
+            pkArr[validGroupList[index]].delete(String(pkUserIds[pkindex]));
+          }
+        }
+        this.saveJson(pkArr, validGroupList[index]);
+      }
+    }
+  }
+
   async addOutGroupBlack(user_id) {
     let blackkey = `Yz:newblackcomers:${this.e.group_id}`;
 
@@ -222,6 +285,19 @@ export class tools extends plugin {
     await redis.set(
       blackkey,
       JSON.stringify({ blacks: Array.from(blackcomersSet) })
+    );
+  }
+
+  /** 保存json文件 */
+  saveJson(pkArr, group_id) {
+    let obj = {};
+    for (let [k, v] of pkArr[group_id]) {
+      obj[k] = v;
+    }
+
+    fs.writeFileSync(
+      `${this.pkJsonPath}${group_id}.json`,
+      JSON.stringify(obj, "", "\t")
     );
   }
 }

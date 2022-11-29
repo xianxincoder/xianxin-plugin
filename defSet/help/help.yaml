@@ -151,7 +151,9 @@
     - icon: wiki
       title: "#清理缓存文件"
       desc: "快速清理缓存文件"
-      
+    - icon: paimon
+      title: "#清理无效数据"
+      desc: "快速清理无效数据"
 - group: 其他指令
   list:
     - icon: 问号
