@@ -195,7 +195,14 @@ export class forward extends plugin {
   }
 
   groupList() {
-    this.reply(`目前加入的群组有\n${this.list.join("\n")}`);
+    console.log(Bot.gl);
+    this.reply(
+      `目前加入的群组有\n${this.list
+        .map(
+          (item, index) => `${index + 1}. ${item.groupName}(${item.groupId})`
+        )
+        .join("\n")}`
+    );
   }
 
   random(min, max) {
