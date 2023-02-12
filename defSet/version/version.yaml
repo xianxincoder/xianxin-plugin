@@ -1,4 +1,11 @@
 - {
+    version: 1.1.6,
+    data:
+      [
+        添加云崽菜单辅助功能，<span class="cmd">#任意功能</span>如果不存在但是有类似的功能将会提示,
+      ],
+  }
+- {
     version: 1.1.5,
     data:
       [
