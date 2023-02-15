@@ -11,6 +11,11 @@ export class ability extends plugin {
       priority: 50000000,
       rule: [
         {
+          reg: "^#*(开|开启|关|关闭)菜单联想$",
+          fnc: "ctrlability",
+          permission: "master",
+        },
+        {
           reg: "^#.*$",
           fnc: "lenovo",
         },
@@ -18,7 +23,23 @@ export class ability extends plugin {
     });
   }
 
+  async ctrlability() {
+    let key = `Yz:abilitystatus:${this.e.group_id || this.e.user_id}`;
+
+    if (this.e.msg.indexOf("开") !== -1) {
+      redis.set(key, "1");
+      this.e.reply("已开启菜单联想");
+    } else {
+      redis.del(key);
+      this.e.reply("菜单联想功能已关闭");
+    }
+  }
+
   async lenovo() {
+    let key = `Yz:abilitystatus:${this.e.group_id || this.e.user_id}`;
+    if (!(await redis.get(key))) {
+      return "return";
+    }
     const e = this.e;
     const rules = await this.getRules(e);
 
