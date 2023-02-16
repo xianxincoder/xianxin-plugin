@@ -134,7 +134,7 @@ export class ability extends plugin {
               /** 判断权限 */
               if (!this.filtPermission(e, v)) break b;
 
-              if (/[\u4e00-\u9fa5]/g.test(v.reg)) {
+              if (v.reg && /[\u4e00-\u9fa5]/g.test(v.reg)) {
                 rules.push({
                   plugin: plugin.name || undefined,
                   reg: v.reg.replace(/(\^|\$)/g, ""),
